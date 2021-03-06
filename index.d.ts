@@ -1,0 +1,1 @@
+declare module 'metaapi.cloud-copyfactory-sdk';

@@ -1,0 +1,16 @@
+.idea
+.vscode
+node_modules
+.DS_Store
+.npmrc
+npm-debug.log
+package-lock.json
+.npmrc
+.env
+.cache
+test.log
+dist/
+es/
+index.js
+test.log
+.metaapi

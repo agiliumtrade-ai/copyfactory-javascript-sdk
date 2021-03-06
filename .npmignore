@@ -1,0 +1,11 @@
+.idea
+.vscode
+node_modules
+.DS_Store
+.npmrc
+npm-debug.log
+package-lock.json
+.git
+.env
+.metaapi
+test.log
