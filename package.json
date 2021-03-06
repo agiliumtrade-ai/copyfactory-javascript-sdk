@@ -35,7 +35,7 @@
     "browser"
   ],
   "name": "metaapi.cloud-copyfactory-sdk",
-  "description": "SDK for CopyFactory copy trading API. Supports both MetaTrader 5 (MT5) and MetaTrader 4 (MT4). (https://metaapi.cloud)",
+  "description": "Javascript SDK for SDK for CopyFactory trade copying API. Can copy trades both beetween MetaTrader 5 (MT5) and MetaTrader 4 (MT4). (https://metaapi.cloud)",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
