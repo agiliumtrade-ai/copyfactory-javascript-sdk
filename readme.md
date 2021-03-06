@@ -1,4 +1,4 @@
-# CopyFactory SDK for javascript (a member of metaapi.cloud project)
+# CopyFactory SDK for javascript (a member of [metaapi.cloud](https://metaapi.cloud) project)
 
 CopyFactory is a powerful trade copying API which makes developing forex trade copying applications as easy as writing few lines of code.
 
