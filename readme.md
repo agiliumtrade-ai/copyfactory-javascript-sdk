@@ -1,6 +1,6 @@
-# CopyFactory SDK for javascript (a member of [metaapi.cloud](https://metaapi.cloud) project)
+# CopyFactory trade copying API for javascript (a member of [metaapi.cloud](https://metaapi.cloud) project)
 
-CopyFactory is a powerful trade copying API which makes developing forex trade copying applications as easy as writing few lines of code.
+CopyFactory is a powerful copy trading API which makes developing forex trade copying applications as easy as writing few lines of code.
 
 CopyFactory API is a member of MetaApi project ([https://metaapi.cloud](https://metaapi.cloud)), a powerful cloud forex trading API which supports both MetaTrader 4 and MetaTrader 5 platforms.
 
@@ -11,7 +11,7 @@ for hosting your own infrastructure. This is possible because over time we manag
 our MetaTrader infrastructure. And with MetaApi you can save significantly on application development and
 maintenance costs and time thanks to high-quality API, open-source SDKs and convenience of a cloud service.
 
-## Why do we offer CopyFactory API
+## Why do we offer CopyFactory trade copying API
 
 We found that developing reliable and flexible trade copier is a task
 which requires lots of effort, because developers have to solve a series
@@ -20,16 +20,15 @@ of complex technical tasks to create a product.
 We decided to share our product as it allows developers to start with a
 powerful solution in almost no time, saving on development and
 infrastructure maintenance costs.
-
 ## Frequently asked questions (FAQ)
 FAQ is located here: [http://metaapi.cloud/docs/copyfactory/faq](http://metaapi.cloud/docs/copyfactory/faq)
 
-## CopyFactory features
+## CopyFactory copytradging API features
 
 Features supported:
 
-- low latency trade copying
-- reliable trade copying
+- low latency trade copying API
+- reliable trade copying API
 - suitable for large-scale deployments
 - suitable for large number of subscribers
 - connect arbitrary number of strategy providers and subscribers
