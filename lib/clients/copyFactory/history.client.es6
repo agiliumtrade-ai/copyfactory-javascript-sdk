@@ -177,7 +177,7 @@ export default class HistoryClient extends MetaApiClient {
    * @param {Array<String>} [strategyIds] optional list of strategy ids to filter transactions by
    * @param {Array<String>} [subscriberIds] optional list of subscribers to filter transactions by
    * @param {Number} [offset] pagination offset. Default value is 0
-   * @param {Number} [limit] pagination limit. Default value is 10000
+   * @param {Number} [limit] pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
   async getProvidedStrategiesTransactions(from, till, strategyIds, subscriberIds, offset, limit) {
@@ -222,7 +222,7 @@ export default class HistoryClient extends MetaApiClient {
    * @param {Array<String>} strategyIds optional list of strategy ids to filter transactions by
    * @param {Array<String>} providerIds optional list of providers to filter transactions by
    * @param {Number} offset pagination offset. Default value is 0
-   * @param {Number} limit pagination limit. Default value is 10000
+   * @param {Number} limit pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
   async getStrategiesSubscribedTransactions(from, till, strategyIds, providerIds, offset, limit) {
