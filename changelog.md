@@ -1,4 +1,4 @@
-1.1.0
+1.1.1
   - Added API to retrieve account / strategy / portfolio strategy by id
 
 1.0.0
