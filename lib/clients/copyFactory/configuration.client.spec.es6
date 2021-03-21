@@ -147,6 +147,60 @@ describe('ConfigurationClient', () => {
   });
 
   /**
+   * @test {ConfigurationClient#getAccount}
+   */
+  it('should retrieve CopyFactory account from API', async () => {
+    let expected = {
+      _id: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      subscriberId: 'subscriberId',
+      name: 'Demo account',
+      connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+      reservedMarginFraction: 0.25,
+      subscriptions: [
+        {
+          strategyId: 'ABCD',
+          multiplier: 1
+        }
+      ]
+    };
+    httpClient.requestFn = (opts) => {
+      return Promise
+        .resolve()
+        .then(() => {
+          opts.should.eql({
+            url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+            method: 'GET',
+            headers: {
+              'auth-token': 'header.payload.sign'
+            },
+            json: true,
+            timeout: 60000
+          });
+          return expected;
+        });
+    };
+    let accounts = await copyFactoryClient
+      .getAccount('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+    accounts.should.equal(expected);
+  });
+
+  /**
+   * @test {ConfigurationClient#getAccount}
+   */
+  it('should not retrieve CopyFactory account from API with account token', async () => {
+    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    try {
+      await copyFactoryClient.getAccount('test');
+    } catch (error) {
+      error.message.should.equal(
+        'You can not invoke getAccount method, because you have connected with account access token. ' +
+        'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
    * @test {ConfigurationClient#removeAccount}
    */
   it('should remove CopyFactory account via API', async () => {
@@ -348,6 +402,62 @@ describe('ConfigurationClient', () => {
   });
 
   /**
+   * @test {ConfigurationClient#getStrategy}
+   */
+  it('should retrieve strategy from API', async () => {
+    let expected = {
+      _id: 'ABCD',
+      providerId: 'providerId',
+      platformCommissionRate: 0.01,
+      name: 'Test strategy',
+      positionLifecycle: 'hedging',
+      connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+      maxTradeRisk: 0.1,
+      stopOutRisk: {
+        value: 0.4,
+        startTime: '2020-08-24T00:00:00.000Z'
+      },
+      timeSettings: {
+        lifetimeInHours: 192,
+        openingIntervalInMinutes: 5
+      }
+    };
+    httpClient.requestFn = (opts) => {
+      return Promise
+        .resolve()
+        .then(() => {
+          opts.should.eql({
+            url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+            method: 'GET',
+            headers: {
+              'auth-token': 'header.payload.sign'
+            },
+            json: true,
+            timeout: 60000
+          });
+          return expected;
+        });
+    };
+    let strategies = await copyFactoryClient.getStrategy('ABCD');
+    strategies.should.equal(expected);
+  });
+
+  /**
+   * @test {ConfigurationClient#getStrategy}
+   */
+  it('should not retrieve strategy from API with account token', async () => {
+    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    try {
+      await copyFactoryClient.getStrategy('ABCD');
+    } catch (error) {
+      error.message.should.equal(
+        'You can not invoke getStrategy method, because you have connected with account access token. ' +
+        'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
    * @test {ConfigurationClient#removeStrategy}
    */
   it('should remove strategy via API', async () => {
@@ -435,6 +545,61 @@ describe('ConfigurationClient', () => {
     } catch (error) {
       error.message.should.equal(
         'You can not invoke getPortfolioStrategies method, because you have connected with account access token. ' +
+        'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
+   * @test {ConfigurationClient#getPortfolioStrategy}
+   */
+  it('should retrieve portfolio strategy from API', async () => {
+    let expected = {
+      _id: 'ABCD',
+      providerId: 'providerId',
+      platformCommissionRate: 0.01,
+      name: 'Test strategy',
+      members: [
+        {
+          strategyId: 'BCDE'
+        }
+      ],
+      maxTradeRisk: 0.1,
+      stopOutRisk: {
+        value: 0.4,
+        startTime: '2020-08-24T00:00:00.000Z'
+      }
+    };
+    httpClient.requestFn = (opts) => {
+      return Promise
+        .resolve()
+        .then(() => {
+          opts.should.eql({
+            url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+            method: 'GET',
+            headers: {
+              'auth-token': 'header.payload.sign'
+            },
+            json: true,
+            timeout: 60000
+          });
+          return expected;
+        });
+    };
+    let strategies = await copyFactoryClient.getPortfolioStrategy('ABCD');
+    strategies.should.equal(expected);
+  });
+
+  /**
+   * @test {ConfigurationClient#getPortfolioStrategy}
+   */
+  it('should not retrieve portfolio strategy from API with account token', async () => {
+    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    try {
+      await copyFactoryClient.getPortfolioStrategy('ABCD');
+    } catch (error) {
+      error.message.should.equal(
+        'You can not invoke getPortfolioStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
       );
     }

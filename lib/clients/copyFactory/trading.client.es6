@@ -5,7 +5,7 @@ import randomstring from 'randomstring';
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
- * https://trading-api-v1.project-stock.agiliumlabs.cloud/swagger/#/)
+ * https://metaapi.cloud/docs/copyfactory/)
  */
 export default class TradingClient extends MetaApiClient {
 
@@ -22,7 +22,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Resynchronizes the account. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/post_users_current_accounts_accountId_resynchronize
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resynchronize/
    * @param {String} accountId account id
    * @param {Array<String>} strategyIds optional array of strategy ids to recynchronize. Default is to synchronize all
    * strategies
@@ -59,7 +59,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Returns subscriber account stopouts. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_accounts_accountId_stopouts
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getStopOuts/
    * @param {String} accountId account id
    * @return {Promise<Array<CopyFactoryStrategyStopout>>} promise which resolves with stopouts found
    */
@@ -80,8 +80,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Resets strategy stopouts. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/post_users_current_accounts_accountId_
-   * strategies_subscribed_strategyId_stopouts_reason_reset
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
    * @param {String} accountId account id
    * @param {String} strategyId strategy id
    * @param {String} reason stopout reason to reset. One of yearly-balance, monthly-balance, daily-balance,
@@ -121,7 +120,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Returns copy trading user log for an account and time range. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_accounts_accountId_user_log
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getUserLog/
    * @param {string} accountId account id
    * @param {Date} [startTime] time to start loading data from
    * @param {Date} [endTime] time to stop loading data at

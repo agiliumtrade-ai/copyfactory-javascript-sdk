@@ -6,7 +6,7 @@ import randomstring from 'randomstring';
 
 /**
  * metaapi.cloud CopyFactory configuration API (trade copying configuration API) client (see
- * https://trading-api-v1.project-stock.agiliumlabs.cloud/swagger/#/)
+ * https://metaapi.cloud/docs/copyfactory/)
  */
 export default class ConfigurationClient extends MetaApiClient {
 
@@ -29,7 +29,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Retrieves new unused strategy id. Method is accessible only with API access token. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_configuration_unused_strategy_id
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/generateStrategyId/
    * @return {Promise<StrategyId>} promise resolving with strategy id generated
    */
   generateStrategyId() {
@@ -173,8 +173,8 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Retrieves CopyFactory copy trading accounts. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_configuration_accounts
-   * @return {Promise<CopyFactoryAccount>} promise resolving with CopyFactory accounts found
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getAccounts/
+   * @return {Promise<Array<CopyFactoryAccount>>} promise resolving with CopyFactory accounts found
    */
   getAccounts() {
     if (this._isNotJwtToken()) {
@@ -182,6 +182,27 @@ export default class ConfigurationClient extends MetaApiClient {
     }
     const opts = {
       url: `${this._host}/users/current/configuration/accounts`,
+      method: 'GET',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
+   * Retrieves CopyFactory copy trading account by id. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getAccount/
+   * @param {string} accountId CopyFactory account id
+   * @return {Promise<CopyFactoryAccount>} promise resolving with CopyFactory account found
+   */
+  getAccount(accountId) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('getAccount');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/accounts/${accountId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -220,7 +241,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Updates a CopyFactory trade copying account. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/put_users_current_configuration_accounts_accountId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updateAccount/
    * @param {String} id copy trading account id
    * @param {CopyFactoryAccountUpdate} account trading account update
    * @return {Promise} promise resolving when account is updated
@@ -243,7 +264,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Deletes a CopyFactory trade copying account. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/delete_users_current_configuration_accounts_accountId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeAccount/
    * @param {String} id copy trading account id
    * @return {Promise} promise resolving when account is removed
    */
@@ -310,8 +331,8 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Retrieves CopyFactory copy trading strategies. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_configuration_strategies
-   * @return {Promise<CopyFactoryStrategy>} promise resolving with CopyFactory strategies found
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getStrategies/
+   * @return {Promise<Array<CopyFactoryStrategy>>} promise resolving with CopyFactory strategies found
    */
   getStrategies() {
     if (this._isNotJwtToken()) {
@@ -319,6 +340,27 @@ export default class ConfigurationClient extends MetaApiClient {
     }
     const opts = {
       url: `${this._host}/users/current/configuration/strategies`,
+      method: 'GET',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
+   * Retrieves CopyFactory copy trading strategy by id. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getStrategy/
+   * @param {string} strategy id trading strategy id
+   * @return {Promise<CopyFactoryStrategy>} promise resolving with CopyFactory strategy found
+   */
+  getStrategy(strategyId) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('getStrategy');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -377,7 +419,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Updates a CopyFactory strategy. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/put_users_current_configuration_strategies_strategyId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updateStrategy/
    * @param {String} id copy trading strategy id
    * @param {CopyFactoryStrategyUpdate} strategy trading strategy update
    * @return {Promise} promise resolving when strategy is updated
@@ -400,7 +442,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Deletes a CopyFactory strategy. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/delete_users_current_configuration_strategies_strategyId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeStrategy/
    * @param {String} id strategy id
    * @return {Promise} promise resolving when strategy is removed
    */
@@ -501,8 +543,9 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Retrieves CopyFactory copy portfolio strategies. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_configuration_portfolio_strategies
-   * @return {Promise<CopyFactoryPortfolioStrategy>} promise resolving with CopyFactory portfolio strategies found
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getPortfolioStrategies/
+   * @return {Promise<Array<CopyFactoryPortfolioStrategy>>} promise resolving with CopyFactory portfolio strategies
+   * found
    */
   getPortfolioStrategies() {
     if (this._isNotJwtToken()) {
@@ -520,8 +563,29 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
+   * Retrieves CopyFactory copy portfolio strategy by id. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getPortfolioStrategy/
+   * @param {string} portfolioId portfolio strategy id
+   * @return {Promise<CopyFactoryPortfolioStrategy>} promise resolving with CopyFactory portfolio strategy found
+   */
+  getPortfolioStrategy(portfolioId) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('getPortfolioStrategy');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
+      method: 'GET',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
    * Updates a CopyFactory portfolio strategy. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/put_users_current_configuration_portfolio_strategies_portfolioId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updatePortfolioStrategy/
    * @param {String} id copy trading portfolio strategy id
    * @param {CopyFactoryPortfolioStrategyUpdate} strategy portfolio strategy update
    * @return {Promise} promise resolving when portfolio strategy is updated
@@ -544,8 +608,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Deletes a CopyFactory portfolio strategy. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/
-   * #!/default/delete_users_current_configuration_portfolio_strategies_portfolioId
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removePortfolioStrategy/
    * @param {String} id portfolio strategy id
    * @return {Promise} promise resolving when portfolio strategy is removed
    */
@@ -575,8 +638,7 @@ export default class ConfigurationClient extends MetaApiClient {
   
   /**
    * Returns list of active resynchronization tasks for a specified connection. See
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/
-   * get_users_current_configuration_connections_connectionId_active_resynchronization_tasks
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getActiveResynchronizationTasks/
    * @param {String} connectionId MetaApi account id to return tasks for
    * @return {Promise<Array<ResynchronizationTask>>} promise resolving with list of active resynchronization tasks
    */

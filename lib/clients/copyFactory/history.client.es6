@@ -5,7 +5,7 @@ import randomstring from 'randomstring';
 
 /**
  * metaapi.cloud CopyFactory history API (trade copying history API) client (see
- * https://trading-api-v1.project-stock.agiliumlabs.cloud/swagger/#/)
+ * https://metaapi.cloud/docs/copyfactory/)
  */
 export default class HistoryClient extends MetaApiClient {
 
@@ -38,7 +38,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of providers providing strategies to the current user
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_providers
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProviders/
    * @return {Promise<Array<CopyFactorySubscriberOrProvider>>} promise resolving with providers found
    */
   getProviders() {
@@ -58,7 +58,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of subscribers subscribed to the strategies of the current user
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_subscribers
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscribers/
    * @return {Promise<Array<CopyFactorySubscriberOrProvider>>} promise resolving with subscribers found
    */
   getSubscribers() {
@@ -78,7 +78,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of strategies the current user is subscribed to
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_strategies_subscribed
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getStrategiesSubscribed/
    * @return {Promise<Array<CopyFactoyStrategyIdAndName>>} promise resolving with strategies found
    */
   getStrategiesSubscribed() {
@@ -98,7 +98,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of strategies the current user provides to other users
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_provided_strategies
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedStrategies/
    * @return {Promise<Array<CopyFactoryStrategyIdAndName>>} promise resolving with strategies found
    */
   getProvidedStrategies() {
@@ -171,7 +171,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of transactions on the strategies the current user provides to other users
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_provided_strategies_transactions
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedStrategiesTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
    * @param {Array<String>} [strategyIds] optional list of strategy ids to filter transactions by
@@ -216,7 +216,7 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of trades on the strategies the current user subscribed to
-   * https://trading-api-v1.agiliumtrade.agiliumtrade.ai/swagger/#!/default/get_users_current_strategies_subscribed_transactions
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getStrategiesSubscribedTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
    * @param {Array<String>} strategyIds optional list of strategy ids to filter transactions by

@@ -3,8 +3,7 @@
   "description": "metaapi.cloud CopyFactory API example scripts",
   "version": "1.0.0",
   "dependencies": {
-    "metaapi.cloud-sdk": "^12.4.0",
-    "metaapi.cloud-copyfactory-sdk": "^1.0.0"
+    "metaapi.cloud-sdk": "^12.4.0"
   },
   "scripts": {}
 }
