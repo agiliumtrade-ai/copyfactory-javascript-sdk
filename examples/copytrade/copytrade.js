@@ -1,12 +1,12 @@
 let MetaApi = require('metaapi.cloud-sdk').default;
-let CopyFactory = require('metaapi.cloud-copyfactory-sdk').default;
+let CopyFactory = require('metaapi.cloud-sdk').CopyFactory;
 
 // your MetaApi API token
 let token = process.env.TOKEN || '<put in your token here>';
 // your master MetaApi account id
-let masterAccountId = process.env.MASTER_ACCOUNT_ID || '<put in your MT login here>';
+let masterAccountId = process.env.MASTER_ACCOUNT_ID || '<put in your masterAccountId here>';
 // your slave MetaApi account id
-let slaveAccountId = process.env.SLAVE_ACCOUNT_ID || '<put in your MT login here>';
+let slaveAccountId = process.env.SLAVE_ACCOUNT_ID || '<put in your slaveAccountId here>';
 
 const api = new MetaApi(token);
 const copyFactory = new CopyFactory(token);

@@ -1,5 +1,5 @@
 let MetaApi = require('metaapi.cloud-sdk').default;
-let CopyFactory = require('metaapi.cloud-copyfactory-sdk').default;
+let CopyFactory = require('metaapi.cloud-sdk').CopyFactory;
 
 // your MetaApi API token
 let token = process.env.TOKEN || '<put in your token here>';
