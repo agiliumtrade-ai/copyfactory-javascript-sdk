@@ -246,6 +246,7 @@ describe('HistoryClient', () => {
               from,
               till,
               strategyId: ['ABCD'],
+              accountId: ['accountId'],
               subscriberId: ['subscriberId'],
               offset: 100,
               limit: 200
@@ -256,7 +257,7 @@ describe('HistoryClient', () => {
           return expected;
         });
     };
-    let transactions = await copyFactoryClient.getProvidedStrategiesTransactions(from, till, ['ABCD'],
+    let transactions = await copyFactoryClient.getProvidedStrategiesTransactions(from, till, ['ABCD'], ['accountId'],
       ['subscriberId'], 100, 200);
     transactions.should.equal(expected);
   });
@@ -326,6 +327,7 @@ describe('HistoryClient', () => {
               from,
               till,
               strategyId: ['ABCD'],
+              accountId: ['accountId'],
               providerId: ['providerId'],
               offset: 100,
               limit: 200
@@ -335,7 +337,7 @@ describe('HistoryClient', () => {
           return expected;
         });
     };
-    let transactions = await copyFactoryClient.getStrategiesSubscribedTransactions(from, till, ['ABCD'],
+    let transactions = await copyFactoryClient.getStrategiesSubscribedTransactions(from, till, ['ABCD'], ['accountId'],
       ['providerId'], 100, 200);
     transactions.should.equal(expected);
   });
