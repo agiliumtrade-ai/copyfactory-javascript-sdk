@@ -51,6 +51,9 @@ CopyFactory SDK is built on top of CopyFactory REST API.
 
 CopyFactory REST API docs are available at [https://metaapi.cloud/docs/copyfactory/](https://metaapi.cloud/docs/copyfactory/)
 
+## FAQ
+Please check this page for FAQ: [https://metaapi.cloud/docs/copyfactory/faq/](https://metaapi.cloud/docs/copyfactory/faq/).
+
 ## Code examples
 We published some code examples in our github repository, namely:
 
@@ -222,9 +225,10 @@ console.log(await tradingApi.getUserLog(accountId, new Date(Date.now() - 24 * 60
 ```
 
 ## Related projects:
-See our website for the full list of APIs and features supported [https://metaapi.cloud/#features](https://metaapi.cloud/#features)
+Take a look at our website for the full list of APIs and features supported [https://metaapi.cloud/#features](https://metaapi.cloud/#features)
 
-Some of the APIs you might decide to use together with this module:
+Some of the APIs you might decide to use together with MetaStats API are:
 
-1. MetaApi cloud forex trading API [https://metaapi.cloud/docs/client/](https://metaapi.cloud/docs/client/)
-2. MetaStats cloud forex trading statistics API [https://metaapi.cloud/docs/metastats/](https://metaapi.cloud/docs/metastats/)
+1. MetaApi cloud forex API [https://metaapi.cloud/docs/client/](https://metaapi.cloud/docs/client/)
+2. MetaTrader account management API [https://metaapi.cloud/docs/provisioning/](https://metaapi.cloud/docs/provisioning/)
+3. MetaStats forex trading metrics API [https://metaapi.cloud/docs/metastats/](https://metaapi.cloud/docs/metastats/)
