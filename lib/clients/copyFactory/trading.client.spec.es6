@@ -1,6 +1,7 @@
 'use strict';
 
-import {HttpClientMock} from '../httpClient';
+import HttpClient from '../httpClient';
+import sinon from 'sinon';
 import TradingClient from './trading.client';
 
 const copyFactoryApiUrl = 'https://trading-api-v1.agiliumtrade.agiliumtrade.ai';
@@ -11,37 +12,41 @@ const copyFactoryApiUrl = 'https://trading-api-v1.agiliumtrade.agiliumtrade.ai';
 describe('TradingClient', () => {
 
   let tradingClient;
-  let httpClient = new HttpClientMock(() => 'empty');
+  const token = 'header.payload.sign';
+  let httpClient = new HttpClient();
+  let sandbox;
+  let requestStub;
+
+  before(() => {
+    sandbox = sinon.createSandbox();
+  });
 
   beforeEach(() => {
-    tradingClient = new TradingClient(httpClient, 'header.payload.sign');
+    tradingClient = new TradingClient(httpClient, token);
+    requestStub = sandbox.stub(httpClient, 'request');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   /**
    * @test {TradingClient#resynchronize}
    */
   it('should resynchronize CopyFactory account', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/resynchronize',
-            method: 'POST',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000,
-            qs: {
-              strategyId: ['ABCD']
-            }
-          });
-          return;
-        });
-    };
     await tradingClient.resynchronize('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef', ['ABCD']);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/resynchronize',
+      method: 'POST',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+      qs: {
+        strategyId: ['ABCD']
+      }
+    });
   });
 
   /**
@@ -73,26 +78,19 @@ describe('TradingClient', () => {
       reasonDescription: 'total strategy equity drawdown exceeded limit'
     }
     ];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/stopouts',
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let stopouts = await tradingClient
       .getStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
     stopouts.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/stopouts',
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -114,26 +112,18 @@ describe('TradingClient', () => {
    * @test {TradingClient#resetStopouts}
    */
   it('should reset stopouts', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/strategies-subscribed/' +
-              'ABCD/stopouts/daily-equity/reset',
-            method: 'POST',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return;
-        });
-    };
     await tradingClient.resetStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
       'ABCD', 'daily-equity');
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/strategies-subscribed/' +
+              'ABCD/stopouts/daily-equity/reset',
+      method: 'POST',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -161,33 +151,26 @@ describe('TradingClient', () => {
       level: 'INFO',
       message: 'message'
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/accounts/` +
-            '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/user-log',
-            method: 'GET',
-            qs: {
-              startTime: new Date('2020-08-01T00:00:00.000Z'),
-              endTime: new Date('2020-08-10T00:00:00.000Z'),
-              offset: 10,
-              limit: 100
-            },
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let records = await tradingClient
       .getUserLog('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
         new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
     records.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/accounts/` +
+            '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/user-log',
+      method: 'GET',
+      qs: {
+        startTime: new Date('2020-08-01T00:00:00.000Z'),
+        endTime: new Date('2020-08-10T00:00:00.000Z'),
+        offset: 10,
+        limit: 100
+      },
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
