@@ -2,9 +2,10 @@
 
 import request from 'request-promise-any';
 import {
-  UnauthorizedError, ForbiddenError, ApiError, ConflictError,
-  ValidationError, InternalError, NotFoundError, TooManyRequestsError
+  UnauthorizedError, ForbiddenError, ApiError, ValidationError, InternalError, 
+  NotFoundError, TooManyRequestsError, ConflictError
 } from './errorHandler';
+import TimeoutError from './timeoutError';
 
 /**
  * HTTP client library based on request-promise
@@ -12,44 +13,86 @@ import {
 export default class HttpClient {
 
   /**
+   * @typedef {Object} RetryOptions retry options
+   * @property {Number} [retries] the number of attempts to retry failed request, default 5
+   * @property {Number} [minDelayInSeconds] minimum delay in seconds before retrying, default 1
+   * @property {Number} [maxDelayInSeconds] maximum delay in seconds before retrying, default 30
+   */
+
+  /**
    * Constructs HttpClient class instance
-   * @param timeout request timeout in seconds
+   * @param {Number} timeout request timeout in seconds
+   * @param {RetryOptions} [retryOpts] retry options
    */
   constructor(timeout = 60, retryOpts = {}) {
     this._timeout = timeout * 1000;
     this._retries = retryOpts.retries || 5;
-    this._minRetryDelayInSeconds = retryOpts.minDelayInSeconds || 1;
-    this._maxRetryDelayInSeconds = retryOpts.maxDelayInSeconds || 30;
+    this._minRetryDelay = (retryOpts.minDelayInSeconds || 1) * 1000;
+    this._maxRetryDelay = (retryOpts.maxDelayInSeconds || 30) * 1000;
   }
 
   /**
    * Performs a request. Response errors are returned as ApiError or subclasses.
    * @param {Object} options request options
-   * @returns {Promise} promise returning request results
+   * @returns {Object|String|any} request result
    */
-  request(options, retryCounter = 0) {
+  async request(options, retryCounter = 0, endTime = Date.now() + this._maxRetryDelay * this._retries) {
     options.timeout = this._timeout;
-    return this._makeRequest(options)
-      .catch(async (err) => {
-        const error = this._convertError(err);
-        if(['ConflictError', 'InternalError', 'ApiError', 'TimeoutError']
-          .includes(error.name) && retryCounter < this._retries) {
-          await new Promise(res => setTimeout(res, 
-            Math.min(Math.pow(2, retryCounter) * this._minRetryDelayInSeconds, this._maxRetryDelayInSeconds) * 1000));
-          return this.request(options, retryCounter + 1);
-        } else {
-          throw error;
-        }
-      });
+    let retryAfterSeconds = 0;
+    options.callback = (e, res) => {
+      if (res && res.statusCode === 202) {
+        retryAfterSeconds = res.headers['retry-after'];
+      }
+    };
+    let body;
+    try {
+      body = await this._makeRequest(options);
+    } catch (err) {
+      retryCounter = await this._handleError(err, retryCounter, endTime);
+      return this.request(options, retryCounter, endTime);
+    }
+    if (retryAfterSeconds) {
+      await this._handleRetry(endTime, retryAfterSeconds * 1000);
+      body = await this.request(options, retryCounter, endTime);
+    }
+    return body;
   }
 
   _makeRequest(options) {
     return request(options);
   }
 
+  async _wait(pause) {
+    await new Promise(res => setTimeout(res, pause));
+  }
+
+  async _handleRetry(endTime, retryAfter) {
+    if(endTime > Date.now() + retryAfter) {
+      await this._wait(retryAfter);
+    } else {
+      throw new TimeoutError('Timed out waiting for the end of the process of calculating metrics');
+    }
+  }
+
+  async _handleError(err, retryCounter, endTime) {
+    const error = this._convertError(err);
+    if(['ConflictError', 'InternalError', 'ApiError', 'TimeoutError'].includes(error.name)
+      && retryCounter < this._retries) {
+      const pause = Math.min(Math.pow(2, retryCounter) * this._minRetryDelay, this._maxRetryDelay);
+      await this._wait(pause);
+      return retryCounter + 1;
+    } else if(error.name === 'TooManyRequestsError') {
+      const retryTime = Date.parse(error.metadata.recommendedRetryTime);
+      if (retryTime < endTime) {
+        await this._wait(retryTime - Date.now());
+        return retryCounter;
+      }
+    }
+    throw error;
+  }
+
   // eslint-disable-next-line complexity
   _convertError(err) {
-    let error;
     err.error = err.error || {};
     let status = err.statusCode || err.status;
     switch (status) {
@@ -82,30 +125,16 @@ export class HttpClientMock extends HttpClient {
   /**
    * Constructs HTTP client mock
    * @param {Function(options:Object):Promise} requestFn mocked request function
+   * @param {Number} timeout request timeout in seconds
+   * @param {RetryOptions} retryOpts retry options
    */
-  constructor(requestFn, timeout = 60, retryOpts = {}) {
+  constructor(requestFn, timeout, retryOpts) {
     super(timeout, retryOpts);
     this._requestFn = requestFn;
   }
 
   _makeRequest() {
     return this._requestFn.apply(this, arguments);
-  }
-
-  /**
-   * Set request mock function
-   * @param {Function} requestFn mock function
-   */
-  set requestFn(requestFn) {
-    this._requestFn = requestFn;
-  }
-
-  /**
-   * Return request mock function
-   * @returns {Function} request mock function
-   */
-  get requestFn() {
-    return this._requestFn;
   }
 
 }

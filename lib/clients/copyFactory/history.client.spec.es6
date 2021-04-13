@@ -1,6 +1,7 @@
 'use strict';
 
-import {HttpClientMock} from '../httpClient';
+import HttpClient from '../httpClient';
+import sinon from 'sinon';
 import HistoryClient from './history.client';
 
 const copyFactoryApiUrl = 'https://trading-api-v1.agiliumtrade.agiliumtrade.ai';
@@ -11,10 +12,22 @@ const copyFactoryApiUrl = 'https://trading-api-v1.agiliumtrade.agiliumtrade.ai';
 describe('HistoryClient', () => {
 
   let copyFactoryClient;
-  let httpClient = new HttpClientMock(() => 'empty');
+  const token = 'header.payload.sign';
+  let httpClient = new HttpClient();
+  let sandbox;
+  let requestStub;
+
+  before(() => {
+    sandbox = sinon.createSandbox();
+  });
 
   beforeEach(() => {
-    copyFactoryClient = new HistoryClient(httpClient, 'header.payload.sign');
+    copyFactoryClient = new HistoryClient(httpClient, token);
+    requestStub = sandbox.stub(httpClient, 'request');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   /**
@@ -29,24 +42,17 @@ describe('HistoryClient', () => {
         name: 'Test strategy'
       }]
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/providers`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let providers = await copyFactoryClient.getProviders();
     providers.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/providers`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -76,24 +82,17 @@ describe('HistoryClient', () => {
         name: 'Test strategy'
       }]
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/subscribers`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let providers = await copyFactoryClient.getSubscribers();
     providers.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/subscribers`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -119,24 +118,17 @@ describe('HistoryClient', () => {
       id: 'ABCD',
       name: 'Test strategy'
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/strategies-subscribed`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getStrategiesSubscribed();
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/strategies-subscribed`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -162,24 +154,17 @@ describe('HistoryClient', () => {
       id: 'ABCD',
       name: 'Test strategy'
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/provided-strategies`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getProvidedStrategies();
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/provided-strategies`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -232,34 +217,27 @@ describe('HistoryClient', () => {
     }];
     let from = new Date();
     let till = new Date();
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/provided-strategies/transactions`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            qs: {
-              from,
-              till,
-              strategyId: ['ABCD'],
-              accountId: ['accountId'],
-              subscriberId: ['subscriberId'],
-              offset: 100,
-              limit: 200
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let transactions = await copyFactoryClient.getProvidedStrategiesTransactions(from, till, ['ABCD'], ['accountId'],
       ['subscriberId'], 100, 200);
     transactions.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/provided-strategies/transactions`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      qs: {
+        from,
+        till,
+        strategyId: ['ABCD'],
+        accountId: ['accountId'],
+        subscriberId: ['subscriberId'],
+        offset: 100,
+        limit: 200
+      },
+      json: true,
+    });
   });
 
   /**
@@ -312,34 +290,27 @@ describe('HistoryClient', () => {
     }];
     let from = new Date();
     let till = new Date();
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/strategies-subscribed/transactions`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            qs: {
-              from,
-              till,
-              strategyId: ['ABCD'],
-              accountId: ['accountId'],
-              providerId: ['providerId'],
-              offset: 100,
-              limit: 200
-            },
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let transactions = await copyFactoryClient.getStrategiesSubscribedTransactions(from, till, ['ABCD'], ['accountId'],
       ['providerId'], 100, 200);
     transactions.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/strategies-subscribed/transactions`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+      qs: {
+        from,
+        till,
+        strategyId: ['ABCD'],
+        accountId: ['accountId'],
+        providerId: ['providerId'],
+        offset: 100,
+        limit: 200
+      },
+    });
   });
 
   /**
