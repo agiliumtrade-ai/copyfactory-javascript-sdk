@@ -1,3 +1,6 @@
+2.1.0
+  - added settings to disable SL and/or TP copying
+
 2.0.0
   - breaking change: added option to filter transactions by account id in history API and altered API parameter list as a result
 

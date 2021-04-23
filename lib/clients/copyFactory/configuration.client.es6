@@ -97,6 +97,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
    * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
    * balance.
+   * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
+   * loss.
+   * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
+   * profit.
    */
 
   /**
@@ -236,6 +240,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * equity drawdown
    * @property {Number} [maxLeverage] optional setting indicating maxumum leverage allowed when opening a new positions.
    * Any trade which results in a higher leverage will be discarded.
+   * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
+   * loss.
+   * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
+   * profit.
    * @property {Array<CopyFactoryStrategySubscription>} subscriptions strategy subscriptions
    */
 
@@ -415,6 +423,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * balance.
    * @property {CopyFactoryStrategyEquityCurveFilter} equityCurveFilter filter which permits the trades only if account
    * equity is greater than balance moving average
+   * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
+   * loss.
+   * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
+   * profit.
    */
 
   /**
@@ -493,6 +505,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
    * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
    * balance.
+   * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
+   * loss.
+   * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
+   * profit.
    */
 
   /**
@@ -530,6 +546,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
    * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
    * balance.
+   * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
+   * loss.
+   * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
+   * profit.
    */
 
   /**
