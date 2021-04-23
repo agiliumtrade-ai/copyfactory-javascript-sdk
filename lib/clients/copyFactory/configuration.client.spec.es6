@@ -2,7 +2,7 @@
 
 import should from 'should';
 import sinon from 'sinon';
-import {HttpClientMock} from '../httpClient';
+import HttpClient from '../httpClient';
 import ConfigurationClient from './configuration.client';
 
 const copyFactoryApiUrl = 'https://trading-api-v1.agiliumtrade.agiliumtrade.ai';
@@ -14,14 +14,17 @@ describe('ConfigurationClient', () => {
 
   let sandbox;
   let copyFactoryClient;
-  let httpClient = new HttpClientMock(() => 'empty');
+  const token = 'header.payload.sign';
+  let httpClient = new HttpClient();
+  let requestStub;
 
   before(() => {
     sandbox = sinon.createSandbox();
   });
 
   beforeEach(() => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'header.payload.sign');
+    copyFactoryClient = new ConfigurationClient(httpClient, token);
+    requestStub = sandbox.stub(httpClient, 'request');
   });
 
   afterEach(() => {
@@ -39,33 +42,6 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#updateAccount}
    */
   it('should update CopyFactory account via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-            method: 'PUT',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000,
-            body: {
-              name: 'Demo account',
-              connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
-              reservedMarginFraction: 0.25,
-              subscriptions: [
-                {
-                  strategyId: 'ABCD',
-                  multiplier: 1
-                }
-              ]
-            }
-          });
-        });
-    };
     await copyFactoryClient.updateAccount('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef', {
       name: 'Demo account',
       connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
@@ -76,6 +52,26 @@ describe('ConfigurationClient', () => {
           multiplier: 1
         }
       ]
+    });
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      method: 'PUT',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+      body: {
+        name: 'Demo account',
+        connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+        reservedMarginFraction: 0.25,
+        subscriptions: [
+          {
+            strategyId: 'ABCD',
+            multiplier: 1
+          }
+        ]
+      }
     });
   });
 
@@ -111,24 +107,17 @@ describe('ConfigurationClient', () => {
         }
       ]
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/accounts`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let accounts = await copyFactoryClient.getAccounts();
     accounts.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/accounts`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -163,26 +152,19 @@ describe('ConfigurationClient', () => {
         }
       ]
     };
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let accounts = await copyFactoryClient
       .getAccount('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
     accounts.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -204,24 +186,16 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removeAccount}
    */
   it('should remove CopyFactory account via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-            method: 'DELETE',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return;
-        });
-    };
     await copyFactoryClient.removeAccount('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/accounts/` +
+              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      method: 'DELETE',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -246,24 +220,17 @@ describe('ConfigurationClient', () => {
     let expected = {
       id: 'ABCD'
     };
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/unused-strategy-id`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let id = await copyFactoryClient.generateStrategyId();
     id.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/unused-strategy-id`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -285,35 +252,6 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#updateStrategy}
    */
   it('should update strategy via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
-            method: 'PUT',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000,
-            body: {
-              name: 'Test strategy',
-              positionLifecycle: 'hedging',
-              connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
-              maxTradeRisk: 0.1,
-              stopOutRisk: {
-                value: 0.4,
-                startTime: '2020-08-24T00:00:00.000Z'
-              },
-              timeSettings: {
-                lifetimeInHours: 192,
-                openingIntervalInMinutes: 5
-              }
-            }
-          });
-        });
-    };
     await copyFactoryClient.updateStrategy('ABCD', {
       name: 'Test strategy',
       positionLifecycle: 'hedging',
@@ -326,6 +264,28 @@ describe('ConfigurationClient', () => {
       timeSettings: {
         lifetimeInHours: 192,
         openingIntervalInMinutes: 5
+      }
+    });
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+      method: 'PUT',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+      body: {
+        name: 'Test strategy',
+        positionLifecycle: 'hedging',
+        connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+        maxTradeRisk: 0.1,
+        stopOutRisk: {
+          value: 0.4,
+          startTime: '2020-08-24T00:00:00.000Z'
+        },
+        timeSettings: {
+          lifetimeInHours: 192,
+          openingIntervalInMinutes: 5
+        }
       }
     });
   });
@@ -366,24 +326,17 @@ describe('ConfigurationClient', () => {
         openingIntervalInMinutes: 5
       }
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/strategies`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getStrategies();
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/strategies`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -422,24 +375,17 @@ describe('ConfigurationClient', () => {
         openingIntervalInMinutes: 5
       }
     };
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getStrategy('ABCD');
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -461,23 +407,15 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removeStrategy}
    */
   it('should remove strategy via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
-            method: 'DELETE',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return;
-        });
-    };
     await copyFactoryClient.removeStrategy('ABCD');
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -515,24 +453,17 @@ describe('ConfigurationClient', () => {
         startTime: '2020-08-24T00:00:00.000Z'
       }
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategies();
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -570,24 +501,17 @@ describe('ConfigurationClient', () => {
         startTime: '2020-08-24T00:00:00.000Z'
       }
     };
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategy('ABCD');
     strategies.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -609,34 +533,6 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#updatePortfolioStrategy}
    */
   it('should update portfolio strategy via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
-            method: 'PUT',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000,
-            body: {
-              name: 'Test strategy',
-              members: [
-                {
-                  strategyId: 'BCDE'
-                }
-              ],
-              maxTradeRisk: 0.1,
-              stopOutRisk: {
-                value: 0.4,
-                startTime: '2020-08-24T00:00:00.000Z'
-              }
-            }
-          });
-        });
-    };
     await copyFactoryClient.updatePortfolioStrategy('ABCD', {
       name: 'Test strategy',
       members: [
@@ -648,6 +544,27 @@ describe('ConfigurationClient', () => {
       stopOutRisk: {
         value: 0.4,
         startTime: '2020-08-24T00:00:00.000Z'
+      }
+    });
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+      method: 'PUT',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+      body: {
+        name: 'Test strategy',
+        members: [
+          {
+            strategyId: 'BCDE'
+          }
+        ],
+        maxTradeRisk: 0.1,
+        stopOutRisk: {
+          value: 0.4,
+          startTime: '2020-08-24T00:00:00.000Z'
+        }
       }
     });
   });
@@ -671,23 +588,15 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removePortfolioStrategy}
    */
   it('should remove portfolio strategy via API', async () => {
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
-            method: 'DELETE',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return;
-        });
-    };
     await copyFactoryClient.removePortfolioStrategy('ABCD');
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -715,25 +624,18 @@ describe('ConfigurationClient', () => {
       createdAt: '2020-08-25T00:00:00.000Z',
       status: 'EXECUTING'
     }];
-    httpClient.requestFn = (opts) => {
-      return Promise
-        .resolve()
-        .then(() => {
-          opts.should.eql({
-            url: `${copyFactoryApiUrl}/users/current/configuration/connections/` 
-              + 'accountId/active-resynchronization-tasks',
-            method: 'GET',
-            headers: {
-              'auth-token': 'header.payload.sign'
-            },
-            json: true,
-            timeout: 60000
-          });
-          return expected;
-        });
-    };
+    requestStub.resolves(expected);
     let tasks = await copyFactoryClient.getActiveResynchronizationTasks('accountId');
     tasks.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/connections/` 
+              + 'accountId/active-resynchronization-tasks',
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
   });
 
   /**
@@ -763,7 +665,7 @@ describe('ConfigurationClient', () => {
         createdAt: '2020-08-25T00:00:00.000Z',
         status: 'EXECUTING'
       }];
-      sandbox.stub(httpClient, 'request')
+      requestStub
         .onFirstCall().resolves(activeTasks)
         .onSecondCall().resolves(activeTasks)
         .onThirdCall().resolves([]);
@@ -774,7 +676,7 @@ describe('ConfigurationClient', () => {
           + 'accountId/active-resynchronization-tasks',
         method: 'GET',
         headers: {
-          'auth-token': 'header.payload.sign'
+          'auth-token': token
         },
         json: true
       });
@@ -791,7 +693,7 @@ describe('ConfigurationClient', () => {
         createdAt: '2020-08-25T00:00:00.000Z',
         status: 'EXECUTING'
       }];
-      sandbox.stub(httpClient, 'request').resolves(activeTasks);
+      requestStub.resolves(activeTasks);
       try {
         await copyFactoryClient.waitResynchronizationTasksCompleted('accountId', 1, 50);
         throw new Error('TimeoutError is expected');
@@ -803,7 +705,7 @@ describe('ConfigurationClient', () => {
           + 'accountId/active-resynchronization-tasks',
         method: 'GET',
         headers: {
-          'auth-token': 'header.payload.sign'
+          'auth-token': token
         },
         json: true
       });
