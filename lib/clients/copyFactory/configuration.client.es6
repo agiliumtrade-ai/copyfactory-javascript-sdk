@@ -101,6 +101,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
    * profit.
+   * @property {number} [minTradeVolume] Minimum trade volume to copy. Trade signals with a smaller volume will not be
+   * copied
+   * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
+   * with maximum volume instead
    */
 
   /**
@@ -244,6 +248,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
    * profit.
+   * @property {number} [minTradeVolume] Minimum trade volume to copy. Trade signals with a smaller volume will not be
+   * copied
+   * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
+   * with maximum volume instead
    * @property {Array<CopyFactoryStrategySubscription>} subscriptions strategy subscriptions
    */
 
@@ -427,6 +435,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
    * profit.
+   * @property {number} [minTradeVolume] Minimum trade volume to copy. Trade signals with a smaller volume will not be
+   * copied
+   * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
+   * with maximum volume instead
    */
 
   /**
@@ -509,6 +521,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
    * profit.
+   * @property {number} [minTradeVolume] Minimum trade volume to copy. Trade signals with a smaller volume will not be
+   * copied
+   * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
+   * with maximum volume instead
    */
 
   /**
@@ -550,6 +566,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
    * profit.
+   * @property {number} [minTradeVolume] Minimum trade volume to copy. Trade signals with a smaller volume will not be
+   * copied
+   * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
+   * with maximum volume instead
    */
 
   /**

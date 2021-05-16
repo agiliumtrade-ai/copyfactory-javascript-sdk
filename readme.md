@@ -46,6 +46,8 @@ Features supported:
 
 Please note that trade copying to MT5 netting accounts is not supported in the current API version
 
+Please check Features section of the [https://metaapi.cloud/docs/copyfactory/](https://metaapi.cloud/docs/copyfactory/) documentation for detailed description of all settings you can make
+
 ## REST API documentation
 CopyFactory SDK is built on top of CopyFactory REST API.
 
