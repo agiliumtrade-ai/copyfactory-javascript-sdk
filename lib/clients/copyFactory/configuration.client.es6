@@ -93,10 +93,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {String} [tradeSizeScalingMode] If set to balance, the trade size on strategy subscriber will be scaled
-   * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
-   * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
-   * balance.
+   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
@@ -105,6 +103,20 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   */
+
+  /**
+   * CopyFactory strategy trade size scaling settings
+   * @typedef {Object} CopyFactoryStrategyTradeSizeScaling
+   * @property {string} mode If set to balance, the trade size on strategy subscriber will be scaled according to
+   * balance to preserve risk. If value is none, then trade size will be preserved irregardless of the subscriber
+   * balance. If value is contractSize, then trade size will be scaled according to contract size. If fixedVolume is
+   * set, then trade will be copied with a fixed volume of traceVolume setting. If fixedRisk is set, then each trade
+   * will be copied with a trade volume set to risk specific fraction of balance as configured by riskFraction setting.
+   * Note, that in fixedRisk mode trades without a SL are not copied. Default is balance. Allowed values: none,
+   * contractSize, balance, fixedVolume, fixedRisk
+   * @property {number} [tradeVolume] Fixed trade volume for use with fixedVolume trade size scaling mode
+   * @property {number} [riskFraction] Fixed risk fraction for use with fixedRisk trade size scaling mode
    */
 
   /**
@@ -135,7 +147,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<String>} priorities list of breaking news priorities to stop trading on, leave empty to disable
    * breaking news filter. One of high, medium, low.
    * @property {Number} [closePositionTimeGapInMinutes] optional time interval specifying when to force close an already
-   * open position before calendar news. Default value is 60 minutes
+   * open position after breaking news. Default value is 60 minutes
    * @property {Number} [openPositionFollowingTimeGapInMinutes] optional time interval specifying when it is allowed to
    * open position after calendar news. Default value is 60 minutes
    */
@@ -425,10 +437,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {String} [tradeSizeScalingMode] If set to balance, the trade size on strategy subscriber will be scaled
-   * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
-   * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
-   * balance.
+   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {CopyFactoryStrategyEquityCurveFilter} equityCurveFilter filter which permits the trades only if account
    * equity is greater than balance moving average
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
@@ -513,10 +523,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {String} [tradeSizeScalingMode] If set to balance, the trade size on strategy subscriber will be scaled
-   * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
-   * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
-   * balance.
+   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
@@ -558,10 +566,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {String} [tradeSizeScalingMode] If set to balance, the trade size on strategy subscriber will be scaled
-   * according to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
-   * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. Default is
-   * balance.
+   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
