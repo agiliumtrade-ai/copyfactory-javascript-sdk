@@ -63,17 +63,17 @@ We published some code examples in our github repository, namely:
 
 ## Installation
 ```bash
-npm install --save metaapi.cloud-copyfacory-sdk
+npm install --save metaapi.cloud-sdk
 ```
 
 ## Installing SDK in browser SPA applications
 ```bash
-npm install --save metaapi.cloud-copyfactory-sdk
+npm install --save metaapi.cloud-sdk
 ```
 
 ## Installing SDK in browser HTML applications
 ```html
-<script src="unpkg.com/metaapi.cloud-copyfactory-sdk/index.js"></script>
+<script src="unpkg.com/metaapi.cloud-sdk/index.js"></script>
 <script>
     const token = '...';
     const api = new CopyFactory(token);
@@ -93,8 +93,7 @@ In order to configure trade copying you need to:
 - subscribe slave CopyFactory accounts to the strategy
 
 ```javascript
-import MetaApi from 'metaapi.cloud-sdk';
-import CopyFactory from 'metaapi.cloud-copyfactory-sdk';
+import MetaApi, {CopyFactory} from 'metaapi.cloud-sdk';
 
 const token = '...';
 const metaapi = new MetaApi(token);
