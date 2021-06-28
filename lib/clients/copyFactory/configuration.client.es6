@@ -409,9 +409,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    * @property {CopyFactoryStrategyCommissionScheme} [commissionScheme] commission scheme allowed by this strategy
-   * @property {Number} platformCommissionRate commission rate the platform charges for strategy copying, applied to
-   * commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should
-   * be fraction of 1
    * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit

@@ -25,21 +25,41 @@ async function configureCopyFactory() {
     }
 
     let configurationApi = copyFactory.configurationApi;
-    masterAccountId = configurationApi.generateAccountId();
-    slaveAccountId = configurationApi.generateAccountId();
+    const copyfactoryAccounts = await configurationApi.getAccounts();
+    const masterAccount = copyfactoryAccounts.find(a => a.connectionId === masterMetaapiAccount.id);
+    if(masterAccount) {
+      masterAccountId = masterAccount._id;
+    } else {
+      masterAccountId = configurationApi.generateAccountId();
+    }
     await configurationApi.updateAccount(masterAccountId, {
       name: 'Demo master account',
       connectionId: masterMetaapiAccount.id,
       subscriptions: []
     });
 
+    const strategies = await configurationApi.getStrategies();
+    const strategy = strategies.find(a => a.connectionId === masterMetaapiAccount.id);
+    let strategyId;
+    if(strategy) {
+      strategyId = strategy._id;
+    } else {
+      strategyId = await configurationApi.generateStrategyId();
+      strategyId = strategyId.id;
+    }
+
     // create a strategy being copied
-    let strategyId = await configurationApi.generateStrategyId();
-    await configurationApi.updateStrategy(strategyId.id, {
+    await configurationApi.updateStrategy(strategyId, {
       name: 'Test strategy',
       description: 'Some useful description about your strategy',
       connectionId: masterMetaapiAccount.id
     });
+
+    const slaveAccount = copyfactoryAccounts.find(a => a.connectionId === slaveMetaapiAccount.id);
+    if(slaveAccount) {
+      await configurationApi.removeAccount(slaveAccount._id);
+    }
+    slaveAccountId = configurationApi.generateAccountId();
 
     // subscribe slave CopyFactory accounts to the strategy
     await configurationApi.updateAccount(slaveAccountId, {
@@ -47,7 +67,7 @@ async function configureCopyFactory() {
       connectionId: slaveMetaapiAccount.id,
       subscriptions: [
         {
-          strategyId: strategyId.id,
+          strategyId: strategyId,
           multiplier: 1
         }
       ]
