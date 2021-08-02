@@ -358,6 +358,16 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
+   * CopyFactory strategy drawdown filter
+   * @typedef {Object} CopyFactoryStrategyDrawdownFilter
+   * @property {Number} maxDrawdown Maximum drawdown value after which action is executed. Drawdown should be configured
+   * as a fraction of 1, i.e. 0.15 means 15% drawdown value
+   * @property {String} action Action to take when drawdown exceeds maxDrawdown value. include means the trading signal
+   * will be transmitted only if dd is greater than maxDrawdown value. exclude means the trading signal will be
+   * transmitted only if dd is less than maxDrawdown value.
+   */
+
+  /**
    * Retrieves CopyFactory copy trading strategies. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getStrategies/
    * @return {Promise<Array<CopyFactoryStrategy>>} promise resolving with CopyFactory strategies found
@@ -439,7 +449,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * trades are copied using signal source symbol name
    * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
    * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
-   * @property {CopyFactoryStrategyEquityCurveFilter} equityCurveFilter filter which permits the trades only if account
+   * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
    * equity is greater than balance moving average
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
@@ -449,6 +459,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {CopyFactoryStrategyDrawdownFilter} [drawdownFilter] Master account strategy drawdown filter
    */
 
   /**

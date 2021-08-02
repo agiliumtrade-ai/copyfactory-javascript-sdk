@@ -1,3 +1,6 @@
+2.2.0
+  - added drawdown filter
+
 2.1.0
   - added settings to disable SL and/or TP copying
   - added settings to specify max and min trade volume
