@@ -70,7 +70,7 @@
     "lint": "eslint --ext es6 ./lib",
     "lint:fix": "eslint --ext es6 ./lib --fix",
     "build": "rm -rf dist; rm -rf es; npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp",
-    "build-win": "rmdir /Q /S dist && rmdir /Q /S es && npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp"
+    "build-win": "rmdir /Q /S dist | rmdir /Q /S es | npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp"
   },
   "main": "dist/index.js",
   "module": "es/index.js"
