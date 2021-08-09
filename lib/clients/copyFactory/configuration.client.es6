@@ -78,7 +78,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
    * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
    * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations on strategy level) or by-symbol (limit correlations on symbol level).
+   * correlations for the strategy) or by-account (limit correlations for the account)
    * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and positions closed
    * once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] optional symbol filter which can be used to copy only specific
@@ -425,7 +425,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
    * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
    * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations on strategy level) or by-symbol (limit correlations on symbol level)
+   * correlations for the strategy) or by-account (limit correlations for the account)
    * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
    * positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
@@ -516,7 +516,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
    * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
    * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations on strategy level) or by-symbol (limit correlations on symbol level)
+   * correlations for the strategy) or by-account (limit correlations for the account)
    * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
    * positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
@@ -559,7 +559,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
    * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
    * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations on strategy level) or by-symbol (limit correlations on symbol level)
+   * correlations for the strategy) or by-account (limit correlations for the account)
    * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
    * positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific

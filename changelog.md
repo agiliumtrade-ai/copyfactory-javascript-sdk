@@ -1,5 +1,6 @@
 2.2.0
   - added drawdown filter
+  - changed reduceCorrelations filter allowed values
 
 2.1.0
   - added settings to disable SL and/or TP copying
