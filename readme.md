@@ -100,24 +100,20 @@ const metaapi = new MetaApi(token);
 const copyFactory = new CopyFactory(token);
 
 // retrieve MetaApi MetaTrader accounts with CopyFactory as application field value
-const masterMetaapiAccount = await metaapi.metatraderAccountApi.getAccount('masterMetaapiAccountId');
-if (masterMetaapiAccount.application !== 'CopyFactory') {
-  throw new Error('Please specify CopyFactory application field value in your MetaApi account in order to use it in CopyFactory API');
+// master account must have PROVIDER value in copyFactoryRoles
+const masterMetaapiAccount = await api.metatraderAccountApi.getAccount('masterMetaapiAccountId');
+if(!masterMetaapiAccount.copyFactoryRoles || !masterMetaapiAccount.copyFactoryRoles.includes('PROVIDER')) {
+  throw new Error('Please specify PROVIDER copyFactoryRoles value in your MetaApi account in ' +
+    'order to use it in CopyFactory API');
 }
-const slaveMetaapiAccount = await metaapi.metatraderAccountApi.getAccount('slaveMetaapiAccountId');
-if (slaveMetaapiAccount.application !== 'CopyFactory') {
-  throw new Error('Please specify CopyFactory application field value in your MetaApi account in order to use it in CopyFactory API');
+// slave account must have SUBSCRIBER value in copyFactoryRoles
+const slaveMetaapiAccount = await api.metatraderAccountApi.getAccount('slaveMetaapiAccountId');
+if(!slaveMetaapiAccount.copyFactoryRoles || !slaveMetaapiAccount.copyFactoryRoles.includes('SUBSCRIBER')) {
+  throw new Error('Please specify SUBSCRIBER copyFactoryRoles value in your MetaApi account in ' +
+    'order to use it in CopyFactory API');
 }
 
-// create CopyFactory master and slave accounts and connect them to MetaApi accounts via connectionId field
 let configurationApi = copyFactory.configurationApi;
-let masterAccountId = configurationApi.generateAccountId();
-let slaveAccountId = configurationApi.generateAccountId();
-await configurationApi.updateAccount(masterAccountId, {
-  name: 'Demo account',
-  connectionId: masterMetaapiAccount.id,
-  subscriptions: []
-});
 
 // create a strategy being copied
 let strategyId = await configurationApi.generateStrategyId();
@@ -125,7 +121,7 @@ await configurationApi.updateStrategy(strategyId.id, {
   name: 'Test strategy',
   description: 'Some useful description about your strategy',
   positionLifecycle: 'hedging',
-  connectionId: masterMetaapiAccount.id,
+  accountId: masterMetaapiAccount.id,
   maxTradeRisk: 0.1,
   stopOutRisk: {
     value: 0.4,
@@ -138,16 +134,25 @@ await configurationApi.updateStrategy(strategyId.id, {
 });
 
 // subscribe slave CopyFactory accounts to the strategy
-await configurationApi.updateAccount(slaveAccountId, {
+await configurationApi.updateSubscriber(slaveMetaapiAccount.id, {
   name: 'Demo account',
-  connectionId: slaveMetaapiAccount.id,
   subscriptions: [
     {
-      strategyId.id,
+      strategyId: strategyId.id,
       multiplier: 1
     }
   ]
 });
+
+// retrieve list of strategies
+console.log(await configurationApi.getStrategies())
+
+// retrieve list of provider portfolios
+console.log(await configurationApi.getPortfolioStrategies())
+
+// retrieve list of subscribers
+console.log(await configurationApi.getSubscribers())
+
 ```
 
 See esdoc in-code documentation for full definition of possible configuration options.
@@ -160,12 +165,6 @@ CopyFactory allows you to monitor transactions conducted on trading accounts in 
 ```javascript
 let historyApi = copyFactory.historyApi;
 
-// retrieve list of subscribers
-console.log(await historyApi.getSubscribers());
-
-// retrieve list of strategies provided
-console.log(await historyApi.getProvidedStrategies());
-
 // retrieve trading history, please note that this method support pagination and limits number of records
 console.log(await historyApi.getProvidedStrategiesTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
 ```
@@ -173,12 +172,6 @@ console.log(await historyApi.getProvidedStrategiesTransactions(new Date('2020-08
 ### Retrieving trading history on subscriber side
 ```javascript
 let historyApi = copyFactory.historyApi;
-
-// retrieve list of providers
-console.log(await historyApi.getProviders());
-
-// retrieve list of strategies subscribed to
-console.log(await historyApi.getStrategiesSubscribed());
 
 // retrieve trading history, please note that this method support pagination and limits number of records
 console.log(await historyApi.getStrategiesSubscribedTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
@@ -197,6 +190,37 @@ await copyFactory.tradingApi.resynchronize(accountId);
 
 // resynchronize specific strategy
 await copyFactory.tradingApi.resynchronize(accountId, ['ABCD']);
+```
+
+## Sending external trading signals to a strategy
+You can submit external trading signals to your trading strategy.
+
+```javascript
+const tradingApi = copyFactory.tradingApi;
+const signalId = tradingApi;
+
+// add trading signal
+await tradingApi.updateExternalSignal(strategyId, signalId, {
+  symbol: 'EURUSD',
+  type: 'POSITION_TYPE_BUY',
+  time: new Date(),
+  volume: 0.01
+});
+
+// remove signal
+await tradingApi.removeExternalSignal(strategyId, signalId, {
+  time: new Date()
+});
+```
+
+## Retrieving trading signals
+
+```javascript
+
+const subscriberId = '...' // CopyFactory subscriber id
+
+// retrieve trading signals
+console.log(await tradingApi.getTradingSignals(subscriberId));
 ```
 
 ## Managing stopouts

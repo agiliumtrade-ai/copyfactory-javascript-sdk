@@ -18,7 +18,7 @@ export default class ConfigurationClient extends MetaApiClient {
    */
   constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
     super(httpClient, token, domain);
-    this._host = `https://trading-api-v1.${domain}`;
+    this._host = `https://copyfactory-application-history-master-v1.${domain}`;
   }
 
   /**
@@ -56,12 +56,6 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
-   * CopyFactory account model
-   * @typedef {CopyFactoryAccountUpdate} CopyFactoryAccount
-   * @property {String} _id account unique identifier
-   */
-
-  /**
    * CopyFactory strategy subscriptions
    * @typedef {Object} CopyFactoryStrategySubscription
    * @property {String} strategyId id of the strategy to subscribe to
@@ -76,11 +70,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
-   * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and positions closed
-   * once equity drawdown reaches this value
+   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
+   * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will be terminated
+   * and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] optional symbol filter which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] optional news risk filter configuration
@@ -93,7 +87,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * @property {CopyFactoryStrategyTradeSizeScaling} [tradeSizeScaling] Trade size scaling settings. By default the
    * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
@@ -121,7 +115,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * CopyFactory strategy stopout settings
-   * @typedef {Object} CopyFactoryStrategyStopOut
+   * @typedef {Object} CopyFactoryStrategyStopOutSettings
    * @property {Number} value value of the stop out risk, expressed as a fraction of 1
    * @property {Date} [startTime] the time to start risk calculation from. All previous trades will be ignored. You can
    * use it to reset the risk counter after a stopout event
@@ -192,51 +186,9 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
-   * Retrieves CopyFactory copy trading accounts. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getAccounts/
-   * @return {Promise<Array<CopyFactoryAccount>>} promise resolving with CopyFactory accounts found
-   */
-  getAccounts() {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getAccounts');
-    }
-    const opts = {
-      url: `${this._host}/users/current/configuration/accounts`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * Retrieves CopyFactory copy trading account by id. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getAccount/
-   * @param {string} accountId CopyFactory account id
-   * @return {Promise<CopyFactoryAccount>} promise resolving with CopyFactory account found
-   */
-  getAccount(accountId) {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getAccount');
-    }
-    const opts = {
-      url: `${this._host}/users/current/configuration/accounts/${accountId}`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
    * CopyFactory account update
-   * @typedef {Object} CopyFactoryAccountUpdate
+   * @typedef {Object} CopyFactorySubscriberUpdate
    * @property {String} name account human-readable name
-   * @property {String} connectionId id of the MetaApi MetaTrader account this copy trading account is connected to
    * @property {Number} [reservedMarginFraction] optional fraction of reserved margin to reduce a risk of margin call.
    * Default is to reserve no margin. We recommend using maxLeverage setting instead. Specified as a fraction of balance
    * thus the value is usually greater than 1
@@ -249,8 +201,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). One of by-position, by-symbol or leave empty to disable this setting.
-   * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and positions closed
-   * once equity drawdown reaches this value
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * be terminated and positions closed once equity drawdown reaches this value
    * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional account risk limits. You can configure trading to be
    * stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or
    * equity drawdown
@@ -268,48 +220,10 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
-   * Updates a CopyFactory trade copying account. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updateAccount/
-   * @param {String} id copy trading account id
-   * @param {CopyFactoryAccountUpdate} account trading account update
-   * @return {Promise} promise resolving when account is updated
+   * CopyFactory subscriber model
+   * @typedef {CopyFactorySubscriberUpdate} CopyFactorySubscriber
+   * @property {String} _id id of the MetaApi account to copy trades to 
    */
-  updateAccount(id, account) {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('updateAccount');
-    }
-    const opts = {
-      url: `${this._host}/users/current/configuration/accounts/${id}`,
-      method: 'PUT',
-      headers: {
-        'auth-token': this._token
-      },
-      body: account,
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * Deletes a CopyFactory trade copying account. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeAccount/
-   * @param {String} id copy trading account id
-   * @return {Promise} promise resolving when account is removed
-   */
-  removeAccount(id) {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('removeAccount');
-    }
-    const opts = {
-      url: `${this._host}/users/current/configuration/accounts/${id}`,
-      method: 'DELETE',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
 
   /**
    * CopyFactory provider strategy
@@ -358,16 +272,6 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
-   * CopyFactory strategy drawdown filter
-   * @typedef {Object} CopyFactoryStrategyDrawdownFilter
-   * @property {Number} maxDrawdown Maximum drawdown value after which action is executed. Drawdown should be configured
-   * as a fraction of 1, i.e. 0.15 means 15% drawdown value
-   * @property {String} action Action to take when drawdown exceeds maxDrawdown value. include means the trading signal
-   * will be transmitted only if dd is greater than maxDrawdown value. exclude means the trading signal will be
-   * transmitted only if dd is less than maxDrawdown value.
-   */
-
-  /**
    * Retrieves CopyFactory copy trading strategies. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getStrategies/
    * @return {Promise<Array<CopyFactoryStrategy>>} promise resolving with CopyFactory strategies found
@@ -409,13 +313,23 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
+   * CopyFactory strategy drawdown filter
+   * @typedef {Object} CopyFactoryStrategyDrawdownFilter
+   * @property {Number} maxDrawdown maximum drawdown value after which action is executed. Drawdown should
+   * be configured as a fraction of 1, i.e. 0.15 means 15% drawdown value
+   * @property {String} action action to take when drawdown exceeds maxDrawdown value. include means the trading
+   * signal will be transmitted only if dd is greater than maxDrawdown value. exclude means the trading signal 
+   * will be transmitted only if dd is less than maxDrawdown value
+   */
+
+  /**
    * CopyFactory strategy update
    * @typedef {Object} CopyFactoryStrategyUpdate
    * @property {String} name strategy human-readable name
    * @property {String} description longer strategy human-readable description
    * @property {String} positionLifecycle position detection mode. Allowed values are netting (single position per
    * strategy per symbol), hedging (multiple positions per strategy per symbol)
-   * @property {String} connectionId id of the MetaApi account providing the strategy
+   * @property {String} accountId id of the MetaApi account providing the strategy
    * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    * @property {CopyFactoryStrategyCommissionScheme} [commissionScheme] commission scheme allowed by this strategy
@@ -423,11 +337,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
-   * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
-   * positions closed once equity drawdown reaches this value
+   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
+   * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -437,17 +351,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] optional stop loss value restriction
    * @property {Number} [maxLeverage] optional max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
-   * @property {CopyFactoryStrategyMagicFilter} [magicFilter] optional magic (expert id) filter
-   * @property {CopyFactoryStrategyTimeSettings} [timeSettings] settings to manage copying timeframe and position
-   * lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for
-   * up to 90 days
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * @property {CopyFactoryStrategyTradeSizeScaling} [tradeSizeScaling] Trade size scaling settings. By default the
    * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
-   * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
-   * equity is greater than balance moving average
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    * @property {boolean} [copyTakeProfit] flag indicating whether take profit should be copied. Default is to copy take
@@ -456,22 +364,28 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
-   * @property {CopyFactoryStrategyDrawdownFilter} [drawdownFilter] Master account strategy drawdown filter
+   * @property {CopyFactoryStrategyMagicFilter} [magicFilter] optional magic (expert id) filter
+   * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
+   * equity is greater than balance moving average
+   * @property {CopyFactoryStrategyDrawdownFilter} [drawdownFilter] master account strategy drawdown filter
+   * @property {CopyFactoryStrategyTimeSettings} [timeSettings] settings to manage copying timeframe and position
+   * lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for
+   * up to 90 days
    */
 
   /**
    * Updates a CopyFactory strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updateStrategy/
-   * @param {String} id copy trading strategy id
+   * @param {String} strategyId copy trading strategy id
    * @param {CopyFactoryStrategyUpdate} strategy trading strategy update
    * @return {Promise} promise resolving when strategy is updated
    */
-  updateStrategy(id, strategy) {
+  updateStrategy(strategyId, strategy) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('updateStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies/${id}`,
+      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
       method: 'PUT',
       headers: {
         'auth-token': this._token
@@ -485,15 +399,15 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Deletes a CopyFactory strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeStrategy/
-   * @param {String} id strategy id
+   * @param {String} strategyId copy trading strategy id
    * @return {Promise} promise resolving when strategy is removed
    */
-  removeStrategy(id) {
+  removeStrategy(strategyId) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('removeStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies/${id}`,
+      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -505,7 +419,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Portfolio strategy member
-   * @typedef {Object} CopyFactoryPortfolioMember
+   * @typedef {Object} CopyFactoryPortfolioStrategyMember
    * @property {String} strategyId member strategy id
    * @property {Number} multiplier copying multiplier (weight in the portfolio)
    * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
@@ -514,11 +428,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
-   * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
-   * positions closed once equity drawdown reaches this value
+   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
+   * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -531,7 +445,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * @property {CopyFactoryStrategyTradeSizeScaling} [tradeSizeScaling] Trade size scaling settings. By default the
    * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
@@ -548,7 +462,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @typedef {Object} CopyFactoryPortfolioStrategyUpdate
    * @property {String} name strategy human-readable name
    * @property {String} description longer strategy human-readable description
-   * @property {Array<CopyFactoryPortfolioMember>} members array of portfolio memebers
+   * @property {Array<CopyFactoryPortfolioStrategyMember>} members array of portfolio members
    * @property {CopyFactoryStrategyCommissionScheme} [commissionScheme] commission scheme allowed by this strategy. By
    * default monthly billing period with no commission is being used
    * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
@@ -557,11 +471,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade correlation
-   * reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit
-   * correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOut} [stopOutRisk] optional stop out setting. All trading will be terminated and
-   * positions closed once equity drawdown reaches this value
+   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
+   * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -574,7 +488,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
    * trades are copied using signal source symbol name
-   * @property {CopyFactoryStrategyTradeSizeAcaling} [tradeSizeScaling] Trade size scaling settings. By default the
+   * @property {CopyFactoryStrategyTradeSizeScaling} [tradeSizeScaling] Trade size scaling settings. By default the
    * trade size on strategy subscriber side will be scaled according to balance to preserve risk.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
@@ -640,21 +554,21 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Updates a CopyFactory portfolio strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updatePortfolioStrategy/
-   * @param {String} id copy trading portfolio strategy id
-   * @param {CopyFactoryPortfolioStrategyUpdate} strategy portfolio strategy update
+   * @param {String} portfolioId copy trading portfolio strategy id
+   * @param {CopyFactoryPortfolioStrategyUpdate} portfolio portfolio strategy update
    * @return {Promise} promise resolving when portfolio strategy is updated
    */
-  updatePortfolioStrategy(id, strategy) {
+  updatePortfolioStrategy(portfolioId, portfolio) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('updatePortfolioStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${id}`,
+      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
       method: 'PUT',
       headers: {
         'auth-token': this._token
       },
-      body: strategy,
+      body: portfolio,
       json: true
     };
     return this._httpClient.request(opts);
@@ -663,15 +577,15 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Deletes a CopyFactory portfolio strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removePortfolioStrategy/
-   * @param {String} id portfolio strategy id
+   * @param {String} portfolioId portfolio strategy id
    * @return {Promise} promise resolving when portfolio strategy is removed
    */
-  removePortfolioStrategy(id) {
+  removePortfolioStrategy(portfolioId) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('removePortfolioStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${id}`,
+      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -682,55 +596,88 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
-   * Resynchronization task
-   * @typedef {Object} ResynchronizationTask
-   * @property {String} _id task unique id
-   * @property {String} type task type. One of CREATE_ACCOUNT, CREATE_STRATEGY, UPDATE_STRATEGY, REMOVE_STRATEGY
-   * @property {Date} createdAt the time task was created at
-   * @property {String} status task status. One of PLANNED, EXECUTING, SYNCHRONIZING
+   * Returns CopyFactory subscribers the user has configured. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscribers/
+   * @return {Promise<Array<CopyFactorySubscriber>>} promise resolving with subscribers found
    */
-  
-  /**
-   * Returns list of active resynchronization tasks for a specified connection. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getActiveResynchronizationTasks/
-   * @param {String} connectionId MetaApi account id to return tasks for
-   * @return {Promise<Array<ResynchronizationTask>>} promise resolving with list of active resynchronization tasks
-   */
-  async getActiveResynchronizationTasks(connectionId) {
+  getSubscribers() {
     if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getActiveResynchronizationTasks');
+      return this._handleNoAccessError('getSubscribers');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/connections/${connectionId}/active-resynchronization-tasks`,
+      url: `${this._host}/users/current/configuration/subscribers`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    let tasks = await this._httpClient.request(opts);
-    tasks.forEach(t => t.createdAt = new Date(t.createdAt));
-    return tasks;
+    return this._httpClient.request(opts);
   }
 
   /**
-   * Waits until active resynchronization tasks are completed
-   * @param {String} connectionId MetaApi account id to wait tasks completed for
-   * @param {Number} timeoutInSeconds wait timeout in seconds, default is 5m
-   * @param {Number} intervalInMilliseconds interval between tasks reload while waiting for a change, default is 1s
-   * @return {Promise} promise which resolves when tasks are completed
-   * @throws {TimeoutError} if tasks have not completed withing timeout allowed
+   * Returns CopyFactory subscriber by id. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getSubscriber/
+   * @param {String} subscriberId subscriber id
+   * @returns {Promise<CopyFactorySubscriber>} promise resolving with subscriber found
    */
-  async waitResynchronizationTasksCompleted(connectionId, timeoutInSeconds = 300, intervalInMilliseconds = 1000) {
-    let startTime = Date.now();
-    let tasks = await this.getActiveResynchronizationTasks(connectionId);
-    while (tasks.length !== 0 && (startTime + timeoutInSeconds * 1000) > Date.now()) {
-      await new Promise(res => setTimeout(res, intervalInMilliseconds));
-      tasks = await this.getActiveResynchronizationTasks(connectionId);
+  getSubscriber(subscriberId) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('getSubscriber');
     }
-    if (tasks.length !== 0) {
-      throw new TimeoutError('Timed out waiting for resynchronization tasks for account '
-        + connectionId + ' to be completed');
-    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      method: 'GET',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._httpClient.request(opts);
   }
+
+  /**
+   * Updates CopyFactory subscriber configuration. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/updateSubscriber/
+   * @param {String} subscriberId subscriber id
+   * @param {CopyFactorySubscriberUpdate} subscriber subscriber update
+   * @returns {Promise} promise resolving when subscriber is updated
+   */
+  updateSubscriber(subscriberId, subscriber) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('updateSubscriber');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      method: 'PUT',
+      headers: {
+        'auth-token': this._token
+      },
+      body: subscriber,
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
+   * Deletes subscriber configuration. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeSubscriber/
+   * @param {String} subscriberId subscriber id
+   * @returns {Promise} promise resolving when subscriber is removed
+   */
+  removeSubscriber(subscriberId) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('removeSubscriber');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
 }
