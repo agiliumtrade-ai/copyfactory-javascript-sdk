@@ -17,7 +17,7 @@ export default class HistoryClient extends MetaApiClient {
    */
   constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
     super(httpClient, token, domain);
-    this._host = `https://trading-api-v1.${domain}`;
+    this._host = `https://copyfactory-application-history-master-v1.${domain}`;
   }
 
   /**
@@ -25,8 +25,8 @@ export default class HistoryClient extends MetaApiClient {
    * @typedef {Object} CopyFactorySubscriberOrProvider
    * @property {String} id profile id
    * @property {String} name user name
-   * @property {Array<CopyFactoryStrategyIdAndName>} strategies array of strategy IDs provided by provider or subscribed to by
-   * subscriber
+   * @property {Array<CopyFactoryStrategyIdAndName>} strategies array of strategy IDs provided by provider
+   * or subscribed to by subscriber
    */
 
   /**
@@ -35,86 +35,6 @@ export default class HistoryClient extends MetaApiClient {
    * @property {String} id unique strategy id
    * @property {String} name human-readable strategy name
    */
-
-  /**
-   * Returns list of providers providing strategies to the current user
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProviders/
-   * @return {Promise<Array<CopyFactorySubscriberOrProvider>>} promise resolving with providers found
-   */
-  getProviders() {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getProviders');
-    }
-    const opts = {
-      url: `${this._host}/users/current/providers`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * Returns list of subscribers subscribed to the strategies of the current user
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscribers/
-   * @return {Promise<Array<CopyFactorySubscriberOrProvider>>} promise resolving with subscribers found
-   */
-  getSubscribers() {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getSubscribers');
-    }
-    const opts = {
-      url: `${this._host}/users/current/subscribers`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * Returns list of strategies the current user is subscribed to
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getStrategiesSubscribed/
-   * @return {Promise<Array<CopyFactoyStrategyIdAndName>>} promise resolving with strategies found
-   */
-  getStrategiesSubscribed() {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getStrategiesSubscribed');
-    }
-    const opts = {
-      url: `${this._host}/users/current/strategies-subscribed`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * Returns list of strategies the current user provides to other users
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedStrategies/
-   * @return {Promise<Array<CopyFactoryStrategyIdAndName>>} promise resolving with strategies found
-   */
-  getProvidedStrategies() {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getProvidedStrategies');
-    }
-    const opts = {
-      url: `${this._host}/users/current/provided-strategies`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
 
   /**
    * CopyFactory transaction
@@ -139,6 +59,7 @@ export default class HistoryClient extends MetaApiClient {
    * @property {Number} platformCommission platform commission
    * @property {Number} [incomingProviderCommission] commission paid by provider to underlying providers
    * @property {Number} [incomingPlatformCommission] platform commission paid by provider to underlying providers
+   * @property {Number} [quantity] trade volume
    * @property {Number} [lotPrice] trade lot price
    * @property {Number} [tickPrice] trade tick price
    * @property {Number} [amount] trade amount
@@ -164,9 +85,6 @@ export default class HistoryClient extends MetaApiClient {
    * milliseconds
    * @property {Number} [mtAndBrokerTradeLatency] trade latency for a copied trade introduced by broker and MT platform,
    * measured in milliseconds
-   * @property {Number} [totalLatency] total trade copying latency, measured in milliseconds. This value might be
-   * slightly different from tradeCopyingLatency value due to limited measurement precision as it is measured based
-   * on timestamps captured during copy trading process as opposed to broker data
    */
 
   /**
@@ -176,12 +94,11 @@ export default class HistoryClient extends MetaApiClient {
    * @param {Date} till time to load transactions till
    * @param {Array<string>} [strategyIds] optional list of strategy ids to filter transactions by
    * @param {Array<string>} [accountIds] the list of CopyFactory subscriber account id (64-character long) to filter by
-   * @param {Array<string>} [subscriberIds] optional list of subscribers to filter transactions by
    * @param {number} [offset] pagination offset. Default value is 0
    * @param {number} [limit] pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  async getProvidedStrategiesTransactions(from, till, strategyIds, accountIds, subscriberIds, offset, limit) {
+  async getProvidedStrategiesTransactions(from, till, strategyIds, accountIds, offset, limit) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getProvidedStrategiesTransactions');
     }
@@ -191,9 +108,6 @@ export default class HistoryClient extends MetaApiClient {
     };
     if (strategyIds) {
       qs.strategyId = strategyIds;
-    }
-    if (subscriberIds) {
-      qs.subscriberId = subscriberIds;
     }
     if (accountIds) {
       qs.accountId = accountIds;
@@ -205,7 +119,7 @@ export default class HistoryClient extends MetaApiClient {
       qs.limit = limit;
     }
     const opts = {
-      url: `${this._host}/users/current/provided-strategies/transactions`,
+      url: `${this._host}/users/current/provided-transactions`,
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -223,14 +137,13 @@ export default class HistoryClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getStrategiesSubscribedTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
-   * @param {Array<String>} strategyIds optional list of strategy ids to filter transactions by
+   * @param {Array<String>} [strategyIds] optional list of strategy ids to filter transactions by
    * @param {Array<string>} [accountIds] the list of CopyFactory subscriber account id (64-character long) to filter by
-   * @param {Array<String>} providerIds optional list of providers to filter transactions by
    * @param {Number} offset pagination offset. Default value is 0
    * @param {Number} limit pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  async getStrategiesSubscribedTransactions(from, till, strategyIds, accountIds, providerIds, offset, limit) {
+  async getStrategiesSubscribedTransactions(from, till, strategyIds, accountIds, offset, limit) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getStrategiesSubscribedTransactions');
     }
@@ -240,9 +153,6 @@ export default class HistoryClient extends MetaApiClient {
     };
     if (strategyIds) {
       qs.strategyId = strategyIds;
-    }
-    if (providerIds) {
-      qs.providerId = providerIds;
     }
     if (accountIds) {
       qs.accountId = accountIds;
@@ -254,7 +164,7 @@ export default class HistoryClient extends MetaApiClient {
       qs.limit = limit;
     }
     const opts = {
-      url: `${this._host}/users/current/strategies-subscribed/transactions`,
+      url: `${this._host}/users/current/subscription-transactions`,
       method: 'GET',
       headers: {
         'auth-token': this._token

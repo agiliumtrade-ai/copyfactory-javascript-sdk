@@ -13,7 +13,7 @@ let slaveAccountId = process.env.SLAVE_ACCOUNT_ID || '<put in your slaveAccountI
 const api = new MetaApi(token);
 const copyFactory = new CopyFactory(token);
 
-async function configureCopyFactory() {
+async function externalSignal() {
   try {
     let masterMetaapiAccount = await api.metatraderAccountApi.getAccount(masterAccountId);
     if(!masterMetaapiAccount.copyFactoryRoles || !masterMetaapiAccount.copyFactoryRoles.includes('PROVIDER')) {
@@ -55,10 +55,30 @@ async function configureCopyFactory() {
         }
       ]
     });
+
+    // send external signal
+    const tradingApi = copyFactory.tradingApi;
+    const signalId = tradingApi.generateSignalId();
+    await tradingApi.updateExternalSignal(strategyId, signalId, {
+      symbol: 'EURUSD',
+      type: 'POSITION_TYPE_BUY',
+      time: new Date(),
+      volume: 0.01
+    });
+
+    await new Promise(res => setTimeout(res, 10000));
+
+    // output trading signals
+    console.log(await tradingApi.getTradingSignals(slaveMetaapiAccount.id));
+
+    // remove external signal
+    await tradingApi.removeExternalSignal(strategyId, signalId, {
+      time: new Date()
+    });
   } catch (err) {
     console.error(err);
   }
   process.exit();
 }
 
-configureCopyFactory();
+externalSignal();
