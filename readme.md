@@ -166,7 +166,7 @@ CopyFactory allows you to monitor transactions conducted on trading accounts in 
 let historyApi = copyFactory.historyApi;
 
 // retrieve trading history, please note that this method support pagination and limits number of records
-console.log(await historyApi.getProvidedStrategiesTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
+console.log(await historyApi.getProvidedTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
 ```
 
 ### Retrieving trading history on subscriber side
@@ -174,7 +174,7 @@ console.log(await historyApi.getProvidedStrategiesTransactions(new Date('2020-08
 let historyApi = copyFactory.historyApi;
 
 // retrieve trading history, please note that this method support pagination and limits number of records
-console.log(await historyApi.getStrategiesSubscribedTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
+console.log(await historyApi.getSubscriptionTransactions(new Date('2020-08-01'), new Date('2020-09-01')));
 ```
 
 ## Resynchronizing slave accounts to masters

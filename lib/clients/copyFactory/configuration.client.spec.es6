@@ -433,7 +433,7 @@ describe('ConfigurationClient', () => {
    */
   it('should retrieve CopyFactory subscribers from API', async () => {
     let expected = [{
-      _id: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      _id: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       name: 'Demo account',
       reservedMarginFraction: 0.25,
       subscriptions: [
@@ -476,7 +476,7 @@ describe('ConfigurationClient', () => {
    */
   it('should retrieve CopyFactory subscriber from API', async () => {
     let expected = {
-      _id: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      _id: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       name: 'Demo account',
       reservedMarginFraction: 0.25,
       subscriptions: [
@@ -488,11 +488,11 @@ describe('ConfigurationClient', () => {
     };
     requestStub.resolves(expected);
     let accounts = await copyFactoryClient
-      .getSubscriber('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      .getSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     accounts.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
-        '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+        'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -531,10 +531,10 @@ describe('ConfigurationClient', () => {
       ]
     };
     await copyFactoryClient
-      .updateSubscriber('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef', subscriber);
+      .updateSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', subscriber);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
-        '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+        'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'PUT',
       headers: {
         'auth-token': token
@@ -564,10 +564,10 @@ describe('ConfigurationClient', () => {
    */
   it('should remove CopyFactory subscriber via API', async () => {
     await copyFactoryClient
-      .removeSubscriber('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      .removeSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
-        '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+        'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'DELETE',
       headers: {
         'auth-token': token

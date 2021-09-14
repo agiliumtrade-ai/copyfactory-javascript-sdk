@@ -62,9 +62,9 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/updateSignal/
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/updateExternalSignal/
    * @param {String} strategyId strategy id
-   * @param {String} signalId external signal id
+   * @param {String} signalId external signal id (should be 8 alphanumerical symbols)
    * @param {CopyFactoryExternalSignalUpdate} signal signal update payload
    * @return {Promise} promise which resolves when the external signal is updated
    */
@@ -92,7 +92,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/removeSignal/
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/removeExternalSignal/
    * @param {String} strategyId strategy id
    * @param {String} signalId external signal id
    * @param {CopyFactoryExternalSignalRemove} signal signal removal payload
@@ -145,7 +145,7 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Returns trading signals the subscriber is subscribed to. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getSignals/
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getTradingSignals/
    * @param {String} subscriberId subscriber id
    * @returns {Promise<Array<CopyFactoryTradingSignal>>}
    */
