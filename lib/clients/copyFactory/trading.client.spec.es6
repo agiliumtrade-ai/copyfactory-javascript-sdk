@@ -111,11 +111,10 @@ describe('TradingClient', () => {
    * @test {TradingClient#resynchronize}
    */
   it('should resynchronize CopyFactory account', async () => {
-    await tradingClient.resynchronize('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef', ['ABCD'],
+    await tradingClient.resynchronize('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', ['ABCD'],
       ['0123456']);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/subscribers/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/resynchronize',
+      url: `${copyFactoryApiUrl}/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/resynchronize`,
       method: 'POST',
       headers: {
         'auth-token': token
@@ -134,7 +133,7 @@ describe('TradingClient', () => {
   it('should not resynchronize account with account token', async () => {
     tradingClient = new TradingClient(httpClient, 'token');
     try {
-      await tradingClient.resynchronize('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      await tradingClient.resynchronize('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     } catch (error) {
       error.message.should.equal(
         'You can not invoke resynchronize method, because you have connected with account access token. ' +
@@ -155,12 +154,10 @@ describe('TradingClient', () => {
       volume: 1
     }];
     requestStub.resolves(expected);
-    let stopouts = await tradingClient
-      .getTradingSignals('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+    let stopouts = await tradingClient.getTradingSignals('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     stopouts.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/subscribers/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/signals',
+      url: `${copyFactoryApiUrl}/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/signals`,
       method: 'GET',
       headers: {
         'auth-token': token
@@ -175,7 +172,7 @@ describe('TradingClient', () => {
   it('should not retrieve signals with account token', async () => {
     tradingClient = new TradingClient(httpClient, 'token');
     try {
-      await tradingClient.getTradingSignals('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      await tradingClient.getTradingSignals('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     } catch (error) {
       error.message.should.equal(
         'You can not invoke getTradingSignals method, because you have connected with account access token. ' +
@@ -199,12 +196,10 @@ describe('TradingClient', () => {
     }
     ];
     requestStub.resolves(expected);
-    let stopouts = await tradingClient
-      .getStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+    let stopouts = await tradingClient.getStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     stopouts.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/subscribers/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/stopouts',
+      url: `${copyFactoryApiUrl}/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/stopouts`,
       method: 'GET',
       headers: {
         'auth-token': token
@@ -219,7 +214,7 @@ describe('TradingClient', () => {
   it('should not retrieve stopouts from API with account token', async () => {
     tradingClient = new TradingClient(httpClient, 'token');
     try {
-      await tradingClient.getStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      await tradingClient.getStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     } catch (error) {
       error.message.should.equal(
         'You can not invoke getStopouts method, because you have connected with account access token. ' +
@@ -232,12 +227,10 @@ describe('TradingClient', () => {
    * @test {TradingClient#resetStopouts}
    */
   it('should reset stopouts', async () => {
-    await tradingClient.resetStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-      'ABCD', 'daily-equity');
+    await tradingClient.resetStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', 'daily-equity');
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/subscribers/` +
-              '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/subscription-strategies/' +
-              'ABCD/stopouts/daily-equity/reset',
+        'e8867baa-5ec2-45ae-9930-4d5cea18d0d6/subscription-strategies/ABCD/stopouts/daily-equity/reset',
       method: 'POST',
       headers: {
         'auth-token': token
@@ -252,7 +245,7 @@ describe('TradingClient', () => {
   it('should not reset stopouts with account token', async () => {
     tradingClient = new TradingClient(httpClient, 'token');
     try {
-      await tradingClient.resetStopouts('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      await tradingClient.resetStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
         'ABCD', 'daily-equity');
     } catch (error) {
       error.message.should.equal(
@@ -272,13 +265,11 @@ describe('TradingClient', () => {
       message: 'message'
     }];
     requestStub.resolves(expected);
-    let records = await tradingClient
-      .getUserLog('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-        new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
+    let records = await tradingClient.getUserLog('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
     records.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/subscribers/` +
-            '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef/user-log',
+      url: `${copyFactoryApiUrl}/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/user-log`,
       method: 'GET',
       qs: {
         startTime: new Date('2020-08-01T00:00:00.000Z'),
@@ -299,7 +290,7 @@ describe('TradingClient', () => {
   it('should not retrieve copy trading user log from API with account token', async () => {
     tradingClient = new TradingClient(httpClient, 'token');
     try {
-      await tradingClient.getUserLog('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef');
+      await tradingClient.getUserLog('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     } catch (error) {
       error.message.should.equal(
         'You can not invoke getUserLog method, because you have connected with account access token. ' +

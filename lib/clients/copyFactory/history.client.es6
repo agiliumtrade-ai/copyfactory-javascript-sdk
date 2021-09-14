@@ -21,8 +21,8 @@ export default class HistoryClient extends MetaApiClient {
   }
 
   /**
-   * CopyFactory provider or subscriber
-   * @typedef {Object} CopyFactorySubscriberOrProvider
+   * CopyFactory provider or subscriber user
+   * @typedef {Object} CopyFactorySubscriberOrProviderUser
    * @property {String} id profile id
    * @property {String} name user name
    * @property {Array<CopyFactoryStrategyIdAndName>} strategies array of strategy IDs provided by provider
@@ -47,13 +47,14 @@ export default class HistoryClient extends MetaApiClient {
    * DEAL_DIVIDEND, DEAL_DIVIDEND_FRANKED, DEAL_TAX). See
    * https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties#enum_deal_type
    * @property {Date} time transaction time
-   * @property {String} accountId CopyFactory account id
+   * @property {String} subscriberId CopyFactory subscriber id
    * @property {String} [symbol] optional symbol traded
-   * @property {CopyFactorySubscriberOrProvider} subscriber strategy subscriber
+   * @property {CopyFactorySubscriberOrProviderUser} subscriberUser strategy subscriber
    * @property {Boolean} demo demo account flag
-   * @property {CopyFactorySubscriberOrProvider} provider strategy provider
+   * @property {CopyFactorySubscriberOrProviderUser} providerUser strategy provider
    * @property {CopyFactoryStrategyIdAndName} strategy strategy
    * @property {String} [positionId] source position id
+   * @property {String} [slavePositionId] slave position id
    * @property {Number} improvement high-water mark strategy balance improvement
    * @property {Number} providerCommission provider commission
    * @property {Number} platformCommission platform commission
@@ -89,18 +90,18 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of transactions on the strategies the current user provides to other users
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedStrategiesTransactions/
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
    * @param {Array<string>} [strategyIds] optional list of strategy ids to filter transactions by
-   * @param {Array<string>} [accountIds] the list of CopyFactory subscriber account id (64-character long) to filter by
+   * @param {Array<string>} [subscriberIds] the list of CopyFactory subscriber account ids to filter by
    * @param {number} [offset] pagination offset. Default value is 0
    * @param {number} [limit] pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  async getProvidedStrategiesTransactions(from, till, strategyIds, accountIds, offset, limit) {
+  async getProvidedTransactions(from, till, strategyIds, subscriberIds, offset, limit) {
     if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getProvidedStrategiesTransactions');
+      return this._handleNoAccessError('getProvidedTransactions');
     }
     let qs = {
       from,
@@ -109,8 +110,8 @@ export default class HistoryClient extends MetaApiClient {
     if (strategyIds) {
       qs.strategyId = strategyIds;
     }
-    if (accountIds) {
-      qs.accountId = accountIds;
+    if (subscriberIds) {
+      qs.subscriberId = subscriberIds;
     }
     if (offset !== undefined) {
       qs.offset = offset;
@@ -134,18 +135,18 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Returns list of trades on the strategies the current user subscribed to
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getStrategiesSubscribedTransactions/
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscriptionTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
    * @param {Array<String>} [strategyIds] optional list of strategy ids to filter transactions by
-   * @param {Array<string>} [accountIds] the list of CopyFactory subscriber account id (64-character long) to filter by
+   * @param {Array<string>} [subscriberIds] the list of CopyFactory subscriber account ids to filter by
    * @param {Number} offset pagination offset. Default value is 0
    * @param {Number} limit pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  async getStrategiesSubscribedTransactions(from, till, strategyIds, accountIds, offset, limit) {
+  async getSubscriptionTransactions(from, till, strategyIds, subscriberIds, offset, limit) {
     if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getStrategiesSubscribedTransactions');
+      return this._handleNoAccessError('getSubscriptionTransactions');
     }
     let qs = {
       from,
@@ -154,8 +155,8 @@ export default class HistoryClient extends MetaApiClient {
     if (strategyIds) {
       qs.strategyId = strategyIds;
     }
-    if (accountIds) {
-      qs.accountId = accountIds;
+    if (subscriberIds) {
+      qs.subscriberId = subscriberIds;
     }
     if (offset !== undefined) {
       qs.offset = offset;

@@ -31,21 +31,21 @@ describe('HistoryClient', () => {
   });
 
   /**
-   * @test {TradingClient#getProvidedStrategiesTransactions}
+   * @test {TradingClient#getProvidedTransactions}
    */
   it('should retrieve transactions performed on provided strategies from API', async () => {
     let expected = [{
       id: '64664661:close',
       type: 'DEAL_TYPE_SELL',
       time: new Date('2020-08-02T21:01:01.830Z'),
-      accountId: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      subscriberId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       symbol: 'EURJPY',
-      subscriber: {
+      subscriberUser: {
         id: 'subscriberId',
         name: 'Subscriber'
       },
       demo: false,
-      provider: {
+      providerUser: {
         id: 'providerId',
         name: 'Provider'
       },
@@ -66,8 +66,8 @@ describe('HistoryClient', () => {
     let from = new Date();
     let till = new Date();
     requestStub.resolves(expected);
-    let transactions = await copyFactoryClient.getProvidedStrategiesTransactions(from, till, ['ABCD'], ['accountId'],
-      100, 200);
+    let transactions = await copyFactoryClient.getProvidedTransactions(from, till, ['ABCD'],
+      ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'], 100, 200);
     transactions.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/provided-transactions`,
@@ -79,7 +79,7 @@ describe('HistoryClient', () => {
         from,
         till,
         strategyId: ['ABCD'],
-        accountId: ['accountId'],
+        subscriberId: ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'],
         offset: 100,
         limit: 200
       },
@@ -88,36 +88,36 @@ describe('HistoryClient', () => {
   });
 
   /**
-   * @test {TradingClient#getProvidedStrategiesTransactions}
+   * @test {TradingClient#getProvidedTransactions}
    */
   it('should not retrieve transactions on provided strategies from API with account token', async () => {
     copyFactoryClient = new HistoryClient(httpClient, 'token');
     try {
-      await copyFactoryClient.getProvidedStrategiesTransactions(new Date(), new Date());
+      await copyFactoryClient.getProvidedTransactions(new Date(), new Date());
     } catch (error) {
       error.message.should.equal(
-        'You can not invoke getProvidedStrategiesTransactions method, because you have connected with account ' + 
+        'You can not invoke getProvidedTransactions method, because you have connected with account ' + 
         'access token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
       );
     }
   });
 
   /**
-   * @test {TradingClient#getStrategiesSubscribedTransactions}
+   * @test {TradingClient#getSubscriptionTransactions}
    */
   it('should retrieve transactions performed on strategies current user is subscribed to from API', async () => {
     let expected = [{
       id: '64664661:close',
       type: 'DEAL_TYPE_SELL',
       time: new Date('2020-08-02T21:01:01.830Z'),
-      accountId: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      subscriberId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       symbol: 'EURJPY',
-      subscriber: {
+      subscriberUser: {
         id: 'subscriberId',
         name: 'Subscriber'
       },
       demo: false,
-      provider: {
+      providerUser: {
         id: 'providerId',
         name: 'Provider'
       },
@@ -138,8 +138,8 @@ describe('HistoryClient', () => {
     let from = new Date();
     let till = new Date();
     requestStub.resolves(expected);
-    let transactions = await copyFactoryClient.getStrategiesSubscribedTransactions(from, till, ['ABCD'], ['accountId'],
-      100, 200);
+    let transactions = await copyFactoryClient.getSubscriptionTransactions(from, till, ['ABCD'],
+      ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'], 100, 200);
     transactions.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/subscription-transactions`,
@@ -152,7 +152,7 @@ describe('HistoryClient', () => {
         from,
         till,
         strategyId: ['ABCD'],
-        accountId: ['accountId'],
+        subscriberId: ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'],
         offset: 100,
         limit: 200
       },
@@ -160,15 +160,15 @@ describe('HistoryClient', () => {
   });
 
   /**
-   * @test {TradingClient#getStrategiesSubscribedTransactions}
+   * @test {TradingClient#getSubscriptionTransactions}
    */
   it('should not retrieve transactions on strategies subscribed to from API with account token', async () => {
     copyFactoryClient = new HistoryClient(httpClient, 'token');
     try {
-      await copyFactoryClient.getStrategiesSubscribedTransactions(new Date(), new Date());
+      await copyFactoryClient.getSubscriptionTransactions(new Date(), new Date());
     } catch (error) {
       error.message.should.equal(
-        'You can not invoke getStrategiesSubscribedTransactions method, because you have connected with account ' + 
+        'You can not invoke getSubscriptionTransactions method, because you have connected with account ' + 
         'access token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
       );
     }

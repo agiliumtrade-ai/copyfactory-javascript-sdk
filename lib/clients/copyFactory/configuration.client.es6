@@ -267,7 +267,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * CopyFactory strategy equity curve filter
    * @typedef {Object} CopyFactoryStrategyEquityCurveFilter
    * @property {Number} period moving average period, must be greater or equal to 1
-   * @property {String} granularity moving average granularity, a positive integer followed by time unit, e.g. 2h.
+   * @property {String} timeframe moving average timeframe, a positive integer followed by time unit, e.g. 2h.
    * Allowed units are s, m, h, d and w.
    */
 
