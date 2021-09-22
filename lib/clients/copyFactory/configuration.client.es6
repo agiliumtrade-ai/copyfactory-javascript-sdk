@@ -65,7 +65,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [closeOnly] optional setting wich instructs the application not to open new positions. by-symbol
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
-   * per symbol). One of by-position, by-symbol or leave empty to disable this setting.
+   * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
    * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
@@ -200,7 +200,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [closeOnly] optional setting wich instructs the application not to open new positions. by-symbol
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
-   * per symbol). One of by-position, by-symbol or leave empty to disable this setting.
+   * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
    * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
    * be terminated and positions closed once equity drawdown reaches this value
    * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional account risk limits. You can configure trading to be
@@ -397,12 +397,26 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
+   * CopyFactory close instructions
+   * @typedef {Object} CopyFactoryCloseInstructions
+   * @property {String} mode position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory.
+   * close-gracefully-by-position means that positions will continue to be managed by CopyFactory,
+   * but only close signals will be copied. close-gracefully-by-symbol means that positions will
+   * continue to be managed by CopyFactory, but only close signals will be copied or signals to
+   * open positions for the symbols which already have positions opened. close-immediately means
+   * that all positions will be closed immediately. Default is close-immediately. One of 'preserve',
+   * 'close-gracefully-by-position', 'close-gracefully-by-symbol', 'close-immediately'
+   */
+
+  /**
    * Deletes a CopyFactory strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeStrategy/
    * @param {String} strategyId copy trading strategy id
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
    * @return {Promise} promise resolving when strategy is removed
    */
-  removeStrategy(strategyId) {
+  removeStrategy(strategyId, closeInstructions) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('removeStrategy');
     }
@@ -412,6 +426,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      body: closeInstructions,
       json: true
     };
     return this._httpClient.request(opts);
@@ -578,9 +593,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * Deletes a CopyFactory portfolio strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removePortfolioStrategy/
    * @param {String} portfolioId portfolio strategy id
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
    * @return {Promise} promise resolving when portfolio strategy is removed
    */
-  removePortfolioStrategy(portfolioId) {
+  removePortfolioStrategy(portfolioId, closeInstructions) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('removePortfolioStrategy');
     }
@@ -590,6 +606,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      body: closeInstructions,
       json: true
     };
     return this._httpClient.request(opts);

@@ -232,13 +232,15 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removeStrategy}
    */
   it('should remove strategy via API', async () => {
-    await copyFactoryClient.removeStrategy('ABCD');
+    const payload = {mode: 'preserve'};
+    await copyFactoryClient.removeStrategy('ABCD', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
       method: 'DELETE',
       headers: {
         'auth-token': token
       },
+      body: payload,
       json: true,
     });
   });
@@ -402,13 +404,15 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removePortfolioStrategy}
    */
   it('should remove portfolio strategy via API', async () => {
-    await copyFactoryClient.removePortfolioStrategy('ABCD');
+    const payload = {mode: 'preserve'};
+    await copyFactoryClient.removePortfolioStrategy('ABCD', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
       method: 'DELETE',
       headers: {
         'auth-token': token
       },
+      body: payload,
       json: true,
     });
   });
