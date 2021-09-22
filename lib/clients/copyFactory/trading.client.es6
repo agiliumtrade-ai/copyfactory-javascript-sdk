@@ -172,6 +172,7 @@ export default class TradingClient extends MetaApiClient {
    * @property {String} reason stopout reason. One of yearly-balance, monthly-balance, daily-balance, yearly-equity,
    * monthly-equity, daily-equity, max-drawdown
    * @property {String} reasonDescription human-readable description of the stopout reason
+   * @property {Boolean} [closePositions] flag indicating if positions should be closed
    * @property {Date} stoppedAt time the strategy was stopped at
    * @property {Date} stoppedTill time the strategy is stopped till
    */
