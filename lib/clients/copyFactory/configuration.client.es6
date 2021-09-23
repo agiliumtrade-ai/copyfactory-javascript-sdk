@@ -680,9 +680,10 @@ export default class ConfigurationClient extends MetaApiClient {
    * Deletes subscriber configuration. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeSubscriber/
    * @param {String} subscriberId subscriber id
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] subscriber close instructions
    * @returns {Promise} promise resolving when subscriber is removed
    */
-  removeSubscriber(subscriberId) {
+  removeSubscriber(subscriberId, closeInstructions) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('removeSubscriber');
     }
@@ -692,6 +693,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      body: closeInstructions,
       json: true
     };
     return this._httpClient.request(opts);
