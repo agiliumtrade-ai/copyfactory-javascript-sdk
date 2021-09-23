@@ -567,8 +567,9 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#removeSubscriber}
    */
   it('should remove CopyFactory subscriber via API', async () => {
+    const payload = {mode: 'preserve'};
     await copyFactoryClient
-      .removeSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
+      .removeSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
         'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
@@ -576,6 +577,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
+      body: payload,
       json: true,
     });
   });
