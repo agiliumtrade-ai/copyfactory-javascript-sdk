@@ -59,30 +59,30 @@ export default class ConfigurationClient extends MetaApiClient {
    * CopyFactory strategy subscriptions
    * @typedef {Object} CopyFactoryStrategySubscription
    * @property {String} strategyId id of the strategy to subscribe to
-   * @property {Number} [multiplier] optional subscription multiplier, default is 1x
-   * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied. Default
+   * @property {Number} [multiplier] subscription multiplier, default is 1x
+   * @property {Boolean} [skipPendingOrders] flag indicating that pending orders should not be copied. Default
    * is to copy pending orders
-   * @property {String} [closeOnly] optional setting wich instructs the application not to open new positions. by-symbol
+   * @property {String} [closeOnly] setting wich instructs the application not to open new positions. by-symbol
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
-   * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
+   * @property {Number} [maxTradeRisk] max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will be terminated
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will be terminated
    * and positions closed once equity drawdown reaches this value
-   * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] optional symbol filter which can be used to copy only specific
+   * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filter which can be used to copy only specific
    * symbols or exclude some symbols from copying
-   * @property {CopyFactoryStrategyNewsFilter} [newsFilter] optional news risk filter configuration
-   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional strategy risk limits. You can configure trading to be
+   * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
+   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] strategy risk limits. You can configure trading to be
    * stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or
    * equity drawdown
-   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] optional stop loss value restriction
-   * @property {Number} [maxLeverage] optional setting indicating maximum leverage allowed when opening a new positions.
+   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] stop loss value restriction
+   * @property {Number} [maxLeverage] setting indicating maximum leverage allowed when opening a new positions.
    * Any trade which results in a higher leverage will be discarded
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
@@ -97,6 +97,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {boolean} [removed] flag indicating that the subscription was scheduled for removal once all subscription
+   * positions will be closed
    */
 
   /**
@@ -368,6 +370,9 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
    * equity is greater than balance moving average
    * @property {CopyFactoryStrategyDrawdownFilter} [drawdownFilter] master account strategy drawdown filter
+   * @property {Array<String>} [symbolsTraded] symbols traded by this strategy. Specifying the symbols will improve trade
+   * latency on first trades made by strategy. If you do not specify this setting the application will monitor the strategy
+   * trades and detect the symbols automatically over time 
    * @property {CopyFactoryStrategyTimeSettings} [timeSettings] settings to manage copying timeframe and position
    * lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for
    * up to 90 days
@@ -689,6 +694,30 @@ export default class ConfigurationClient extends MetaApiClient {
     }
     const opts = {
       url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': this._token
+      },
+      body: closeInstructions,
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
+   * Deletes a subscription of subscriber to a strategy. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeSubscription/
+   * @param {String} subscriberId subscriber id
+   * @param {String} strategyId strategy id
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] subscriber close instructions
+   * @returns {Promise} promise resolving when subscriber is removed
+   */
+  removeSubscription(subscriberId, strategyId, closeInstructions) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('removeSubscription');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}/subscriptions/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token

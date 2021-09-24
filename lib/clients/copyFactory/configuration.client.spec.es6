@@ -597,4 +597,38 @@ describe('ConfigurationClient', () => {
     }
   });
 
+  /**
+   * @test {TradingClient#removeSubscription}
+   */
+  it('should remove CopyFactory subscription via API', async () => {
+    const payload = {mode: 'preserve'};
+    await copyFactoryClient
+      .removeSubscription('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', payload);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
+          'e8867baa-5ec2-45ae-9930-4d5cea18d0d6/subscriptions/ABCD',
+      method: 'DELETE',
+      headers: {
+        'auth-token': token
+      },
+      body: payload,
+      json: true,
+    });
+  });
+    
+  /**
+   * @test {TradingClient#removeSubscription}
+   */
+  it('should not remove CopyFactory subscription via API with account token', async () => {
+    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    try {
+      await copyFactoryClient.removeSubscription('test', 'ABCD');
+    } catch (error) {
+      error.message.should.equal(
+        'You can not invoke removeSubscription method, because you have connected with account access token. ' +
+          'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
 });
