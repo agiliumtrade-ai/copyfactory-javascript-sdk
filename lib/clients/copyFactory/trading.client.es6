@@ -56,6 +56,7 @@ export default class TradingClient extends MetaApiClient {
    * @property {Number} [takeProfit] take profit price
    * @property {Number} signalVolume the signal volume
    * @property {Number} subscriberVolume the volume already open on subscriber side
+   * @property {Number} subscriberProfit total profit of the position on subscriber side
    * @property {Date} closeAfter the time the signal will be automatically closed at
    * @property {Boolean} [closeOnly] flag indicating that only closing side of this signal will be copied
    */
