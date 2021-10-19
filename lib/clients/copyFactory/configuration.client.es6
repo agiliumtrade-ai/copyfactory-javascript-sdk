@@ -133,8 +133,8 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * CopyFactory news risk filter
    * @typedef {Object} CopyFactoryStrategyNewsFilter
-   * @property {CopyFactoryStrategyBreakingNewsFilter} [breakingNewsFilter] optional breaking news filter
-   * @property {CopyFactoryStrategyCalendarNewsFilter} [calendarNewsFilter] optional calendar news filter
+   * @property {CopyFactoryStrategyBreakingNewsFilter} [breakingNewsFilter] breaking news filter
+   * @property {CopyFactoryStrategyCalendarNewsFilter} [calendarNewsFilter] calendar news filter
    */
 
   /**
@@ -142,9 +142,9 @@ export default class ConfigurationClient extends MetaApiClient {
    * @typedef {Object} CopyFactoryStrategyBreakingNewsFilter
    * @property {Array<String>} priorities list of breaking news priorities to stop trading on, leave empty to disable
    * breaking news filter. One of high, medium, low.
-   * @property {Number} [closePositionTimeGapInMinutes] optional time interval specifying when to force close an already
+   * @property {Number} [closePositionTimeGapInMinutes] time interval specifying when to force close an already
    * open position after breaking news. Default value is 60 minutes
-   * @property {Number} [openPositionFollowingTimeGapInMinutes] optional time interval specifying when it is allowed to
+   * @property {Number} [openPositionFollowingTimeGapInMinutes] time interval specifying when it is allowed to
    * open position after calendar news. Default value is 60 minutes
    */
 
@@ -153,11 +153,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * @typedef {Object} CopyFactoryStrategyCalendarNewsFilter
    * @property {Array<String>} priorities list of calendar news priorities to stop trading on, leave empty to disable
    * calendar news filter. One of election, high, medium, low.
-   * @property {Number} [closePositionTimeGapInMinutes] optional time interval specifying when to force close an already
+   * @property {Number} [closePositionTimeGapInMinutes] time interval specifying when to force close an already
    * open position before calendar news. Default value is 60 minutes
-   * @property {Number} [openPositionPrecedingTimeGapInMinutes] optional time interval specifying when it is still
+   * @property {Number} [openPositionPrecedingTimeGapInMinutes] time interval specifying when it is still
    * allowed to open position before calendar news. Default value is 120 minutes
-   * @property {Number} [openPositionFollowingTimeGapInMinutes] optional time interval specifying when it is allowed to
+   * @property {Number} [openPositionFollowingTimeGapInMinutes] time interval specifying when it is allowed to
    * open position after calendar news. Default value is 60 minutes
    */
 
@@ -169,7 +169,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Number} maxRisk max drawdown allowed, expressed as a fraction of 1
    * @property {Boolean} closePositions whether to force close positions when the risk is reached. If value is false
    * then only the new trades will be halted, but existing ones will not be closed
-   * @property {Date} [startTime] optional time to start risk tracking from. All previous trades will be ignored. You
+   * @property {Date} [startTime] time to start risk tracking from. All previous trades will be ignored. You
    * can use this value to reset the filter after stopout event
    */
 
@@ -191,24 +191,24 @@ export default class ConfigurationClient extends MetaApiClient {
    * CopyFactory account update
    * @typedef {Object} CopyFactorySubscriberUpdate
    * @property {String} name account human-readable name
-   * @property {Number} [reservedMarginFraction] optional fraction of reserved margin to reduce a risk of margin call.
+   * @property {Number} [reservedMarginFraction] fraction of reserved margin to reduce a risk of margin call.
    * Default is to reserve no margin. We recommend using maxLeverage setting instead. Specified as a fraction of balance
    * thus the value is usually greater than 1
-   * @property {Array<String>} [phoneNumbers] optional phone numbers to send sms notifications to. Leave empty to
+   * @property {Array<String>} [phoneNumbers] phone numbers to send sms notifications to. Leave empty to
    * receive no sms notifications
-   * @property {Number} [minTradeAmount] optional value of minimal trade size allowed, expressed in amount of account
+   * @property {Number} [minTradeAmount] value of minimal trade size allowed, expressed in amount of account
    * currency. Can be useful if your broker charges a fixed fee per transaction so that you can skip small trades with
-   * high broker commission rates. Default is 100
-   * @property {String} [closeOnly] optional setting wich instructs the application not to open new positions. by-symbol
+   * high broker commission rates. Default is 0
+   * @property {String} [closeOnly] setting wich instructs the application not to open new positions. by-symbol
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
    * be terminated and positions closed once equity drawdown reaches this value
-   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional account risk limits. You can configure trading to be
+   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] account risk limits. You can configure trading to be
    * stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or
    * equity drawdown
-   * @property {Number} [maxLeverage] optional setting indicating maxumum leverage allowed when opening a new positions.
+   * @property {Number} [maxLeverage] setting indicating maxumum leverage allowed when opening a new positions.
    * Any trade which results in a higher leverage will be discarded.
    * @property {boolean} [copyStopLoss] flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
@@ -259,8 +259,8 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * CopyFactory strategy time settings
    * @typedef {Object} CopyFactoryStrategyTimeSettings
-   * @property {Number} [lifetimeInHours] optional position lifetime. Default is to keep positions open up to 90 days
-   * @property {Number} [openingIntervalInMinutes] optional time interval to copy new positions. Default is to let 1
+   * @property {Number} [lifetimeInHours] position lifetime. Default is to keep positions open up to 90 days
+   * @property {Number} [openingIntervalInMinutes] time interval to copy new positions. Default is to let 1
    * minute for the position to get copied. If position were not copied during this time, the copying will not be
    * retried anymore.
    */
@@ -332,26 +332,26 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} positionLifecycle position detection mode. Allowed values are netting (single position per
    * strategy per symbol), hedging (multiple positions per strategy per symbol)
    * @property {String} accountId id of the MetaApi account providing the strategy
-   * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
+   * @property {Boolean} [skipPendingOrders] flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    * @property {CopyFactoryStrategyCommissionScheme} [commissionScheme] commission scheme allowed by this strategy
-   * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
+   * @property {Number} [maxTradeRisk] max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
    * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
-   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional strategy risk limits. You can configure
+   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] strategy risk limits. You can configure
    * trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for
    * balance or equity drawdown
-   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] optional stop loss value restriction
-   * @property {Number} [maxLeverage] optional max leverage risk restriction. All trades resulting in a leverage value
+   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] stop loss value restriction
+   * @property {Number} [maxLeverage] max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
@@ -366,7 +366,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
-   * @property {CopyFactoryStrategyMagicFilter} [magicFilter] optional magic (expert id) filter
+   * @property {CopyFactoryStrategyMagicFilter} [magicFilter] magic (expert id) filter
    * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
    * equity is greater than balance moving average
    * @property {CopyFactoryStrategyDrawdownFilter} [drawdownFilter] master account strategy drawdown filter
@@ -442,25 +442,25 @@ export default class ConfigurationClient extends MetaApiClient {
    * @typedef {Object} CopyFactoryPortfolioStrategyMember
    * @property {String} strategyId member strategy id
    * @property {Number} multiplier copying multiplier (weight in the portfolio)
-   * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
+   * @property {Boolean} [skipPendingOrders] flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
-   * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
+   * @property {Number} [maxTradeRisk] max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
    * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
-   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional strategy risk limits. You can configure
+   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] strategy risk limits. You can configure
    * trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for
    * balance or equity drawdown
-   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] optional stop loss value restriction
-   * @property {Number} [maxLeverage] optional max leverage risk restriction. All trades resulting in a leverage value
+   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] stop loss value restriction
+   * @property {Number} [maxLeverage] max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
@@ -485,25 +485,25 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<CopyFactoryPortfolioStrategyMember>} members array of portfolio members
    * @property {CopyFactoryStrategyCommissionScheme} [commissionScheme] commission scheme allowed by this strategy. By
    * default monthly billing period with no commission is being used
-   * @property {Boolean} [skipPendingOrders] optional flag indicating that pending orders should not be copied.
+   * @property {Boolean} [skipPendingOrders] flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
-   * @property {Number} [maxTradeRisk] optional max risk per trade, expressed as a fraction of 1. If trade has a SL, the
+   * @property {Number} [maxTradeRisk] max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    * @property {Boolean} [reverse] flag indicating that the strategy should be copied in a reverse direction
-   * @property {String} [reduceCorrelations] optional setting indicating whether to enable automatic trade
+   * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] optional stop out setting. All trading will
+   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
    * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
-   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] optional strategy risk limits. You can configure
+   * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] strategy risk limits. You can configure
    * trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for
    * balance or equity drawdown
-   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] optional stop loss value restriction
-   * @property {Number} [maxLeverage] optional max leverage risk restriction. All trades resulting in a leverage value
+   * @property {CopyFactoryStrategyMaxStopLoss} [maxStopLoss] stop loss value restriction
+   * @property {Number} [maxLeverage] max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    * @property {Array<CopyFactoryStrategySymbolMapping>} [symbolMapping] defines how symbol name should be changed when
    * trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the
