@@ -119,9 +119,9 @@ export default class TradingClient extends MetaApiClient {
    * Resynchronizes the account. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resynchronize/
    * @param {String} accountId account id
-   * @param {Array<String>} strategyIds optional array of strategy ids to recynchronize. Default is to synchronize all
+   * @param {Array<String>} [strategyIds] array of strategy ids to recynchronize. Default is to synchronize all
    * strategies
-   * @param {Array<String>} positionIds optional array of position ids to resynchronize. Default is to synchronize all
+   * @param {Array<String>} [positionIds] array of position ids to resynchronize. Default is to synchronize all
    * positions
    * @return {Promise} promise which resolves when resynchronization is scheduled
    */

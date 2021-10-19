@@ -48,7 +48,7 @@ export default class HistoryClient extends MetaApiClient {
    * https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties#enum_deal_type
    * @property {Date} time transaction time
    * @property {String} subscriberId CopyFactory subscriber id
-   * @property {String} [symbol] optional symbol traded
+   * @property {String} [symbol] symbol traded
    * @property {CopyFactorySubscriberOrProviderUser} subscriberUser strategy subscriber
    * @property {Boolean} demo demo account flag
    * @property {CopyFactorySubscriberOrProviderUser} providerUser strategy provider
@@ -93,7 +93,7 @@ export default class HistoryClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
-   * @param {Array<string>} [strategyIds] optional list of strategy ids to filter transactions by
+   * @param {Array<string>} [strategyIds] list of strategy ids to filter transactions by
    * @param {Array<string>} [subscriberIds] the list of CopyFactory subscriber account ids to filter by
    * @param {number} [offset] pagination offset. Default value is 0
    * @param {number} [limit] pagination limit. Default value is 1000
@@ -138,7 +138,7 @@ export default class HistoryClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscriptionTransactions/
    * @param {Date} from time to load transactions from
    * @param {Date} till time to load transactions till
-   * @param {Array<String>} [strategyIds] optional list of strategy ids to filter transactions by
+   * @param {Array<String>} [strategyIds] list of strategy ids to filter transactions by
    * @param {Array<string>} [subscriberIds] the list of CopyFactory subscriber account ids to filter by
    * @param {Number} offset pagination offset. Default value is 0
    * @param {Number} limit pagination limit. Default value is 1000

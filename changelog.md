@@ -1,3 +1,6 @@
+3.1.2
+  - updated docs
+
 3.1.1
   - added subscriber profit field to trading signal model
 
