@@ -120,7 +120,6 @@ let strategyId = await configurationApi.generateStrategyId();
 await configurationApi.updateStrategy(strategyId.id, {
   name: 'Test strategy',
   description: 'Some useful description about your strategy',
-  positionLifecycle: 'hedging',
   accountId: masterMetaapiAccount.id,
   maxTradeRisk: 0.1,
   stopOutRisk: {

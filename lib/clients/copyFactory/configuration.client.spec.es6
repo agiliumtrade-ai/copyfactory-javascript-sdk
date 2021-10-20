@@ -81,7 +81,6 @@ describe('ConfigurationClient', () => {
       _id: 'ABCD',
       platformCommissionRate: 0.01,
       name: 'Test strategy',
-      positionLifecycle: 'hedging',
       accountId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
       stopOutRisk: {
@@ -137,7 +136,6 @@ describe('ConfigurationClient', () => {
       providerId: 'providerId',
       platformCommissionRate: 0.01,
       name: 'Test strategy',
-      positionLifecycle: 'hedging',
       connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
       stopOutRisk: {
@@ -183,7 +181,6 @@ describe('ConfigurationClient', () => {
   it('should update strategy via API', async () => {
     const strategy = {
       name: 'Test strategy',
-      positionLifecycle: 'hedging',
       accountId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
       stopOutRisk: {
