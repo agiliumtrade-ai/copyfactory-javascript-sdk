@@ -1,3 +1,6 @@
+3.1.4
+  - added removeAfter field to closeInstructions
+
 3.1.3
   - removed positionLifecycle property
 
