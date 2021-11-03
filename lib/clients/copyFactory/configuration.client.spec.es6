@@ -229,7 +229,7 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removeStrategy}
    */
   it('should remove strategy via API', async () => {
-    const payload = {mode: 'preserve'};
+    const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient.removeStrategy('ABCD', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
@@ -401,7 +401,7 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removePortfolioStrategy}
    */
   it('should remove portfolio strategy via API', async () => {
-    const payload = {mode: 'preserve'};
+    const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient.removePortfolioStrategy('ABCD', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
@@ -564,7 +564,7 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#removeSubscriber}
    */
   it('should remove CopyFactory subscriber via API', async () => {
-    const payload = {mode: 'preserve'};
+    const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient
       .removeSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
@@ -598,7 +598,7 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#removeSubscription}
    */
   it('should remove CopyFactory subscription via API', async () => {
-    const payload = {mode: 'preserve'};
+    const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient
       .removeSubscription('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', payload);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
