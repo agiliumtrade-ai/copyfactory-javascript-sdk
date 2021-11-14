@@ -276,11 +276,24 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Retrieves CopyFactory copy trading strategies. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getStrategies/
+   * @param {Boolean} [includeRemoved] flag instructing to include removed strategies in results
+   * @param {Number} [limit] pagination limit
+   * @param {Number} [offset] copy trading strategy id
    * @return {Promise<Array<CopyFactoryStrategy>>} promise resolving with CopyFactory strategies found
    */
-  getStrategies() {
+  getStrategies(includeRemoved, limit, offset) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getStrategies');
+    }
+    let qs = {};
+    if(includeRemoved !== undefined) {
+      qs.includeRemoved = includeRemoved;
+    }
+    if(limit !== undefined) {
+      qs.limit = limit;
+    }
+    if(offset !== undefined) {
+      qs.offset = offset;
     }
     const opts = {
       url: `${this._host}/users/current/configuration/strategies`,
@@ -288,6 +301,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      qs,
       json: true
     };
     return this._httpClient.request(opts);
@@ -534,12 +548,25 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Retrieves CopyFactory copy portfolio strategies. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/getPortfolioStrategies/
+   * @param {Boolean} [includeRemoved] flag instructing to include removed portfolio strategies in results
+   * @param {Number} [limit] pagination limit
+   * @param {Number} [offset] copy trading strategy id
    * @return {Promise<Array<CopyFactoryPortfolioStrategy>>} promise resolving with CopyFactory portfolio strategies
    * found
    */
-  getPortfolioStrategies() {
+  getPortfolioStrategies(includeRemoved, limit, offset) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getPortfolioStrategies');
+    }
+    let qs = {};
+    if(includeRemoved !== undefined) {
+      qs.includeRemoved = includeRemoved;
+    }
+    if(limit !== undefined) {
+      qs.limit = limit;
+    }
+    if(offset !== undefined) {
+      qs.offset = offset;
     }
     const opts = {
       url: `${this._host}/users/current/configuration/portfolio-strategies`,
@@ -547,6 +574,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      qs,
       json: true
     };
     return this._httpClient.request(opts);
@@ -622,11 +650,24 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * Returns CopyFactory subscribers the user has configured. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscribers/
+   * @param {Boolean} [includeRemoved] flag instructing to include removed subscribers in results
+   * @param {Number} [limit] pagination limit
+   * @param {Number} [offset] copy trading strategy id
    * @return {Promise<Array<CopyFactorySubscriber>>} promise resolving with subscribers found
    */
-  getSubscribers() {
+  getSubscribers(includeRemoved, limit, offset) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getSubscribers');
+    }
+    let qs = {};
+    if(includeRemoved !== undefined) {
+      qs.includeRemoved = includeRemoved;
+    }
+    if(limit !== undefined) {
+      qs.limit = limit;
+    }
+    if(offset !== undefined) {
+      qs.offset = offset;
     }
     const opts = {
       url: `${this._host}/users/current/configuration/subscribers`,
@@ -634,6 +675,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
+      qs,
       json: true
     };
     return this._httpClient.request(opts);
