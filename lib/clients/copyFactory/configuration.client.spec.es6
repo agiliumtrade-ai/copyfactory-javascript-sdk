@@ -100,13 +100,18 @@ describe('ConfigurationClient', () => {
       }
     }];
     requestStub.resolves(expected);
-    let strategies = await copyFactoryClient.getStrategies();
+    let strategies = await copyFactoryClient.getStrategies(true, 100, 200);
     strategies.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/strategies`,
       method: 'GET',
       headers: {
         'auth-token': token
+      },
+      qs: { 
+        includeRemoved: true, 
+        limit: 100,
+        offset: 200 
       },
       json: true,
     });
@@ -278,13 +283,18 @@ describe('ConfigurationClient', () => {
       }
     }];
     requestStub.resolves(expected);
-    let strategies = await copyFactoryClient.getPortfolioStrategies();
+    let strategies = await copyFactoryClient.getPortfolioStrategies(true, 100, 200);
     strategies.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies`,
       method: 'GET',
       headers: {
         'auth-token': token
+      },
+      qs: { 
+        includeRemoved: true, 
+        limit: 100,
+        offset: 200 
       },
       json: true,
     });
@@ -445,13 +455,18 @@ describe('ConfigurationClient', () => {
       ]
     }];
     requestStub.resolves(expected);
-    let accounts = await copyFactoryClient.getSubscribers();
+    let accounts = await copyFactoryClient.getSubscribers(true, 100, 200);
     accounts.should.equal(expected);
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${copyFactoryApiUrl}/users/current/configuration/subscribers`,
       method: 'GET',
       headers: {
         'auth-token': token
+      },
+      qs: { 
+        includeRemoved: true, 
+        limit: 100,
+        offset: 200 
       },
       json: true,
     });
