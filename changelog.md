@@ -1,3 +1,6 @@
+3.2.1
+  - added typings for public classes and objects
+
 3.2.0
   - added includeRemoved and pagination to getStrategies, getPortfolioStrategies, getSubscribers
 
