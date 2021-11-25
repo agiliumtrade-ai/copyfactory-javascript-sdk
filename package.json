@@ -41,7 +41,7 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/copyfactory-javascript-sdk.git"
   },
-  "version": "3.2.0",
+  "version": "3.2.1",
   "dependencies": {
     "babel-runtime": "~6.26.0",
     "moment": "~2.29.1",
@@ -55,6 +55,7 @@
     "babel-preset-env": "~1.7.0",
     "babel-preset-es2015": "~6.24.1",
     "babel-register": "~6.26.0",
+    "copyfiles": "~2.4.1",
     "eslint": "~7.1.0",
     "eslint-plugin-mocha": "~7.0.0",
     "gulp": "~4.0.2",
@@ -69,8 +70,8 @@
     "test": "mocha --exit --require babel-register lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
     "lint": "eslint --ext es6 ./lib",
     "lint:fix": "eslint --ext es6 ./lib --fix",
-    "build": "rm -rf dist; rm -rf es; npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp",
-    "build-win": "rmdir /Q /S dist | rmdir /Q /S es | npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp"
+    "build": "rm -rf dist; rm -rf es; npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp && copyfiles -u 1 \"lib/**/*.d.ts\" dist && copyfiles -u 1 \"lib/**/*.d.ts\" es",
+    "build-win": "rmdir /Q /S dist | rmdir /Q /S es | npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp && copyfiles -u 1 \"lib/**/*.d.ts\" dist && copyfiles -u 1 \"lib/**/*.d.ts\" es"
   },
   "main": "dist/index.js",
   "module": "es/index.js"
