@@ -69,22 +69,6 @@ declare type CopyFactorySubscriberOrProviderUser = {
  * CopyFactory strategy id and name
  */
 declare type CopyFactoryStrategyIdAndName = {
-
-  /**
-   * unique strategy id
-   */
-  id: String,
-
-  /**
-   * human-readable strategy name
-   */
-  name:string
-}
-
-/**
- * CopyFactory strategy id and name
- */
-declare type CopyFactoryStrategyIdAndName = {
   
   /**
    * unique strategy id
