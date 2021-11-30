@@ -21,7 +21,7 @@ export default class HttpClient {
 /**
  * retry options
  */
-declare type RetryOptions = {
+export declare type RetryOptions = {
 
   /**
    * the number of attempts to retry failed request, default 5

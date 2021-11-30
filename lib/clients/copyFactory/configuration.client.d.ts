@@ -153,7 +153,7 @@ export default class ConfigurationClient extends MetaApiClient {
 /**
  * Strategy id
  */
-declare type StrategyId = {
+export declare type StrategyId = {
 
   /**
    * strategy id
@@ -164,7 +164,7 @@ declare type StrategyId = {
 /**
  * CopyFactory strategy subscriptions
  */
-declare type CopyFactoryStrategySubscription = {
+export declare type CopyFactoryStrategySubscription = {
 
   /**
    * id of the strategy to subscribe to
@@ -288,7 +288,7 @@ declare type CopyFactoryStrategySubscription = {
 /**
  * CopyFactory strategy trade size scaling settings
  */
-declare type CopyFactoryStrategyTradeSizeScaling = {
+export declare type CopyFactoryStrategyTradeSizeScaling = {
 
   /**
    * If set to balance, the trade size on strategy subscriber will be scaled according to
@@ -315,7 +315,7 @@ declare type CopyFactoryStrategyTradeSizeScaling = {
 /**
  * CopyFactory strategy stopout settings
  */
-declare type CopyFactoryStrategyStopOutSettings = {
+export declare type CopyFactoryStrategyStopOutSettings = {
 
   /**
    * value of the stop out risk, expressed as a fraction of 1
@@ -332,7 +332,7 @@ declare type CopyFactoryStrategyStopOutSettings = {
 /**
  * CopyFactory symbol filter
  */
-declare type CopyFactoryStrategySymbolFilter = {
+export declare type CopyFactoryStrategySymbolFilter = {
 
   /**
    * list of symbols copied. Leave the value empty to copy all symbols
@@ -348,7 +348,7 @@ declare type CopyFactoryStrategySymbolFilter = {
 /**
  * CopyFactory news risk filter
  */
-declare type CopyFactoryStrategyNewsFilter = {
+export declare type CopyFactoryStrategyNewsFilter = {
 
   /**
    * breaking news filter
@@ -364,7 +364,7 @@ declare type CopyFactoryStrategyNewsFilter = {
 /**
  * CopyFactory breaking news risk filter
  */
-declare type CopyFactoryStrategyBreakingNewsFilter = {
+export declare type CopyFactoryStrategyBreakingNewsFilter = {
 
   /**
    * list of breaking news priorities to stop trading on, leave empty to disable
@@ -388,7 +388,7 @@ declare type CopyFactoryStrategyBreakingNewsFilter = {
 /**
  * CopyFactory calendar new filter
  */
-declare type CopyFactoryStrategyCalendarNewsFilter = {
+export declare type CopyFactoryStrategyCalendarNewsFilter = {
 
   /**
    * list of calendar news priorities to stop trading on, leave empty to disable
@@ -418,7 +418,7 @@ declare type CopyFactoryStrategyCalendarNewsFilter = {
 /**
  * CopyFactory risk limit filter
  */
-declare type CopyFactoryStrategyRiskLimit = {
+export declare type CopyFactoryStrategyRiskLimit = {
 
   /**
    * restriction type. One of daily, monthly, or yearly
@@ -451,7 +451,7 @@ declare type CopyFactoryStrategyRiskLimit = {
 /**
  * CopyFactory strategy max stop loss settings
  */
-declare type CopyFactoryStrategyMaxStopLoss = {
+export declare type CopyFactoryStrategyMaxStopLoss = {
 
   /**
    * maximum SL value
@@ -467,7 +467,7 @@ declare type CopyFactoryStrategyMaxStopLoss = {
 /**
  * CopyFactory strategy symbol mapping
  */
-declare type CopyFactoryStrategySymbolMapping = {
+export declare type CopyFactoryStrategySymbolMapping = {
 
   /**
    * symbol name to convert from
@@ -483,7 +483,7 @@ declare type CopyFactoryStrategySymbolMapping = {
 /**
  * CopyFactory account update
  */
-declare type CopyFactorySubscriberUpdate = {
+export declare type CopyFactorySubscriberUpdate = {
 
   /**
    * account human-readable name
@@ -570,7 +570,7 @@ declare type CopyFactorySubscriberUpdate = {
 /**
  * CopyFactory subscriber model
  */
-declare type CopyFactorySubscriber = CopyFactorySubscriberUpdate & {
+export declare type CopyFactorySubscriber = CopyFactorySubscriberUpdate & {
 
   /**
    * id of the MetaApi account to copy trades to
@@ -581,7 +581,7 @@ declare type CopyFactorySubscriber = CopyFactorySubscriberUpdate & {
 /**
  * CopyFactory provider strategy
  */
-declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
+export declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
   
   /**
    * unique strategy id
@@ -599,7 +599,7 @@ declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
 /**
  * CopyFactory strategy commission scheme
  */
-declare type CopyFactoryStrategyCommissionScheme = {
+export declare type CopyFactoryStrategyCommissionScheme = {
 
   /**
    * commission type. One of flat-fee, lots-traded, lots-won, amount-traded, amount-won,
@@ -623,7 +623,7 @@ declare type CopyFactoryStrategyCommissionScheme = {
 /**
  * CopyFactory strategy magic filter
  */
-declare type CopyFactoryStrategyMagicFilter = {
+export declare type CopyFactoryStrategyMagicFilter = {
 
   /**
    * list of magics (expert ids) or magic ranges copied. Leave the value empty to
@@ -641,7 +641,7 @@ declare type CopyFactoryStrategyMagicFilter = {
 /**
  * CopyFactory strategy time settings
  */
-declare type CopyFactoryStrategyTimeSettings = {
+export declare type CopyFactoryStrategyTimeSettings = {
 
   /**
    * position lifetime. Default is to keep positions open up to 90 days
@@ -659,7 +659,7 @@ declare type CopyFactoryStrategyTimeSettings = {
 /**
  * CopyFactory strategy equity curve filter
  */
-declare type CopyFactoryStrategyEquityCurveFilter = {
+export declare type CopyFactoryStrategyEquityCurveFilter = {
 
   /**
    * moving average period, must be greater or equal to 1
@@ -676,7 +676,7 @@ declare type CopyFactoryStrategyEquityCurveFilter = {
 /**
  * CopyFactory strategy drawdown filter
  */
-declare type CopyFactoryStrategyDrawdownFilter = {
+export declare type CopyFactoryStrategyDrawdownFilter = {
 
   /**
    * maximum drawdown value after which action is executed. Drawdown should
@@ -695,7 +695,7 @@ declare type CopyFactoryStrategyDrawdownFilter = {
 /**
  * CopyFactory strategy update
  */
-declare type CopyFactoryStrategyUpdate = {
+export declare type CopyFactoryStrategyUpdate = {
 
   /**
    * strategy human-readable name
@@ -848,7 +848,7 @@ declare type CopyFactoryStrategyUpdate = {
 /**
  * CopyFactory close instructions
  */
-declare type CopyFactoryCloseInstructions = {
+export declare type CopyFactoryCloseInstructions = {
 
   /**
    * position close mode on strategy or subscription removal. Preserve means
@@ -874,7 +874,7 @@ declare type CopyFactoryCloseInstructions = {
 /**
  * Portfolio strategy member
  */
-declare type CopyFactoryPortfolioStrategyMember = {
+export declare type CopyFactoryPortfolioStrategyMember = {
 
   /**
    * member strategy id
@@ -987,7 +987,7 @@ declare type CopyFactoryPortfolioStrategyMember = {
 /**
  * Portfolio strategy update
  */
-declare type CopyFactoryPortfolioStrategyUpdate = {
+export declare type CopyFactoryPortfolioStrategyUpdate = {
 
   /**
    * strategy human-readable name
@@ -1111,7 +1111,7 @@ declare type CopyFactoryPortfolioStrategyUpdate = {
 /**
  * Portfolio strategy, i.e. the strategy which includes a set of other strategies
  */
-declare type CopyFactoryPortfolioStrategy = CopyFactoryPortfolioStrategyUpdate & {
+export declare type CopyFactoryPortfolioStrategy = CopyFactoryPortfolioStrategyUpdate & {
 
   /**
    * unique strategy id

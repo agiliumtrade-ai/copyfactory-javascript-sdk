@@ -98,7 +98,7 @@ export default class TradingClient extends MetaApiClient {
 /**
  * CopyFactory external signal update payload
  */
-declare type CopyFactoryExternalSignalUpdate = {
+export declare type CopyFactoryExternalSignalUpdate = {
 
   /**
    * trade symbol
@@ -150,7 +150,7 @@ declare type CopyFactoryExternalSignalUpdate = {
 /**
  * CopyFactory trading signal
  */
-declare type CopyFactoryTradingSignal = {
+export declare type CopyFactoryTradingSignal = {
 
   /**
    * strategy the signal arrived from
@@ -226,7 +226,7 @@ declare type CopyFactoryTradingSignal = {
 /**
  * CopyFactory external signal remove payload
  */
-declare type CopyFactoryExternalSignalRemove = {
+export declare type CopyFactoryExternalSignalRemove = {
 
   /**
    * the time signal was removed (closed) at
@@ -237,7 +237,7 @@ declare type CopyFactoryExternalSignalRemove = {
 /**
  * CopyFactory strategy stopout
  */
-declare type CopyFactoryStrategyStopout = {
+export declare type CopyFactoryStrategyStopout = {
 
   /**
    * strategy which was stopped out
@@ -279,7 +279,7 @@ declare type CopyFactoryStrategyStopout = {
 /**
  * Trade copying user log record
  */
-declare type CopyFactoryUserLogMessage = {
+export declare type CopyFactoryUserLogMessage = {
 
   /**
    * log record time
