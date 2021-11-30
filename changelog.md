@@ -1,3 +1,6 @@
+3.2.2
+  - fixed export declared types in typings
+
 3.2.1
   - added typings for public classes and objects
 

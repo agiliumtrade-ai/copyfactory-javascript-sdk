@@ -47,7 +47,7 @@ export default class HistoryClient extends MetaApiClient {
 /**
  * CopyFactory provider or subscriber user
  */
-declare type CopyFactorySubscriberOrProviderUser = {
+export declare type CopyFactorySubscriberOrProviderUser = {
 
   /**
    * profile id
@@ -68,23 +68,7 @@ declare type CopyFactorySubscriberOrProviderUser = {
 /**
  * CopyFactory strategy id and name
  */
-declare type CopyFactoryStrategyIdAndName = {
-
-  /**
-   * unique strategy id
-   */
-  id: String,
-
-  /**
-   * human-readable strategy name
-   */
-  name:string
-}
-
-/**
- * CopyFactory strategy id and name
- */
-declare type CopyFactoryStrategyIdAndName = {
+export declare type CopyFactoryStrategyIdAndName = {
   
   /**
    * unique strategy id
@@ -100,7 +84,7 @@ declare type CopyFactoryStrategyIdAndName = {
 /**
  * CopyFactory transaction
  */
-declare type CopyFactoryTransaction = {
+export declare type CopyFactoryTransaction = {
 
   /**
    * transaction id
@@ -232,7 +216,7 @@ declare type CopyFactoryTransaction = {
 /**
  * Trade copying metrics such as slippage and latencies
  */
-declare type CopyFactoryTransactionMetrics = {
+export declare type CopyFactoryTransactionMetrics = {
 
   /**
    * trade copying latency, measured in milliseconds based on transaction time
