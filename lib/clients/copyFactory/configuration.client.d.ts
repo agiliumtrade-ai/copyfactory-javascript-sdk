@@ -102,6 +102,16 @@ export default class ConfigurationClient extends MetaApiClient {
   removePortfolioStrategy(portfolioId: String, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
 
   /**
+   * Deletes a CopyFactory portfolio strategy member. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removePortfolioStrategyMember/
+   * @param {String} portfolioId portfolio strategy id
+   * @param {String} strategyId id of the strategy to delete member for
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
+   * @return {Promise} promise resolving when portfolio strategy member is removed
+   */
+  removePortfolioStrategyMember(portfolioId: String, strategyId: String, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
+
+  /**
    * Returns CopyFactory subscribers the user has configured. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getSubscribers/
    * @param {Boolean} [includeRemoved] flag instructing to include removed subscribers in results
@@ -594,6 +604,18 @@ export declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
    * be fraction of 1
    */
   platformCommissionRate: Number
+
+  /**
+   * position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
+   */
+   closeOnRemovalMode?: String
 }
 
 /**
@@ -982,6 +1004,18 @@ export declare type CopyFactoryPortfolioStrategyMember = {
    * with maximum volume instead
    */
   maxTradeVolume?: Number
+
+  /**
+   * position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
+   */
+  closeOnRemovalMode?: String
 }
 
 /**
@@ -1124,4 +1158,16 @@ export declare type CopyFactoryPortfolioStrategy = CopyFactoryPortfolioStrategyU
    * be fraction of 1
    */
   platformCommissionRate: Number
+
+  /**
+   * position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
+   */
+  closeOnRemovalMode?: String
 }

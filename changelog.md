@@ -1,3 +1,7 @@
+3.3.0
+  - added removePortfolioStrategyMember method
+  - added closeOnRemovalMode to strategy, portfolio strategy and portfolio strategy member
+
 3.2.2
   - fixed export declared types in typings
 
