@@ -234,6 +234,14 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Number} platformCommissionRate commission rate the platform charges for strategy copying, applied to
    * commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should
    * be fraction of 1
+   * @property {String} [closeOnRemovalMode] position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
    */
 
   /**
@@ -491,6 +499,14 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {String} [closeOnRemovalMode] position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
    */
 
   /**
@@ -543,6 +559,14 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Number} platformCommissionRate commission rate the platform charges for strategy copying, applied to
    * commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should
    * be fraction of 1
+   * @property {String} [closeOnRemovalMode] position close mode on strategy or subscription removal. Preserve means
+   * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
+   * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
+   * close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close
+   * signals will be copied or signals to open positions for the symbols which already have positions opened.
+   * close-immediately means that all positions will be closed immediately. Default is close-immediately.
+   * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
+   * close-gracefully-by-symbol, close-immediately
    */
 
   /**
@@ -637,6 +661,30 @@ export default class ConfigurationClient extends MetaApiClient {
     }
     const opts = {
       url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': this._token
+      },
+      body: closeInstructions,
+      json: true
+    };
+    return this._httpClient.request(opts);
+  }
+
+  /**
+   * Deletes a CopyFactory portfolio strategy member. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removePortfolioStrategyMember/
+   * @param {String} portfolioId portfolio strategy id
+   * @param {String} strategyId id of the strategy to delete member for
+   * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
+   * @return {Promise} promise resolving when portfolio strategy is removed
+   */
+  removePortfolioStrategyMember(portfolioId, strategyId, closeInstructions) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('removePortfolioStrategyMember');
+    }
+    const opts = {
+      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}/members/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token

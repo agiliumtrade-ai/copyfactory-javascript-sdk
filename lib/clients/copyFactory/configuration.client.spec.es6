@@ -440,6 +440,38 @@ describe('ConfigurationClient', () => {
   });
 
   /**
+   * @test {ConfigurationClient#removePortfolioStrategyMember}
+   */
+  it('should remove portfolio strategy member via API', async () => {
+    const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
+    await copyFactoryClient.removePortfolioStrategyMember('ABCD', 'BCDE', payload);
+    sinon.assert.calledOnceWithExactly(httpClient.request, {
+      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD/members/BCDE`,
+      method: 'DELETE',
+      headers: {
+        'auth-token': token
+      },
+      body: payload,
+      json: true,
+    });
+  });
+  
+  /**
+     * @test {ConfigurationClient#removePortfolioStrategyMember}
+     */
+  it('should not remove portfolio strategy member from via with account token', async () => {
+    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    try {
+      await copyFactoryClient.removePortfolioStrategyMember('ABCD', 'BCDE');
+    } catch (error) {
+      error.message.should.equal(
+        'You can not invoke removePortfolioStrategyMember method, because you have connected with account access ' +
+        'token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
    * @test {TradingClient#getSubscribers}
    */
   it('should retrieve CopyFactory subscribers from API', async () => {
