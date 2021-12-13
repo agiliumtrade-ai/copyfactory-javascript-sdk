@@ -13,7 +13,7 @@ export default class HistoryClient extends MetaApiClient {
    * @param {String} token authorization token
    * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
    */
-  constructor(httpClien: HttpClient, token: String, domain?: String);
+  constructor(httpClien: HttpClient, token: string, domain?: string);
   
   /**
    * Returns list of transactions on the strategies the current user provides to other users
@@ -26,7 +26,7 @@ export default class HistoryClient extends MetaApiClient {
    * @param {number} [limit] pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  getProvidedTransactions(from: Date, till: Date, strategyIds?: Array<String>, subscriberIds?: Array<String>, offset?: Number, limit?: Number): Promise<Array<CopyFactoryTransaction>>;
+  getProvidedTransactions(from: Date, till: Date, strategyIds?: Array<String>, subscriberIds?: Array<String>, offset?: number, limit?: number): Promise<Array<CopyFactoryTransaction>>;
 
   /**
    * Returns list of trades on the strategies the current user subscribed to
@@ -39,7 +39,7 @@ export default class HistoryClient extends MetaApiClient {
    * @param {Number} limit pagination limit. Default value is 1000
    * @return {Promise<Array<CopyFactoryTransaction>>} promise resolving with transactions found
    */
-  getSubscriptionTransactions(from: Date, till: Date, strategyIds?: Array<String>, subscriberIds?: Array<String>, offset?: Number, limit?: Number): Promise<Array<CopyFactoryTransaction>>;
+  getSubscriptionTransactions(from: Date, till: Date, strategyIds?: Array<String>, subscriberIds?: Array<String>, offset?: number, limit?: number): Promise<Array<CopyFactoryTransaction>>;
 
   
 }
@@ -52,12 +52,12 @@ export declare type CopyFactorySubscriberOrProviderUser = {
   /**
    * profile id
    */
-  id: String,
+  id: string,
 
   /**
    * user name
    */
-  name: String,
+  name: string,
 
   /**
    * array of strategy IDs provided by provider or subscribed to by subscriber
@@ -73,12 +73,12 @@ export declare type CopyFactoryStrategyIdAndName = {
   /**
    * unique strategy id
    */
-  id: String,
+  id: string,
 
   /**
    * human-readable strategy name
    */
-  name: String
+  name: string
 }
 
 /**
@@ -89,7 +89,7 @@ export declare type CopyFactoryTransaction = {
   /**
    * transaction id
    */
-  id: String,
+  id: string,
 
   /**
    * transaction type (one of DEAL_TYPE_BUY, DEAL_TYPE_SELL, DEAL_TYPE_BALANCE,
@@ -99,7 +99,7 @@ export declare type CopyFactoryTransaction = {
    * DEAL_DIVIDEND, DEAL_DIVIDEND_FRANKED, DEAL_TAX). See
    * https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties#enum_deal_type
    */
-  type: String,
+  type: string,
 
   /**
    * transaction time
@@ -109,12 +109,12 @@ export declare type CopyFactoryTransaction = {
   /**
    * CopyFactory subscriber id
    */
-  subscriberId: String,
+  subscriberId: string,
 
   /**
    * symbol traded
    */
-  symbol?: String,
+  symbol?: string,
 
   /**
    * strategy subscriber
@@ -124,7 +124,7 @@ export declare type CopyFactoryTransaction = {
   /**
    * demo account flag
    */
-  demo: Boolean,
+  demo: boolean,
 
   /**
    * strategy provider
@@ -139,72 +139,72 @@ export declare type CopyFactoryTransaction = {
   /**
    * source position id
    */
-  positionId?: String,
+  positionId?: string,
 
   /**
    * slave position id
    */
-  slavePositionId?: String,
+  slavePositionId?: string,
 
   /**
    * high-water mark strategy balance improvement
    */
-  improvement: Number,
+  improvement: number,
 
   /**
    * provider commission
    */
-  providerCommission: Number,
+  providerCommission: number,
 
   /**
    * platform commission
    */
-  platformCommission: Number,
+  platformCommission: number,
 
   /**
    * commission paid by provider to underlying providers
    */
-  incomingProviderCommission?: Number,
+  incomingProviderCommission?: number,
 
   /**
    * platform commission paid by provider to underlying providers
    */
-  incomingPlatformCommission?: Number,
+  incomingPlatformCommission?: number,
 
   /**
    * trade volume
    */
-  quantity?: Number,
+  quantity?: number,
 
   /**
    * trade lot price
    */
-  lotPrice?: Number,
+  lotPrice?: number,
 
   /**
    * trade tick price
    */
-  tickPrice?: Number,
+  tickPrice?: number,
 
   /**
    * trade amount
    */
-  amount?: Number,
+  amount?: number,
 
   /**
    * trade commission
    */
-  commission?: Number,
+  commission?: number,
 
   /**
    * trade swap 
    */
-  swap: Number,
+  swap: number,
 
   /**
    * trade profit
    */
-  profit: Number,
+  profit: number,
 
   /**
    * trade copying metrics such as slippage and latencies. Measured
@@ -222,36 +222,36 @@ export declare type CopyFactoryTransactionMetrics = {
    * trade copying latency, measured in milliseconds based on transaction time
    * provided by broker
    */
-  tradeCopyingLatency?: Number,
+  tradeCopyingLatency?: number,
 
   /**
    * trade copying slippage, measured in basis points (0.01
    * percent) based on transaction price provided by broker
    */
-  tradeCopyingSlippageInBasisPoints?: Number,
+  tradeCopyingSlippageInBasisPoints?: number,
 
   /**
    * trade copying slippage, measured in account currency
    * based on transaction price provided by broker
    */
-  tradeCopyingSlippageInAccountCurrency?: Number,
+  tradeCopyingSlippageInAccountCurrency?: number,
 
   /**
    * trade signal latency introduced by broker and MT platform, measured
    * in milliseconds
    */
-  mtAndBrokerSignalLatency?: Number,
+  mtAndBrokerSignalLatency?: number,
 
   /**
    * trade algorithm latency introduced by CopyFactory servers, measured in
    * milliseconds
    */
-  tradeAlgorithmLatency?: Number,
+  tradeAlgorithmLatency?: number,
 
   /**
    * trade latency for a copied trade introduced by broker and MT platform,
    * measured in milliseconds
    */
-  mtAndBrokerTradeLatency?: Number
+  mtAndBrokerTradeLatency?: number
 }
 

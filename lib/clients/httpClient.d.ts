@@ -8,7 +8,7 @@ export default class HttpClient {
    * @param {Number} timeout request timeout in seconds
    * @param {RetryOptions} [retryOpts] retry options
    */
-  constructor(timeout?: Number, retryOpts?: RetryOptions);
+  constructor(timeout?: number, retryOpts?: RetryOptions);
 
   /**
    * Performs a request. Response errors are returned as ApiError or subclasses.
@@ -26,15 +26,15 @@ export declare type RetryOptions = {
   /**
    * the number of attempts to retry failed request, default 5
    */
-  retries?: Number,
+  retries?: number,
 
   /**
    * minimum delay in seconds before retrying, default 1
    */
-  minDelayInSeconds?: Number,
+  minDelayInSeconds?: number,
 
   /**
    * maximum delay in seconds before retrying, default 30
    */
-  maxDelayInSeconds?: Number
+  maxDelayInSeconds?: number
 }

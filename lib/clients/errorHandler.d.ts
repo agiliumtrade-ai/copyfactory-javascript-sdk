@@ -9,19 +9,19 @@ export class ApiError extends Error {
    * @param {Object} message error message
    * @param {Number} status HTTP status
    */
-  constructor(clazz: Function, message: Object, status: Number);
+  constructor(clazz: Function, message: Object, status: number);
 
   /**
    * Sets error code, used for i18n
    * @param {String} code error code for i18n
    */
-  set code(code: String);
+  set code(code: string);
 
   /**
    * Returns error code used for i18n
    * @return {String} error code
    */
-  get code(): String;
+  get code(): string;
 
   /**
    * Set message arguments for i18n
@@ -45,7 +45,7 @@ export class NotFoundError extends ApiError {
    * Represents NotFoundError.
    * @param {String} message error message
    */
-  constructor(message: String);
+  constructor(message: string);
 }
 
 /**
@@ -57,7 +57,7 @@ export class ForbiddenError extends ApiError {
    * Constructs forbidden error.
    * @param {String} message error message
    */
-   constructor(message: String);
+   constructor(message: string);
 }
 
 /**
@@ -69,7 +69,7 @@ export class UnauthorizedError extends ApiError {
    * Constructs unauthorized error.
    * @param {String} message error message
    */
-   constructor(message: String);
+   constructor(message: string);
 }
 
 /**
@@ -82,7 +82,7 @@ export class ValidationError extends ApiError {
    * @param {String} message error message
    * @param {Object} details error data
    */
-  constructor(message: String, details: Object);
+  constructor(message: string, details: Object);
 }
 
 /**
@@ -94,7 +94,7 @@ export class InternalError extends ApiError {
    * Constructs unexpected error.
    * @param {String} message error message
    */
-  constructor(message: String);
+  constructor(message: string);
 }
 
 /**
@@ -106,7 +106,7 @@ export class InternalError extends ApiError {
    * Constructs conflict error.
    * @param {String} message error message
    */
-  constructor(message: String);
+  constructor(message: string);
  }
 
 /**
@@ -117,12 +117,12 @@ export type TooManyRequestsErrorMetadata = {
   /**
    * throttling period in minutes
    */
-  periodInMinutes: Number,
+  periodInMinutes: number,
 
   /**
    *available requests for periodInMinutes
    */
-  requestsPerPeriodAllowed: Number,
+  requestsPerPeriodAllowed: number,
 
   /**
    * recommended date to retry request
@@ -140,5 +140,5 @@ export class TooManyRequestsError extends ApiError {
    * @param {String} message error message
    * @param {TooManyRequestsErrorMetadata} metadata error metadata
    */
-  constructor(message: String, metadata: TooManyRequestsErrorMetadata);
+  constructor(message: string, metadata: TooManyRequestsErrorMetadata);
 }

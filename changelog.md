@@ -1,3 +1,6 @@
+3.3.1
+  - updated typescript types
+
 3.3.0
   - added removePortfolioStrategyMember method
   - added closeOnRemovalMode to strategy, portfolio strategy and portfolio strategy member
