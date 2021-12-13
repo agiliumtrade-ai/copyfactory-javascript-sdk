@@ -8,5 +8,5 @@ export default class MethodAccessError extends Error {
    * @param {string} methodName Name of method
    * @param {string} accessType Type of method access
    */
-  constructor(methodName: String, accessType?: String);
+  constructor(methodName: string, accessType?: string);
 }

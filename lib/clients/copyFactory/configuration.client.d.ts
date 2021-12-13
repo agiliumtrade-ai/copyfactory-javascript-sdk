@@ -1,3 +1,4 @@
+import moment from "moment";
 import HttpClient from "../httpClient";
 import MetaApiClient from "../metaApi.client";
 
@@ -13,7 +14,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {String} token authorization token
    * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
    */
-  constructor(httpClient: HttpClient, token: String, domain?: String);
+  constructor(httpClient: HttpClient, token: string, domain?: string);
 
   /**
    * Retrieves new unused strategy id. Method is accessible only with API access token. See
@@ -26,7 +27,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * Generates random account id
    * @return {String} account id
    */
-  generateAccountId(): String;
+  generateAccountId(): string;
 
   /**
    * Retrieves CopyFactory copy trading strategies. See
@@ -36,7 +37,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {Number} [offset] copy trading strategy id
    * @return {Promise<Array<CopyFactoryStrategy>>} promise resolving with CopyFactory strategies found
    */
-  getStrategies(includeRemoved?: Boolean, limit?: Number, offset?: Number): Promise<Array<CopyFactoryStrategy>>;
+  getStrategies(includeRemoved?: boolean, limit?: number, offset?: number): Promise<Array<CopyFactoryStrategy>>;
 
   /**
    * Retrieves CopyFactory copy trading strategy by id. See
@@ -44,7 +45,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {String} strategy id trading strategy id
    * @return {Promise<CopyFactoryStrategy>} promise resolving with CopyFactory strategy found
    */
-  getStrategy(strategyId: String): Promise<CopyFactoryStrategy>;
+  getStrategy(strategyId: string): Promise<CopyFactoryStrategy>;
 
   /**
    * Updates a CopyFactory strategy. See
@@ -53,7 +54,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryStrategyUpdate} strategy trading strategy update
    * @return {Promise} promise resolving when strategy is updated
    */
-  updateStrategy(strategyId: String, strategy: CopyFactoryStrategyUpdate): Promise<any>
+  updateStrategy(strategyId: string, strategy: CopyFactoryStrategyUpdate): Promise<any>
 
   /**
    * Deletes a CopyFactory strategy. See
@@ -62,7 +63,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
    * @return {Promise} promise resolving when strategy is removed
    */
-  removeStrategy(strategyId: String, closeInstructions?: CopyFactoryCloseInstructions): Promise<any>
+  removeStrategy(strategyId: string, closeInstructions?: CopyFactoryCloseInstructions): Promise<any>
 
   /**
    * Retrieves CopyFactory copy portfolio strategies. See
@@ -73,7 +74,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @return {Promise<Array<CopyFactoryPortfolioStrategy>>} promise resolving with CopyFactory portfolio strategies
    * found
    */
-  getPortfolioStrategies(includeRemoved?: Boolean, limit?: Number, offset?: Number): Promise<Array<CopyFactoryPortfolioStrategy>>;
+  getPortfolioStrategies(includeRemoved?: boolean, limit?: number, offset?: number): Promise<Array<CopyFactoryPortfolioStrategy>>;
 
   /**
    * Retrieves CopyFactory copy portfolio strategy by id. See
@@ -81,7 +82,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {String} portfolioId portfolio strategy id
    * @return {Promise<CopyFactoryPortfolioStrategy>} promise resolving with CopyFactory portfolio strategy found
    */
-  getPortfolioStrategy(portfolioId: String): Promise<CopyFactoryPortfolioStrategy>;
+  getPortfolioStrategy(portfolioId: string): Promise<CopyFactoryPortfolioStrategy>;
 
   /**
    * Updates a CopyFactory portfolio strategy. See
@@ -90,7 +91,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryPortfolioStrategyUpdate} portfolio portfolio strategy update
    * @return {Promise} promise resolving when portfolio strategy is updated
    */
-  updatePortfolioStrategy(portfolioId: String, portfolio: CopyFactoryPortfolioStrategyUpdate): Promise<any>
+  updatePortfolioStrategy(portfolioId: string, portfolio: CopyFactoryPortfolioStrategyUpdate): Promise<any>
 
   /**
    * Deletes a CopyFactory portfolio strategy. See
@@ -99,7 +100,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
    * @return {Promise} promise resolving when portfolio strategy is removed
    */
-  removePortfolioStrategy(portfolioId: String, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
+  removePortfolioStrategy(portfolioId: string, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
 
   /**
    * Deletes a CopyFactory portfolio strategy member. See
@@ -109,7 +110,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryCloseInstructions} [closeInstructions] strategy close instructions
    * @return {Promise} promise resolving when portfolio strategy member is removed
    */
-  removePortfolioStrategyMember(portfolioId: String, strategyId: String, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
+  removePortfolioStrategyMember(portfolioId: string, strategyId: string, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
 
   /**
    * Returns CopyFactory subscribers the user has configured. See
@@ -119,7 +120,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {Number} [offset] copy trading strategy id
    * @return {Promise<Array<CopyFactorySubscriber>>} promise resolving with subscribers found
    */
-  getSubscribers(includeRemoved?: Boolean, limit?: Number, offset?: Number): Promise<Array<CopyFactorySubscriber>>;
+  getSubscribers(includeRemoved?: boolean, limit?: number, offset?: number): Promise<Array<CopyFactorySubscriber>>;
 
   /**
    * Returns CopyFactory subscriber by id. See
@@ -127,7 +128,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {String} subscriberId subscriber id
    * @returns {Promise<CopyFactorySubscriber>} promise resolving with subscriber found
    */
-  getSubscriber(subscriberId: String): Promise<CopyFactorySubscriber>;
+  getSubscriber(subscriberId: string): Promise<CopyFactorySubscriber>;
 
   /**
    * Updates CopyFactory subscriber configuration. See
@@ -136,8 +137,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactorySubscriberUpdate} subscriber subscriber update
    * @returns {Promise} promise resolving when subscriber is updated
    */
-  updateSubscriber(subscriberId: String, subscriber: CopyFactorySubscriberUpdate): Promise<any>;
-  
+  updateSubscriber(subscriberId: string, subscriber: CopyFactorySubscriberUpdate): Promise<any>;
+
   /**
    * Deletes subscriber configuration. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/configuration/removeSubscriber/
@@ -145,7 +146,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryCloseInstructions} [closeInstructions] subscriber close instructions
    * @returns {Promise} promise resolving when subscriber is removed
    */
-  removeSubscriber(subscriberId: String, closeInstructions: CopyFactoryCloseInstructions): Promise<any>;
+  removeSubscriber(subscriberId: string, closeInstructions?: CopyFactoryCloseInstructions): Promise<any>;
 
   /**
    * Deletes a subscription of subscriber to a strategy. See
@@ -155,9 +156,9 @@ export default class ConfigurationClient extends MetaApiClient {
    * @param {CopyFactoryCloseInstructions} [closeInstructions] subscriber close instructions
    * @returns {Promise} promise resolving when subscriber is removed
    */
-  removeSubscription(subscriberId: String, strategyId: String, closeInstructions?: CopyFactoryCloseInstructions): Promise<any>;
+  removeSubscription(subscriberId: string, strategyId: string, closeInstructions?: CopyFactoryCloseInstructions): Promise<any>;
 
-  
+
 }
 
 /**
@@ -168,7 +169,7 @@ export declare type StrategyId = {
   /**
    * strategy id
    */
-  id: String
+  id: string
 }
 
 /**
@@ -179,18 +180,18 @@ export declare type CopyFactoryStrategySubscription = {
   /**
    * id of the strategy to subscribe to
    */
-  strategyId: String,
+  strategyId: string,
 
   /**
    * subscription multiplier, default is 1x
    */
-  multiplier?: Number,
+  multiplier?: number,
 
   /**
    * flag indicating that pending orders should not be copied. Default
    * is to copy pending orders
    */
-  skipPendingOrders?: Boolean,
+  skipPendingOrders?: boolean,
 
   /**
    * setting wich instructs the application not to open new positions. by-symbol
@@ -198,26 +199,26 @@ export declare type CopyFactoryStrategySubscription = {
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
    */
-  closeOnly?: String,
+  closeOnly?: string,
 
   /**
    * max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    */
-  maxTradeRisk?: Number,
+  maxTradeRisk?: number,
 
   /**
    * flag indicating that the strategy should be copied in a reverse direction
    */
-  reverse?: Boolean,
+  reverse?: boolean,
 
   /**
    * setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
    */
-  reduceCorrelations?: String,
+  reduceCorrelations?: string,
 
   /**
    * stop out setting. All trading will be terminated
@@ -252,7 +253,7 @@ export declare type CopyFactoryStrategySubscription = {
    * setting indicating maximum leverage allowed when opening a new positions.
    * Any trade which results in a higher leverage will be discarded
    */
-  maxLeverage?: Number,
+  maxLeverage?: number,
 
   /**
    * defines how symbol name should be changed when
@@ -270,29 +271,29 @@ export declare type CopyFactoryStrategySubscription = {
   /**
    * flag indicating whether stop loss should be copied. Default is to copy stop loss.
    */
-  copyStopLoss?: Boolean,
+  copyStopLoss?: boolean,
 
   /**
    * flag indicating whether take profit should be copied. Default is to copy take profit.
    */
-  copyTakeProfit?: Boolean,
+  copyTakeProfit?: boolean,
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be copied
    */
-  minTradeVolume?: Number,
+  minTradeVolume?: number,
 
   /**
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: Number,
+  maxTradeVolume?: number,
 
   /**
    * flag indicating that the subscription was scheduled for removal once all subscription
    * positions will be closed
    */
-  removed?: Boolean
+  removed?: boolean
 }
 
 /**
@@ -309,17 +310,17 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
    * Note, that in fixedRisk mode trades without a SL are not copied. Default is balance. Allowed values: none,
    * contractSize, balance, fixedVolume, fixedRisk
    */
-  mode: String,
+  mode: string,
 
   /**
    * Fixed trade volume for use with fixedVolume trade size scaling mode
    */
-  tradeVolume?: Number,
+  tradeVolume?: number,
 
   /**
    * Fixed risk fraction for use with fixedRisk trade size scaling mode
    */
-  riskFraction?: Number
+  riskFraction?: number
 }
 
 /**
@@ -328,15 +329,20 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
 export declare type CopyFactoryStrategyStopOutSettings = {
 
   /**
-   * value of the stop out risk, expressed as a fraction of 1
+   * Value of the stop out risk, measured in account currency
    */
-  value: Number,
+  absoluteValue?: number;
+
+  /**
+   * Value of the stop out risk, expressed as a fraction of 1
+   */
+  relativeValue?: number;
 
   /**
    * the time to start risk calculation from. All previous trades will be ignored. You can
    * use it to reset the risk counter after a stopout event
    */
-  startTime?: Date
+  startTime?: Date | string | moment.Moment
 }
 
 /**
@@ -386,13 +392,13 @@ export declare type CopyFactoryStrategyBreakingNewsFilter = {
    * time interval specifying when to force close an already
    * open position after breaking news. Default value is 60 minutes
    */
-  closePositionTimeGapInMinutes?: Number,
+  closePositionTimeGapInMinutes?: number,
 
   /**
    * time interval specifying when it is allowed to
    * open position after calendar news. Default value is 60 minutes
    */
-  openPositionFollowingTimeGapInMinutes?: Number
+  openPositionFollowingTimeGapInMinutes?: number
 }
 
 /**
@@ -410,19 +416,19 @@ export declare type CopyFactoryStrategyCalendarNewsFilter = {
    * time interval specifying when to force close an already
    * open position before calendar news. Default value is 60 minutes
    */
-  closePositionTimeGapInMinutes?: Number,
+  closePositionTimeGapInMinutes?: number,
 
   /**
    * time interval specifying when it is still
    * allowed to open position before calendar news. Default value is 120 minutes
    */
-  openPositionPrecedingTimeGapInMinutes?: Number
+  openPositionPrecedingTimeGapInMinutes?: number
 
   /**
    * time interval specifying when it is allowed to
    * open position after calendar news. Default value is 60 minutes
    */
-  openPositionFollowingTimeGapInMinutes?: Number
+  openPositionFollowingTimeGapInMinutes?: number
 }
 
 /**
@@ -433,29 +439,34 @@ export declare type CopyFactoryStrategyRiskLimit = {
   /**
    * restriction type. One of daily, monthly, or yearly
    */
-  type: String,
+  type: string,
 
   /**
    * account metric to apply limit to. One of balance, equity
    */
-  applyTo: String,
+  applyTo: string,
 
   /**
-   * max drawdown allowed, expressed as a fraction of 1
+   *  Max drawdown allowed, measured in account currency,
    */
-  maxRisk: Number,
+  maxAbsoluteRisk?: number;
+
+  /**
+  *  Max drawdown allowed, expressed as a fraction of 1,
+  */
+  maxRelativeRisk?: number;
 
   /**
    * whether to force close positions when the risk is reached. If value is false
    * then only the new trades will be halted, but existing ones will not be closed
    */
-  closePositions: Boolean
+  closePositions: boolean
 
   /**
    * time to start risk tracking from. All previous trades will be ignored. You
    * can use this value to reset the filter after stopout event
    */
-  startTime?: Date
+  startTime?: Date | string | moment.Moment
 }
 
 /**
@@ -466,12 +477,12 @@ export declare type CopyFactoryStrategyMaxStopLoss = {
   /**
    * maximum SL value
    */
-  value: Number,
+  value: number,
 
   /**
    * SL units. Only pips value is supported at this point
    */
-  units: String
+  units: string
 }
 
 /**
@@ -482,12 +493,12 @@ export declare type CopyFactoryStrategySymbolMapping = {
   /**
    * symbol name to convert from
    */
-  from: String,
+  from: string,
 
   /**
    * symbol name to convert to
    */
-  to: String
+  to: string
 }
 
 /**
@@ -498,14 +509,14 @@ export declare type CopyFactorySubscriberUpdate = {
   /**
    * account human-readable name
    */
-  name: String
+  name: string
 
   /**
    * fraction of reserved margin to reduce a risk of margin call.
    * Default is to reserve no margin. We recommend using maxLeverage setting instead. Specified as a fraction of balance
    * thus the value is usually greater than 1
    */
-  reservedMarginFraction?: Number,
+  reservedMarginFraction?: number,
 
   /**
    * phone numbers to send sms notifications to. Leave empty to
@@ -518,7 +529,7 @@ export declare type CopyFactorySubscriberUpdate = {
    * currency. Can be useful if your broker charges a fixed fee per transaction so that you can skip small trades with
    * high broker commission rates. Default is 0
    */
-  minTradeAmount?: Number,
+  minTradeAmount?: number,
 
   /**
    * setting wich instructs the application not to open new positions. by-symbol
@@ -526,7 +537,7 @@ export declare type CopyFactorySubscriberUpdate = {
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
    */
-  closeOnly?: String,
+  closeOnly?: string,
 
   /**
    * stop out setting. All trading will
@@ -545,31 +556,31 @@ export declare type CopyFactorySubscriberUpdate = {
    * setting indicating maxumum leverage allowed when opening a new positions.
    * Any trade which results in a higher leverage will be discarded.
    */
-  maxLeverage?: Number,
+  maxLeverage?: number,
 
   /**
    * flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    */
-  copyStopLoss?: Boolean,
+  copyStopLoss?: boolean,
 
   /**
    * flag indicating whether take profit should be copied. Default is to copy take
    * profit.
    */
-  copyTakeProfit?: Boolean,
+  copyTakeProfit?: boolean,
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
-  minTradeVolume?: Number,
+  minTradeVolume?: number,
 
   /**
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: Number,
+  maxTradeVolume?: number,
 
   /**
    * strategy subscriptions
@@ -585,25 +596,25 @@ export declare type CopyFactorySubscriber = CopyFactorySubscriberUpdate & {
   /**
    * id of the MetaApi account to copy trades to
    */
-  _id: String
+  _id: string
 }
 
 /**
  * CopyFactory provider strategy
  */
 export declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
-  
+
   /**
    * unique strategy id
    */
-  _id: String,
+  _id: string,
 
   /**
    * commission rate the platform charges for strategy copying, applied to
    * commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should
    * be fraction of 1
    */
-  platformCommissionRate: Number
+  platformCommissionRate: number
 
   /**
    * position close mode on strategy or subscription removal. Preserve means
@@ -615,7 +626,7 @@ export declare type CopyFactoryStrategy = CopyFactoryStrategyUpdate & {
    * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
    * close-gracefully-by-symbol, close-immediately
    */
-   closeOnRemovalMode?: String
+  closeOnRemovalMode?: string
 }
 
 /**
@@ -627,19 +638,19 @@ export declare type CopyFactoryStrategyCommissionScheme = {
    * commission type. One of flat-fee, lots-traded, lots-won, amount-traded, amount-won,
    * high-water-mark
    */
-  type: String,
+  type: string,
 
   /**
    * billing period. One of week, month, quarter
    */
-  billingPeriod: String,
+  billingPeriod: string,
 
   /**
    * commission rate. Should be greater than or equal to zero if commission type is
    * flat-fee, lots-traded or lots-won, should be greater than or equal to zero and less than or equal to 1 if
    * commission type is amount-traded, amount-won, high-water-mark.
    */
-  commissionRate: Number
+  commissionRate: number
 }
 
 /**
@@ -668,14 +679,14 @@ export declare type CopyFactoryStrategyTimeSettings = {
   /**
    * position lifetime. Default is to keep positions open up to 90 days
    */
-  lifetimeInHours?: Number,
+  lifetimeInHours?: number,
 
   /**
    * time interval to copy new positions. Default is to let 1
    * minute for the position to get copied. If position were not copied during this time, the copying will not be
    * retried anymore.
    */
-  openingIntervalInMinutes?: Number
+  openingIntervalInMinutes?: number
 }
 
 /**
@@ -686,13 +697,13 @@ export declare type CopyFactoryStrategyEquityCurveFilter = {
   /**
    * moving average period, must be greater or equal to 1
    */
-  period: Number,
+  period: number,
 
   /**
    * moving average timeframe, a positive integer followed by time unit, e.g. 2h.
    * Allowed units are s, m, h, d and w.
    */
-  timeframe: String
+  timeframe: string
 }
 
 /**
@@ -704,14 +715,14 @@ export declare type CopyFactoryStrategyDrawdownFilter = {
    * maximum drawdown value after which action is executed. Drawdown should
    * be configured as a fraction of 1, i.e. 0.15 means 15% drawdown value
    */
-  maxDrawdown: Number,
+  maxDrawdown: number,
 
   /**
    * action to take when drawdown exceeds maxDrawdown value. include means the trading
    * signal will be transmitted only if dd is greater than maxDrawdown value. exclude means the trading signal 
    * will be transmitted only if dd is less than maxDrawdown value
    */
-  action: String
+  action: string
 }
 
 /**
@@ -722,23 +733,23 @@ export declare type CopyFactoryStrategyUpdate = {
   /**
    * strategy human-readable name
    */
-  name: String,
+  name: string,
 
   /**
    * longer strategy human-readable description
    */
-  description: String,
+  description: string,
 
   /**
    * id of the MetaApi account providing the strategy
    */
-  accountId: String,
+  accountId: string,
 
   /**
    * flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    */
-  skipPendingOrders?: Boolean,
+  skipPendingOrders?: boolean,
 
   /**
    * commission scheme allowed by this strategy
@@ -750,19 +761,19 @@ export declare type CopyFactoryStrategyUpdate = {
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    */
-  maxTradeRisk?: Number,
+  maxTradeRisk?: number,
 
   /**
    * flag indicating that the strategy should be copied in a reverse direction
    */
-  reverse?: Boolean,
+  reverse?: boolean,
 
   /**
    * setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
    */
-  reduceCorrelations?: String,
+  reduceCorrelations?: string,
 
   /**
    * stop out setting. All trading will
@@ -775,7 +786,7 @@ export declare type CopyFactoryStrategyUpdate = {
    * symbols or exclude some symbols from copying
    */
   symbolFilter?: CopyFactoryStrategySymbolFilter,
-  
+
   /**
    * news risk filter configuration
    */
@@ -797,7 +808,7 @@ export declare type CopyFactoryStrategyUpdate = {
    * max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    */
-  maxLeverage?: Number,
+  maxLeverage?: number,
 
   /**
    * defines how symbol name should be changed when
@@ -816,25 +827,25 @@ export declare type CopyFactoryStrategyUpdate = {
    * flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    */
-  copyStopLoss?: Boolean,
+  copyStopLoss?: boolean,
 
   /**
    * flag indicating whether take profit should be copied. Default is to copy take
    * profit.
    */
-  copyTakeProfit?: Boolean,
+  copyTakeProfit?: boolean,
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
-  minTradeVolume?: Number,
+  minTradeVolume?: number,
 
   /**
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: Number,
+  maxTradeVolume?: number,
 
   /**
    * magic (expert id) filter
@@ -882,7 +893,7 @@ export declare type CopyFactoryCloseInstructions = {
    * that all positions will be closed immediately. Default is close-immediately. One of 'preserve',
    * 'close-gracefully-by-position', 'close-gracefully-by-symbol', 'close-immediately'
    */
-  mode?: String,
+  mode?: string,
 
   /**
    * time to force remove object after. The object will be removed after
@@ -901,37 +912,37 @@ export declare type CopyFactoryPortfolioStrategyMember = {
   /**
    * member strategy id
    */
-  strategyId: String,
+  strategyId: string,
 
   /**
    * copying multiplier (weight in the portfolio)
    */
-  multiplier: Number,
+  multiplier: number,
 
   /**
    * flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    */
-  skipPendingOrders?: Boolean,
+  skipPendingOrders?: boolean,
 
   /**
    * max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    */
-  maxTradeRisk: Number,
+  maxTradeRisk: number,
 
   /**
    * flag indicating that the strategy should be copied in a reverse direction
    */
-  reverse?: Boolean,
+  reverse?: boolean,
 
   /**
    * setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
    */
-  reduceCorrelations?: String,
+  reduceCorrelations?: string,
 
   /**
    * stop out setting. All trading will
@@ -966,7 +977,7 @@ export declare type CopyFactoryPortfolioStrategyMember = {
    * max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    */
-  maxLeverage?: Number,
+  maxLeverage?: number,
 
   /**
    * defines how symbol name should be changed when
@@ -985,25 +996,25 @@ export declare type CopyFactoryPortfolioStrategyMember = {
    * flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    */
-  copyStopLoss?: Boolean,
+  copyStopLoss?: boolean,
 
   /**
    * flag indicating whether take profit should be copied. Default is to copy take
    * profit.
    */
-  copyTakeProfit?: Boolean,
+  copyTakeProfit?: boolean,
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
-  minTradeVolume?: Number,
+  minTradeVolume?: number,
 
   /**
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: Number
+  maxTradeVolume?: number
 
   /**
    * position close mode on strategy or subscription removal. Preserve means
@@ -1015,7 +1026,7 @@ export declare type CopyFactoryPortfolioStrategyMember = {
    * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
    * close-gracefully-by-symbol, close-immediately
    */
-  closeOnRemovalMode?: String
+  closeOnRemovalMode?: string
 }
 
 /**
@@ -1026,12 +1037,12 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
   /**
    * strategy human-readable name
    */
-  name: String,
+  name: string,
 
   /**
    * longer strategy human-readable description
    */
-  description: String,
+  description: string,
 
   /**
    * array of portfolio members
@@ -1048,26 +1059,26 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * flag indicating that pending orders should not be copied.
    * Default is to copy pending orders
    */
-  skipPendingOrders?: Boolean,
+  skipPendingOrders?: boolean,
 
   /**
    * max risk per trade, expressed as a fraction of 1. If trade has a SL, the
    * trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk
    * limit
    */
-  maxTradeRisk?: Number,
+  maxTradeRisk?: number,
 
   /**
    * flag indicating that the strategy should be copied in a reverse direction
    */
-  reverse?: Boolean,
+  reverse?: boolean,
 
   /**
    * setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
    */
-  reduceCorrelations?: String,
+  reduceCorrelations?: string,
 
   /**
    * stop out setting. All trading will
@@ -1102,7 +1113,7 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * max leverage risk restriction. All trades resulting in a leverage value
    * higher than specified will be skipped
    */
-  maxLeverage?: Number,
+  maxLeverage?: number,
 
   /**
    * defines how symbol name should be changed when
@@ -1121,25 +1132,25 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * flag indicating whether stop loss should be copied. Default is to copy stop
    * loss.
    */
-  copyStopLoss?: Boolean,
+  copyStopLoss?: boolean,
 
   /**
    * flag indicating whether take profit should be copied. Default is to copy take
    * profit.
    */
-  copyTakeProfit?: Boolean,
+  copyTakeProfit?: boolean,
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
-  minTradeVolume?: Number,  
+  minTradeVolume?: number,
 
   /**
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: Number
+  maxTradeVolume?: number
 }
 
 /**
@@ -1150,14 +1161,14 @@ export declare type CopyFactoryPortfolioStrategy = CopyFactoryPortfolioStrategyU
   /**
    * unique strategy id
    */
-  _id: String,
+  _id: string,
 
   /**
    * commission rate the platform charges for strategy copying, applied to
    * commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should
    * be fraction of 1
    */
-  platformCommissionRate: Number
+  platformCommissionRate: number
 
   /**
    * position close mode on strategy or subscription removal. Preserve means
@@ -1169,5 +1180,5 @@ export declare type CopyFactoryPortfolioStrategy = CopyFactoryPortfolioStrategyU
    * This field can be changed via remove potfolio member API only, one of preserve, close-gracefully-by-position,
    * close-gracefully-by-symbol, close-immediately
    */
-  closeOnRemovalMode?: String
+  closeOnRemovalMode?: string
 }

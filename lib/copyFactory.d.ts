@@ -14,7 +14,7 @@ export default class CopyFactory {
    * @param {String} [opts.domain] domain to connect to
    * @param {Number} [opts.requestTimeout] timeout for http requests in seconds
    */
-  constructor(token: String, opts?: Object);
+  constructor(token: string, opts?: Object);
 
   /**
    * Returns CopyFactory configuration API

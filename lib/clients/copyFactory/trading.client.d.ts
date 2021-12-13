@@ -14,13 +14,13 @@ export default class TradingClient extends MetaApiClient {
    * @param {String} token authorization token
    * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
    */
-  constructor(httpClient: HttpClient, token: String, domain: String);
+  constructor(httpClient: HttpClient, token: string, domain: string);
 
   /**
    * Generates random signal id
    * @return {String} signal id
    */
-  generateSignalId(): String;
+  generateSignalId(): string;
 
   /**
    * Updates external signal for a strategy. See
@@ -30,7 +30,7 @@ export default class TradingClient extends MetaApiClient {
    * @param {CopyFactoryExternalSignalUpdate} signal signal update payload
    * @return {Promise} promise which resolves when the external signal is updated
    */
-  updateExternalSignal(strategyId: String, signalId: String, signal: CopyFactoryExternalSignalUpdate): Promise<any>;
+  updateExternalSignal(strategyId: string, signalId: string, signal: CopyFactoryExternalSignalUpdate): Promise<any>;
 
   /**
    * Updates external signal for a strategy. See
@@ -40,7 +40,7 @@ export default class TradingClient extends MetaApiClient {
    * @param {CopyFactoryExternalSignalRemove} signal signal removal payload
    * @return {Promise} promise which resolves when the external signal is removed
    */
-  removeExternalSignal(strategyId: String, signalId: String, signal: CopyFactoryExternalSignalRemove): Promise<any>;
+  removeExternalSignal(strategyId: string, signalId: string, signal: CopyFactoryExternalSignalRemove): Promise<any>;
 
   /**
    * Resynchronizes the account. See
@@ -52,7 +52,7 @@ export default class TradingClient extends MetaApiClient {
    * positions
    * @return {Promise} promise which resolves when resynchronization is scheduled
    */
-  resynchronize(accountId: String, strategyIds?: Array<String>, positionIds?: Array<String>): Promise<any>;
+  resynchronize(accountId: string, strategyIds?: Array<String>, positionIds?: Array<String>): Promise<any>;
 
   /**
    * Returns trading signals the subscriber is subscribed to. See
@@ -60,7 +60,7 @@ export default class TradingClient extends MetaApiClient {
    * @param {String} subscriberId subscriber id
    * @returns {Promise<Array<CopyFactoryTradingSignal>>}
    */
-  getTradingSignals(subscriberId: String): Promise<Array<CopyFactoryTradingSignal>>;
+  getTradingSignals(subscriberId: string): Promise<Array<CopyFactoryTradingSignal>>;
 
   /**
    * Returns subscriber account stopouts. See
@@ -68,7 +68,7 @@ export default class TradingClient extends MetaApiClient {
    * @param {String} subscriberId subscriber id
    * @return {Promise<Array<CopyFactoryStrategyStopout>>} promise which resolves with stopouts found
    */
-  getStopouts(subscriberId: String): Promise<Array<CopyFactoryStrategyStopout>>;
+  getStopouts(subscriberId: string): Promise<Array<CopyFactoryStrategyStopout>>;
 
   /**
    * Resets strategy stopouts. See
@@ -79,7 +79,7 @@ export default class TradingClient extends MetaApiClient {
    * yearly-equity, monthly-equity, daily-equity, max-drawdown
    * @return {Promise} promise which resolves when the stopouts are reset
    */
-  resetStopouts(subscriberId: String, strategyId: String, reason: String): Promise<any>;
+  resetStopouts(subscriberId: string, strategyId: string, reason: string): Promise<any>;
 
   /**
    * Returns copy trading user log for an account and time range. See
@@ -91,7 +91,7 @@ export default class TradingClient extends MetaApiClient {
    * @param {number} [limit] pagination limit. Default is 1000
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
-  getUserLog(subscriberId: String, startTime?: Date, endTime?: Date, offset?: Number, limit?: Number): Promise<Array<CopyFactoryUserLogMessage>>;
+  getUserLog(subscriberId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
   
 }
 
@@ -103,13 +103,13 @@ export declare type CopyFactoryExternalSignalUpdate = {
   /**
    * trade symbol
    */
-  symbol: String,
+  symbol: string,
 
   /**
    * trade type (one of POSITION_TYPE_BUY, POSITION_TYPE_SELL, ORDER_TYPE_BUY_LIMIT, ORDER_TYPE_SELL_LIMIT, 
    * ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP)
    */
-  type: String,
+  type: string,
 
   /**
    * time the signal was emitted at
@@ -124,27 +124,27 @@ export declare type CopyFactoryExternalSignalUpdate = {
   /**
    * volume traded
    */
-  volume: Number,
+  volume: number,
   
   /**
    * expert advisor id
    */
-  magic?: Number,
+  magic?: number,
 
   /**
    * stop loss price
    */
-  stopLoss?: Number,
+  stopLoss?: number,
 
   /**
    * take profit price
    */
-  takeProfit?: Number,
+  takeProfit?: number,
 
   /**
    * pending order open price
    */
-  openPrice?: Number
+  openPrice?: number
 }
 
 /**
@@ -160,7 +160,7 @@ export declare type CopyFactoryTradingSignal = {
   /**
    * id of the position the signal was generated from
    */
-  positionId: String,
+  positionId: string,
 
   /**
    * signal time
@@ -170,47 +170,47 @@ export declare type CopyFactoryTradingSignal = {
   /**
    * symbol traded
    */
-  symbol: String,
+  symbol: string,
 
   /**
    * type of the trade (one of market, limit, stop)
    */
-  type: String,
+  type: string,
 
   /**
    * side of the trade (one of buy, sell, close)
    */
-  side: String,
+  side: string,
 
   /**
    * open price for limit and stop orders
    */
-  openPrice?: Number,
+  openPrice?: number,
 
   /**
    * stop loss price
    */
-  stopLoss?: Number,
+  stopLoss?: number,
 
   /**
    * take profit price
    */
-  takeProfit?: Number,
+  takeProfit?: number,
 
   /**
    * the signal volume
    */
-  signalVolume: Number,
+  signalVolume: number,
 
   /**
    * the volume already open on subscriber side
    */
-  subscriberVolume: Number,
+  subscriberVolume: number,
 
   /**
    * total profit of the position on subscriber side
    */
-  subscriberProfit: Number,
+  subscriberProfit: number,
 
   /**
    * the time the signal will be automatically closed at
@@ -220,7 +220,7 @@ export declare type CopyFactoryTradingSignal = {
   /**
    * flag indicating that only closing side of this signal will be copied
    */
-  closeOnly?: Boolean
+  closeOnly?: boolean
 }
 
 /**
@@ -247,23 +247,23 @@ export declare type CopyFactoryStrategyStopout = {
   /**
    * flag indicating that stopout is partial
    */
-  partial: Boolean,
+  partial: boolean,
 
   /**
    * stopout reason. One of yearly-balance, monthly-balance, daily-balance, yearly-equity,
    * monthly-equity, daily-equity, max-drawdown
    */
-  reason: String,
+  reason: string,
 
   /**
    * human-readable description of the stopout reason
    */
-  reasonDescription: String,
+  reasonDescription: string,
 
   /**
    * flag indicating if positions should be closed
    */
-  closePositions?: Boolean,
+  closePositions?: boolean,
 
   /**
    * time the strategy was stopped at
@@ -289,45 +289,45 @@ export declare type CopyFactoryUserLogMessage = {
   /**
    * symbol traded
    */
-  symbol?: String,
+  symbol?: string,
 
   /**
    * id of the strategy event relates to
    */
-  strategyId?: String,
+  strategyId?: string,
   
   /**
    * name of the strategy event relates to
    */
-  strategyName?: String,
+  strategyName?: string,
 
   /**
    * position id event relates to
    */
-  positionId?: String,
+  positionId?: string,
 
   /**
    * side of the trade event relates to. One of buy, sell, close
    */
-  side?: String,
+  side?: string,
 
   /**
    * type of the trade event relates to. One of market, limit, stop
    */
-  type?: String,
+  type?: string,
 
   /**
    * open price for limit and stop orders
    */
-  openPrice?: Number,
+  openPrice?: number,
 
   /**
    * log level. One of INFO, WARN, ERROR
    */
-  level: String,
+  level: string,
 
   /**
    * log message
    */
-  message: String
+  message: string
 }
