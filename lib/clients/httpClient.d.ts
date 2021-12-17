@@ -15,7 +15,7 @@ export default class HttpClient {
    * @param {Object} options request options
    * @returns {Object|String|any} request result
    */
-  request(options: Object): Object | String | any;
+  request(options: Object): Promise<Object> | Promise<string> | Promise<any>;
 }
 
 /**
