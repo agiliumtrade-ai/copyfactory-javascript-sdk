@@ -1,5 +1,5 @@
-3.3.2
-  - updated exported typescript types
+4.0.0
+  - breaking change: updated exported typescript types
 
 3.3.1
   - updated typescript types
