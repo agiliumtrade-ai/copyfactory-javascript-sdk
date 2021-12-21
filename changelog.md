@@ -1,3 +1,6 @@
+4.0.1
+  - fix broken release
+
 4.0.0
   - breaking change: updated exported typescript types
 
