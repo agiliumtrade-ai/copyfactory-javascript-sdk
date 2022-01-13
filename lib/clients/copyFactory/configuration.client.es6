@@ -118,8 +118,9 @@ export default class ConfigurationClient extends MetaApiClient {
   /**
    * CopyFactory strategy stopout settings
    * @typedef {Object} CopyFactoryStrategyStopOutSettings
-   * @property {Number} value value of the stop out risk, expressed as a fraction of 1
-   * @property {Date} [startTime] the time to start risk calculation from. All previous trades will be ignored. You can
+   * @property {Number} [absoluteValue] value of the stop out risk, measured in account currency
+   * @property {Number} [relativeValue] value of the stop out risk, expressed as a fraction of 1
+   * @property {Date|string|moment.Moment} [startTime] the time to start risk calculation from. All previous trades will be ignored. You can
    * use it to reset the risk counter after a stopout event
    */
 
@@ -166,10 +167,11 @@ export default class ConfigurationClient extends MetaApiClient {
    * @typedef {Object} CopyFactoryStrategyRiskLimit
    * @property {String} type restriction type. One of daily, monthly, or yearly
    * @property {String} applyTo account metric to apply limit to. One of balance, equity
-   * @property {Number} maxRisk max drawdown allowed, expressed as a fraction of 1
+   * @property {Number} [maxAbsoluteRisk] max drawdown allowed, measured in account currency
+   * @property {Number} [maxRelativeRisk] max drawdown allowed, measured in account currency
    * @property {Boolean} closePositions whether to force close positions when the risk is reached. If value is false
    * then only the new trades will be halted, but existing ones will not be closed
-   * @property {Date} [startTime] time to start risk tracking from. All previous trades will be ignored. You
+   * @property {Date|string|moment.Moment} [startTime] time to start risk tracking from. All previous trades will be ignored. You
    * can use this value to reset the filter after stopout event
    */
 
