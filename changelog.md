@@ -1,3 +1,6 @@
+4.0.2
+  - fixed esdoc
+
 4.0.1
   - fix broken release
 
