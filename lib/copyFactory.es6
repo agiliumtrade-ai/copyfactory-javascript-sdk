@@ -4,6 +4,7 @@ import HttpClient from './clients/httpClient';
 import ConfigurationClient from './clients/copyFactory/configuration.client';
 import HistoryClient from './clients/copyFactory/history.client';
 import TradingClient from './clients/copyFactory/trading.client';
+import DomainClient from './clients/domain.client';
 
 /**
  * MetaApi CopyFactory copy trading API SDK
@@ -15,16 +16,19 @@ export default class CopyFactory {
    * @param {String} token authorization token
    * @param {Object} opts connection options
    * @param {String} [opts.domain] domain to connect to
+   * @param {String} [opts.extendedTimeout] timeout for extended http requests in seconds
    * @param {Number} [opts.requestTimeout] timeout for http requests in seconds
    */
   constructor(token, opts = {}) {
-    let domain = opts.domain || 'agiliumtrade.agiliumtrade.ai';
-    let requestTimeout = opts.requestTimeout || 60;
+    this._domain = opts.domain || 'agiliumtrade.agiliumtrade.ai';
+    let requestTimeout = opts.requestTimeout || 10;
+    let requestExtendedTimeout = opts.extendedTimeout || 60;
     const retryOpts = opts.retryOpts || {};
-    let httpClient = new HttpClient(requestTimeout, retryOpts);
-    this._configurationClient = new ConfigurationClient(httpClient, token, domain);
-    this._historyClient = new HistoryClient(httpClient, token, domain);
-    this._tradingClient = new TradingClient(httpClient, token, domain);
+    this._httpClient = new HttpClient(requestTimeout, requestExtendedTimeout, retryOpts);
+    this._domainClient = new DomainClient(this._httpClient, token, this._domain);
+    this._configurationClient = new ConfigurationClient(this._domainClient);
+    this._historyClient = new HistoryClient(this._domainClient);
+    this._tradingClient = new TradingClient(this._domainClient);
   }
 
   /**
@@ -50,5 +54,4 @@ export default class CopyFactory {
   get tradingApi() {
     return this._tradingClient;
   }
-
 }

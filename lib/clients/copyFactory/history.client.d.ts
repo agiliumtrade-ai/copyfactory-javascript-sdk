@@ -1,5 +1,5 @@
-import HttpClient from "../httpClient";
 import MetaApiClient from "../metaApi.client";
+import DomainClient from "../domain.client";
 
 /**
  * metaapi.cloud CopyFactory history API (trade copying history API) client (see
@@ -9,12 +9,10 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory history API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClien: HttpClient, token: string, domain?: string);
-  
+  constructor(domainClient: DomainClient);
+
   /**
    * Returns list of transactions on the strategies the current user provides to other users
    * https://metaapi.cloud/docs/copyfactory/restApi/api/history/getProvidedTransactions/

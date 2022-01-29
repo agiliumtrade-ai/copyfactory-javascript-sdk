@@ -2,10 +2,9 @@
 
 import should from 'should';
 import sinon from 'sinon';
+import DomainClient from '../domain.client';
 import HttpClient from '../httpClient';
 import ConfigurationClient from './configuration.client';
-
-const copyFactoryApiUrl = 'https://copyfactory-application-history-master-v1.agiliumtrade.agiliumtrade.ai';
 
 /**
  * @test {ConfigurationClient}
@@ -16,6 +15,7 @@ describe('ConfigurationClient', () => {
   let copyFactoryClient;
   const token = 'header.payload.sign';
   let httpClient = new HttpClient();
+  let domainClient;
   let requestStub;
 
   before(() => {
@@ -23,8 +23,9 @@ describe('ConfigurationClient', () => {
   });
 
   beforeEach(() => {
-    copyFactoryClient = new ConfigurationClient(httpClient, token);
-    requestStub = sandbox.stub(httpClient, 'request');
+    domainClient = new DomainClient(httpClient, token);
+    copyFactoryClient = new ConfigurationClient(domainClient);
+    requestStub = sandbox.stub(domainClient, 'requestCopyFactory');
   });
 
   afterEach(() => {
@@ -48,8 +49,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let id = await copyFactoryClient.generateStrategyId();
     id.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/unused-strategy-id`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/unused-strategy-id',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -62,10 +63,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#generateStrategyId}
    */
   it('should not generate strategy id with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.generateStrategyId();
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke generateStrategyId method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -102,8 +106,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getStrategies(true, 100, 200);
     strategies.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/strategies`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/strategies',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -114,17 +118,20 @@ describe('ConfigurationClient', () => {
         offset: 200 
       },
       json: true,
-    });
+    }, true);
   });
   
   /**
      * @test {ConfigurationClient#getStrategies}
      */
   it('should not retrieve strategies from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getStrategies();
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getStrategies method, because you have connected with account access token. ' +
           'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -155,8 +162,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getStrategy('ABCD');
     strategies.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/strategies/ABCD',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -169,10 +176,13 @@ describe('ConfigurationClient', () => {
      * @test {ConfigurationClient#getStrategy}
      */
   it('should not retrieve strategy from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getStrategy('ABCD');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getStrategy method, because you have connected with account access token. ' +
           'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -205,8 +215,8 @@ describe('ConfigurationClient', () => {
       }
     };
     await copyFactoryClient.updateStrategy('ABCD', strategy);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/strategies/ABCD',
       method: 'PUT',
       headers: {
         'auth-token': token
@@ -219,10 +229,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#updateStrategy}
    */
   it('should not update strategy via API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.updateStrategy('ABCD', {});
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke updateStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -236,8 +249,8 @@ describe('ConfigurationClient', () => {
   it('should remove strategy via API', async () => {
     const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient.removeStrategy('ABCD', payload);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/strategies/ABCD',
       method: 'DELETE',
       headers: {
         'auth-token': token
@@ -251,10 +264,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removeStrategy}
    */
   it('should not remove strategy from via with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.removeStrategy('ABCD');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke removeStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -285,8 +301,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategies(true, 100, 200);
     strategies.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/portfolio-strategies',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -297,17 +313,20 @@ describe('ConfigurationClient', () => {
         offset: 200 
       },
       json: true,
-    });
+    }, true);
   });
 
   /**
    * @test {ConfigurationClient#getPortfolioStrategies}
    */
   it('should not retrieve portfolio strategies from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getPortfolioStrategies();
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getPortfolioStrategies method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -338,8 +357,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategy('ABCD');
     strategies.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/portfolio-strategies/ABCD',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -352,10 +371,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#getPortfolioStrategy}
    */
   it('should not retrieve portfolio strategy from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getPortfolioStrategy('ABCD');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getPortfolioStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -381,8 +403,8 @@ describe('ConfigurationClient', () => {
       }
     };
     await copyFactoryClient.updatePortfolioStrategy('ABCD', strategy);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/portfolio-strategies/ABCD',
       method: 'PUT',
       headers: {
         'auth-token': token
@@ -396,10 +418,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#updatePortfolioStrategy}
    */
   it('should not update portfolio strategy via API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.updatePortfolioStrategy('ABCD', {});
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke updatePortfolioStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -413,8 +438,8 @@ describe('ConfigurationClient', () => {
   it('should remove portfolio strategy via API', async () => {
     const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient.removePortfolioStrategy('ABCD', payload);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/portfolio-strategies/ABCD',
       method: 'DELETE',
       headers: {
         'auth-token': token
@@ -428,10 +453,13 @@ describe('ConfigurationClient', () => {
    * @test {ConfigurationClient#removePortfolioStrategy}
    */
   it('should not remove portfolio strategy from via with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.removePortfolioStrategy('ABCD');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke removePortfolioStrategy method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -445,8 +473,8 @@ describe('ConfigurationClient', () => {
   it('should remove portfolio strategy member via API', async () => {
     const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient.removePortfolioStrategyMember('ABCD', 'BCDE', payload);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/portfolio-strategies/ABCD/members/BCDE`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/portfolio-strategies/ABCD/members/BCDE',
       method: 'DELETE',
       headers: {
         'auth-token': token
@@ -460,10 +488,13 @@ describe('ConfigurationClient', () => {
      * @test {ConfigurationClient#removePortfolioStrategyMember}
      */
   it('should not remove portfolio strategy member from via with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.removePortfolioStrategyMember('ABCD', 'BCDE');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke removePortfolioStrategyMember method, because you have connected with account access ' +
         'token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -489,8 +520,8 @@ describe('ConfigurationClient', () => {
     requestStub.resolves(expected);
     let accounts = await copyFactoryClient.getSubscribers(true, 100, 200);
     accounts.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/subscribers',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -501,17 +532,20 @@ describe('ConfigurationClient', () => {
         offset: 200 
       },
       json: true,
-    });
+    }, true);
   });
   
   /**
      * @test {TradingClient#getSubscribers}
      */
   it('should not retrieve subscribers from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getSubscribers();
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getSubscribers method, because you have connected with account access token. ' +
           'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -538,8 +572,8 @@ describe('ConfigurationClient', () => {
     let accounts = await copyFactoryClient
       .getSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     accounts.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/subscribers/' +
         'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'GET',
       headers: {
@@ -553,10 +587,13 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#getSubscriber}
    */
   it('should not retrieve CopyFactory subscriber from API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.getSubscriber('test');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getSubscriber method, because you have connected with account access token. ' +
             'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -580,8 +617,8 @@ describe('ConfigurationClient', () => {
     };
     await copyFactoryClient
       .updateSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', subscriber);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/subscribers/' +
         'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'PUT',
       headers: {
@@ -596,10 +633,13 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#updateSubscriber}
    */
   it('should not update CopyFactory subscriber via API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.updateSubscriber('test', {});
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke updateSubscriber method, because you have connected with account access token. ' +
             'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -614,8 +654,8 @@ describe('ConfigurationClient', () => {
     const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient
       .removeSubscriber('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', payload);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/subscribers/' +
         'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       method: 'DELETE',
       headers: {
@@ -630,10 +670,13 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#removeSubscriber}
    */
   it('should not remove CopyFactory subscriber via API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.removeSubscriber('test');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke removeSubscriber method, because you have connected with account access token. ' +
               'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -648,8 +691,8 @@ describe('ConfigurationClient', () => {
     const payload = {mode: 'preserve', removeAfter: '2020-08-24T00:00:00.000Z'};
     await copyFactoryClient
       .removeSubscription('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', payload);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/configuration/subscribers/` +
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/configuration/subscribers/' +
           'e8867baa-5ec2-45ae-9930-4d5cea18d0d6/subscriptions/ABCD',
       method: 'DELETE',
       headers: {
@@ -664,10 +707,13 @@ describe('ConfigurationClient', () => {
    * @test {TradingClient#removeSubscription}
    */
   it('should not remove CopyFactory subscription via API with account token', async () => {
-    copyFactoryClient = new ConfigurationClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new ConfigurationClient(domainClient);
     try {
       await copyFactoryClient.removeSubscription('test', 'ABCD');
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke removeSubscription method, because you have connected with account access token. ' +
           'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'

@@ -9,14 +9,11 @@ export default class MetaApiClient {
 
   /**
    * Constructs MetaTrader API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
-    this._httpClient = httpClient;
-    this._host = `https://mt-provisioning-api-v1.${domain}`;
-    this._token = token;
+  constructor(domainClient) {
+    this._domainClient = domainClient;
+    this._token = domainClient.token;
   }
 
   /**

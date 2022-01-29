@@ -1,6 +1,6 @@
-import HttpClient from "../httpClient";
 import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
+import SignalClient from "./signal.client";
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -10,37 +10,9 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory trading API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient: HttpClient, token: string, domain: string);
-
-  /**
-   * Generates random signal id
-   * @return {String} signal id
-   */
-  generateSignalId(): string;
-
-  /**
-   * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/updateExternalSignal/
-   * @param {String} strategyId strategy id
-   * @param {String} signalId external signal id (should be 8 alphanumerical symbols)
-   * @param {CopyFactoryExternalSignalUpdate} signal signal update payload
-   * @return {Promise} promise which resolves when the external signal is updated
-   */
-  updateExternalSignal(strategyId: string, signalId: string, signal: CopyFactoryExternalSignalUpdate): Promise<any>;
-
-  /**
-   * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/removeExternalSignal/
-   * @param {String} strategyId strategy id
-   * @param {String} signalId external signal id
-   * @param {CopyFactoryExternalSignalRemove} signal signal removal payload
-   * @return {Promise} promise which resolves when the external signal is removed
-   */
-  removeExternalSignal(strategyId: string, signalId: string, signal: CopyFactoryExternalSignalRemove): Promise<any>;
+  constructor(domainClient: DomainClient);
 
   /**
    * Resynchronizes the account. See
@@ -55,12 +27,11 @@ export default class TradingClient extends MetaApiClient {
   resynchronize(accountId: string, strategyIds?: Array<String>, positionIds?: Array<String>): Promise<any>;
 
   /**
-   * Returns trading signals the subscriber is subscribed to. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getTradingSignals/
-   * @param {String} subscriberId subscriber id
-   * @returns {Promise<Array<CopyFactoryTradingSignal>>}
+   * Generates an instance of signal client for an account
+   * @param {String} accountId account id
+   * @returns {Promise<SignalClient>}
    */
-  getTradingSignals(subscriberId: string): Promise<Array<CopyFactoryTradingSignal>>;
+  getSignalClient(accountId: string): Promise<SignalClient>;
 
   /**
    * Returns subscriber account stopouts. See

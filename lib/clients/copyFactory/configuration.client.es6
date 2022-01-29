@@ -12,13 +12,11 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory configuration API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
-    super(httpClient, token, domain);
-    this._host = `https://copyfactory-application-history-master-v1.${domain}`;
+  constructor(domainClient) {
+    super(domainClient);
+    this._domainClient = domainClient;
   }
 
   /**
@@ -37,14 +35,14 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('generateStrategyId');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/unused-strategy-id`,
+      url: '/users/current/configuration/unused-strategy-id',
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -306,7 +304,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs.offset = offset;
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies`,
+      url: '/users/current/configuration/strategies',
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -314,7 +312,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts, true);
   }
 
   /**
@@ -328,14 +326,14 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('getStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
+      url: `/users/current/configuration/strategies/${strategyId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -412,7 +410,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('updateStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
+      url: `/users/current/configuration/strategies/${strategyId}`,
       method: 'PUT',
       headers: {
         'auth-token': this._token
@@ -420,7 +418,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: strategy,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -452,7 +450,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('removeStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/strategies/${strategyId}`,
+      url: `/users/current/configuration/strategies/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -460,7 +458,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: closeInstructions,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -595,7 +593,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs.offset = offset;
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies`,
+      url: '/users/current/configuration/portfolio-strategies',
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -603,7 +601,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts, true);
   }
 
   /**
@@ -617,14 +615,14 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('getPortfolioStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
+      url: `/users/current/configuration/portfolio-strategies/${portfolioId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -639,7 +637,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('updatePortfolioStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
+      url: `/users/current/configuration/portfolio-strategies/${portfolioId}`,
       method: 'PUT',
       headers: {
         'auth-token': this._token
@@ -647,7 +645,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: portfolio,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -662,7 +660,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('removePortfolioStrategy');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}`,
+      url: `/users/current/configuration/portfolio-strategies/${portfolioId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -670,7 +668,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: closeInstructions,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -686,7 +684,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('removePortfolioStrategyMember');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/portfolio-strategies/${portfolioId}/members/${strategyId}`,
+      url: `/users/current/configuration/portfolio-strategies/${portfolioId}/members/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -694,7 +692,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: closeInstructions,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -720,7 +718,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs.offset = offset;
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/subscribers`,
+      url: '/users/current/configuration/subscribers',
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -728,7 +726,7 @@ export default class ConfigurationClient extends MetaApiClient {
       qs,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts, true);
   }
 
   /**
@@ -742,14 +740,14 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('getSubscriber');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      url: `/users/current/configuration/subscribers/${subscriberId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -764,7 +762,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('updateSubscriber');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      url: `/users/current/configuration/subscribers/${subscriberId}`,
       method: 'PUT',
       headers: {
         'auth-token': this._token
@@ -772,7 +770,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: subscriber,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -787,7 +785,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('removeSubscriber');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}`,
+      url: `/users/current/configuration/subscribers/${subscriberId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -795,7 +793,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: closeInstructions,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -811,7 +809,7 @@ export default class ConfigurationClient extends MetaApiClient {
       return this._handleNoAccessError('removeSubscription');
     }
     const opts = {
-      url: `${this._host}/users/current/configuration/subscribers/${subscriberId}/subscriptions/${strategyId}`,
+      url: `/users/current/configuration/subscribers/${subscriberId}/subscriptions/${strategyId}`,
       method: 'DELETE',
       headers: {
         'auth-token': this._token
@@ -819,7 +817,7 @@ export default class ConfigurationClient extends MetaApiClient {
       body: closeInstructions,
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
 }

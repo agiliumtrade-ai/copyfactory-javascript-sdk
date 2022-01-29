@@ -1,7 +1,7 @@
 'use strict';
 
 import MetaApiClient from '../metaApi.client';
-import randomstring from 'randomstring';
+import SignalClient from './signal.client';
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -11,108 +11,11 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory trading API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
-    super(httpClient, token, domain);
-    this._host = `https://copyfactory-application-history-master-v1.${domain}`;
-  }
-
-  /**
-   * Generates random signal id
-   * @return {String} signal id
-   */
-  generateSignalId() {
-    return randomstring.generate(8);
-  }
-  /**
-   * CopyFactory external signal update payload
-   * @typedef {Object} CopyFactoryExternalSignalUpdate
-   * @property {String} symbol trade symbol
-   * @property {String} type trade type (one of POSITION_TYPE_BUY, POSITION_TYPE_SELL, ORDER_TYPE_BUY_LIMIT, ORDER_TYPE_SELL_LIMIT, 
-   * ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP)
-   * @property {Date} time time the signal was emitted at
-   * @property {Date} [updateTime] last time of the signal update
-   * @property {Number} volume volume traded
-   * @property {Number} [magic] expert advisor id
-   * @property {Number} [stopLoss] stop loss price
-   * @property {Number} [takeProfit] take profit price
-   * @property {Number} [openPrice] pending order open price
-   */
-
-  /**
-   * CopyFactory trading signal
-   * @typedef {Object} CopyFactoryTradingSignal
-   * @property {CopyFactoryStrategyIdAndName} strategy strategy the signal arrived from
-   * @property {String} positionId id of the position the signal was generated from
-   * @property {Date} time signal time
-   * @property {String} symbol symbol traded
-   * @property {String} type type of the trade (one of market, limit, stop)
-   * @property {String} side side of the trade (one of buy, sell, close)
-   * @property {Number} [openPrice] open price for limit and stop orders
-   * @property {Number} [stopLoss] stop loss price
-   * @property {Number} [takeProfit] take profit price
-   * @property {Number} signalVolume the signal volume
-   * @property {Number} subscriberVolume the volume already open on subscriber side
-   * @property {Number} subscriberProfit total profit of the position on subscriber side
-   * @property {Date} closeAfter the time the signal will be automatically closed at
-   * @property {Boolean} [closeOnly] flag indicating that only closing side of this signal will be copied
-   */
-
-  /**
-   * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/updateExternalSignal/
-   * @param {String} strategyId strategy id
-   * @param {String} signalId external signal id (should be 8 alphanumerical symbols)
-   * @param {CopyFactoryExternalSignalUpdate} signal signal update payload
-   * @return {Promise} promise which resolves when the external signal is updated
-   */
-  updateExternalSignal(strategyId, signalId, signal) {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('updateExternalSignal');
-    }
-    const opts = {
-      url: `${this._host}/users/current/strategies/${strategyId}/external-signals/${signalId}`,
-      method: 'PUT',
-      headers: {
-        'auth-token': this._token
-      },
-      body: signal,
-      json: true
-    };
-    return this._httpClient.request(opts);
-  }
-
-  /**
-   * CopyFactory external signal remove payload
-   * @typedef {Object} CopyFactoryExternalSignalRemove
-   * @property {Date} time the time signal was removed (closed) at
-   */
-
-  /**
-   * Updates external signal for a strategy. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/removeExternalSignal/
-   * @param {String} strategyId strategy id
-   * @param {String} signalId external signal id
-   * @param {CopyFactoryExternalSignalRemove} signal signal removal payload
-   * @return {Promise} promise which resolves when the external signal is removed
-   */
-  removeExternalSignal(strategyId, signalId, signal) {
-    if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('removeExternalSignal');
-    }
-    const opts = {
-      url: `${this._host}/users/current/strategies/${strategyId}/external-signals/${signalId}/remove`,
-      method: 'POST',
-      headers: {
-        'auth-token': this._token
-      },
-      body: signal,
-      json: true
-    };
-    return this._httpClient.request(opts);
+  constructor(domainClient) {
+    super(domainClient);
+    this._domainClient = domainClient;
   }
 
   /**
@@ -130,7 +33,7 @@ export default class TradingClient extends MetaApiClient {
       return this._handleNoAccessError('resynchronize');
     }
     const opts = {
-      url: `${this._host}/users/current/subscribers/${accountId}/resynchronize`,
+      url: `/users/current/subscribers/${accountId}/resynchronize`,
       method: 'POST',
       headers: {
         'auth-token': this._token
@@ -141,28 +44,29 @@ export default class TradingClient extends MetaApiClient {
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
-   * Returns trading signals the subscriber is subscribed to. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getTradingSignals/
-   * @param {String} subscriberId subscriber id
-   * @returns {Promise<Array<CopyFactoryTradingSignal>>}
+   * Generates an instance of signal client for an account
+   * @param {String} accountId account id
    */
-  getTradingSignals(subscriberId) {
+  async getSignalClient(accountId) {
     if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('getTradingSignals');
+      return this._handleNoAccessError('getSignalClient');
     }
-    const opts = {
-      url: `${this._host}/users/current/subscribers/${subscriberId}/signals`,
+    const accountOpts = {
+      url: `https://mt-provisioning-api-v1.${this._domainClient.domain}/users/current/accounts/${accountId}`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+
+    const accountData = await this._domainClient.request(accountOpts);
+    const host = await this._domainClient.getSignalClientHost(accountData.region);
+    return new SignalClient(accountData._id, host, this._domainClient);
   }
 
   /**
@@ -189,14 +93,14 @@ export default class TradingClient extends MetaApiClient {
       return this._handleNoAccessError('getStopouts');
     }
     const opts = {
-      url: `${this._host}/users/current/subscribers/${subscriberId}/stopouts`,
+      url: `/users/current/subscribers/${subscriberId}/stopouts`,
       method: 'GET',
       headers: {
         'auth-token': this._token
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -208,12 +112,12 @@ export default class TradingClient extends MetaApiClient {
    * yearly-equity, monthly-equity, daily-equity, max-drawdown
    * @return {Promise} promise which resolves when the stopouts are reset
    */
-  async resetStopouts(subscriberId, strategyId, reason) {
+  resetStopouts(subscriberId, strategyId, reason) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('resetStopouts');
     }
     const opts = {
-      url: `${this._host}/users/current/subscribers/${subscriberId}/subscription-strategies/` +
+      url: `/users/current/subscribers/${subscriberId}/subscription-strategies/` +
         `${strategyId}/stopouts/${reason}/reset`,
       method: 'POST',
       headers: {
@@ -221,7 +125,7 @@ export default class TradingClient extends MetaApiClient {
       },
       json: true
     };
-    return this._httpClient.request(opts);
+    return this._domainClient.requestCopyFactory(opts);
   }
 
   /**
@@ -254,7 +158,7 @@ export default class TradingClient extends MetaApiClient {
       return this._handleNoAccessError('getUserLog');
     }
     const opts = {
-      url: `${this._host}/users/current/subscribers/${subscriberId}/user-log`,
+      url: `/users/current/subscribers/${subscriberId}/user-log`,
       method: 'GET',
       qs: {
         startTime,
@@ -267,7 +171,7 @@ export default class TradingClient extends MetaApiClient {
       },
       json: true
     };
-    let result = await this._httpClient.request(opts);
+    let result = await this._domainClient.requestCopyFactory(opts, true);
     if (result) {
       result.map(r => r.time = new Date(r.time));
     }

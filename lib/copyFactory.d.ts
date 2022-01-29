@@ -12,6 +12,7 @@ export default class CopyFactory {
    * @param {String} token authorization token
    * @param {Object} opts connection options
    * @param {String} [opts.domain] domain to connect to
+   * @param {String} [opts.extendedTimeout] timeout for extended http requests in seconds
    * @param {Number} [opts.requestTimeout] timeout for http requests in seconds
    */
   constructor(token: string, opts?: Object);
