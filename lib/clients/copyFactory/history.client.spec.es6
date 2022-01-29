@@ -3,17 +3,17 @@
 import HttpClient from '../httpClient';
 import sinon from 'sinon';
 import HistoryClient from './history.client';
-
-const copyFactoryApiUrl = 'https://copyfactory-application-history-master-v1.agiliumtrade.agiliumtrade.ai';
+import DomainClient from '../domain.client';
 
 /**
- * @test {TradingClient}
+ * @test {HistoryClient}
  */
 describe('HistoryClient', () => {
 
   let copyFactoryClient;
   const token = 'header.payload.sign';
   let httpClient = new HttpClient();
+  let domainClient;
   let sandbox;
   let requestStub;
 
@@ -22,8 +22,9 @@ describe('HistoryClient', () => {
   });
 
   beforeEach(() => {
-    copyFactoryClient = new HistoryClient(httpClient, token);
-    requestStub = sandbox.stub(httpClient, 'request');
+    domainClient = new DomainClient(httpClient, token);
+    copyFactoryClient = new HistoryClient(domainClient);
+    requestStub = sandbox.stub(domainClient, 'requestCopyFactory');
   });
 
   afterEach(() => {
@@ -31,7 +32,7 @@ describe('HistoryClient', () => {
   });
 
   /**
-   * @test {TradingClient#getProvidedTransactions}
+   * @test {HistoryClient#getProvidedTransactions}
    */
   it('should retrieve transactions performed on provided strategies from API', async () => {
     let expected = [{
@@ -69,8 +70,8 @@ describe('HistoryClient', () => {
     let transactions = await copyFactoryClient.getProvidedTransactions(from, till, ['ABCD'],
       ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'], 100, 200);
     transactions.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/provided-transactions`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/provided-transactions',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -84,17 +85,20 @@ describe('HistoryClient', () => {
         limit: 200
       },
       json: true,
-    });
+    }, true);
   });
 
   /**
-   * @test {TradingClient#getProvidedTransactions}
+   * @test {HistoryClient#getProvidedTransactions}
    */
   it('should not retrieve transactions on provided strategies from API with account token', async () => {
-    copyFactoryClient = new HistoryClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new HistoryClient(domainClient);
     try {
       await copyFactoryClient.getProvidedTransactions(new Date(), new Date());
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getProvidedTransactions method, because you have connected with account ' + 
         'access token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
@@ -103,7 +107,7 @@ describe('HistoryClient', () => {
   });
 
   /**
-   * @test {TradingClient#getSubscriptionTransactions}
+   * @test {HistoryClient#getSubscriptionTransactions}
    */
   it('should retrieve transactions performed on strategies current user is subscribed to from API', async () => {
     let expected = [{
@@ -141,8 +145,8 @@ describe('HistoryClient', () => {
     let transactions = await copyFactoryClient.getSubscriptionTransactions(from, till, ['ABCD'],
       ['e8867baa-5ec2-45ae-9930-4d5cea18d0d6'], 100, 200);
     transactions.should.equal(expected);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${copyFactoryApiUrl}/users/current/subscription-transactions`,
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/subscription-transactions',
       method: 'GET',
       headers: {
         'auth-token': token
@@ -156,17 +160,20 @@ describe('HistoryClient', () => {
         offset: 100,
         limit: 200
       },
-    });
+    }, true);
   });
 
   /**
-   * @test {TradingClient#getSubscriptionTransactions}
+   * @test {HistoryClient#getSubscriptionTransactions}
    */
   it('should not retrieve transactions on strategies subscribed to from API with account token', async () => {
-    copyFactoryClient = new HistoryClient(httpClient, 'token');
+    domainClient = new DomainClient(httpClient, 'token');
+    copyFactoryClient = new HistoryClient(domainClient);
     try {
       await copyFactoryClient.getSubscriptionTransactions(new Date(), new Date());
+      throw new Error('MethodAccessError expected');
     } catch (error) {
+      error.name.should.equal('MethodAccessError');
       error.message.should.equal(
         'You can not invoke getSubscriptionTransactions method, because you have connected with account ' + 
         'access token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'

@@ -1,9 +1,6 @@
 'use strict';
 
-import {HttpClientMock} from './httpClient';
 import MetaApiClient from './metaApi.client';
-
-const provisioningApiUrl = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 
 /**
  * @test {MetaApiClient}
@@ -11,10 +8,13 @@ const provisioningApiUrl = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumt
 describe('MetaApiClient', () => {
 
   let apiClient;
-  let httpClient = new HttpClientMock(() => 'empty');
+  let domainClient;
 
   beforeEach(() => {
-    apiClient = new MetaApiClient(httpClient, 'token');
+    domainClient = {
+      token: 'token'
+    };
+    apiClient = new MetaApiClient(domainClient);
   });
 
   it('should return account token type', () => {
@@ -22,7 +22,8 @@ describe('MetaApiClient', () => {
   });
 
   it('should return api token type', () => {
-    apiClient = new MetaApiClient(httpClient, 'header.payload.sign');
+    domainClient.token = 'header.payload.sign';
+    apiClient = new MetaApiClient(domainClient);
     apiClient._tokenType.should.equal('api');
   });
 
@@ -31,7 +32,8 @@ describe('MetaApiClient', () => {
   });
 
   it('should check that current token is not account token', () => {
-    apiClient = new MetaApiClient(httpClient, 'header.payload.sign');
+    domainClient.token = 'header.payload.sign';
+    apiClient = new MetaApiClient(domainClient);
     apiClient._isNotAccountToken().should.equal(true);
   });
 
@@ -47,7 +49,8 @@ describe('MetaApiClient', () => {
   });
 
   it('should handle no access error with api token', async () => {
-    apiClient = new MetaApiClient(httpClient, 'header.payload.sign');
+    domainClient.token = 'header.payload.sign';
+    apiClient = new MetaApiClient(domainClient);
     try {
       await apiClient._handleNoAccessError('methodName');
     } catch (error) {

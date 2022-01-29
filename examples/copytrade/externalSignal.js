@@ -58,8 +58,9 @@ async function externalSignal() {
 
     // send external signal
     const tradingApi = copyFactory.tradingApi;
-    const signalId = tradingApi.generateSignalId();
-    await tradingApi.updateExternalSignal(strategyId, signalId, {
+    const signalClient = await tradingApi.getSignalClient(slaveMetaapiAccount.id);
+    const signalId = signalClient.generateSignalId();
+    await signalClient.updateExternalSignal(strategyId, signalId, {
       symbol: 'EURUSD',
       type: 'POSITION_TYPE_BUY',
       time: new Date(),
@@ -69,10 +70,10 @@ async function externalSignal() {
     await new Promise(res => setTimeout(res, 10000));
 
     // output trading signals
-    console.log(await tradingApi.getTradingSignals(slaveMetaapiAccount.id));
+    console.log(await signalClient.getTradingSignals(slaveMetaapiAccount.id));
 
     // remove external signal
-    await tradingApi.removeExternalSignal(strategyId, signalId, {
+    await signalClient.removeExternalSignal(strategyId, signalId, {
       time: new Date()
     });
   } catch (err) {

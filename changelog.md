@@ -1,3 +1,7 @@
+5.0.0
+  - breaking change: signal methods move to a separate class
+  - implemented region support
+
 4.0.2
   - fixed esdoc
 

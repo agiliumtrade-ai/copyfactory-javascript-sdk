@@ -195,11 +195,15 @@ await copyFactory.tradingApi.resynchronize(accountId, ['ABCD']);
 You can submit external trading signals to your trading strategy.
 
 ```javascript
+const accountId = '...';
 const tradingApi = copyFactory.tradingApi;
-const signalId = tradingApi;
+const signalId = '...';
+
+// get signal client
+const signalClient = await tradingApi.getSignalClient(accountId);
 
 // add trading signal
-await tradingApi.updateExternalSignal(strategyId, signalId, {
+await signalClient.updateExternalSignal(strategyId, signalId, {
   symbol: 'EURUSD',
   type: 'POSITION_TYPE_BUY',
   time: new Date(),
@@ -207,7 +211,7 @@ await tradingApi.updateExternalSignal(strategyId, signalId, {
 });
 
 // remove signal
-await tradingApi.removeExternalSignal(strategyId, signalId, {
+await signalClient.removeExternalSignal(strategyId, signalId, {
   time: new Date()
 });
 ```
@@ -215,11 +219,11 @@ await tradingApi.removeExternalSignal(strategyId, signalId, {
 ## Retrieving trading signals
 
 ```javascript
-
-const subscriberId = '...' // CopyFactory subscriber id
+const accountId = '...';
+const signalClient = await tradingApi.getSignalClient(accountId);
 
 // retrieve trading signals
-console.log(await tradingApi.getTradingSignals(subscriberId));
+console.log(await signalClient.getTradingSignals());
 ```
 
 ## Managing stopouts

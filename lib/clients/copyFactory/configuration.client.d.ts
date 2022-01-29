@@ -1,6 +1,6 @@
 import moment from "moment";
-import HttpClient from "../httpClient";
 import MetaApiClient from "../metaApi.client";
+import DomainClient from "../domain.client";
 
 /**
  * metaapi.cloud CopyFactory configuration API (trade copying configuration API) client (see
@@ -10,11 +10,9 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory configuration API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient: HttpClient, token: string, domain?: string);
+  constructor(domainClient: DomainClient);
 
   /**
    * Retrieves new unused strategy id. Method is accessible only with API access token. See

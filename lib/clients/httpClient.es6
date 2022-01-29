@@ -21,11 +21,13 @@ export default class HttpClient {
 
   /**
    * Constructs HttpClient class instance
-   * @param {Number} timeout request timeout in seconds
+   * @param {Number} [timeout] request timeout in seconds
+   * @param {Number} [extendedTimeout] request timeout in seconds
    * @param {RetryOptions} [retryOpts] retry options
    */
-  constructor(timeout = 60, retryOpts = {}) {
+  constructor(timeout = 10, extendedTimeout = 60, retryOpts = {}) {
     this._timeout = timeout * 1000;
+    this._extendedTimeout = extendedTimeout * 1000;
     this._retries = retryOpts.retries || 5;
     this._minRetryDelay = (retryOpts.minDelayInSeconds || 1) * 1000;
     this._maxRetryDelay = (retryOpts.maxDelayInSeconds || 30) * 1000;
@@ -34,9 +36,24 @@ export default class HttpClient {
   /**
    * Performs a request. Response errors are returned as ApiError or subclasses.
    * @param {Object} options request options
+   * @param {Boolean} isExtendedTimeout whether to run the request with an extended timeout
    * @returns {Object|String|any} request result
    */
-  async request(options, retryCounter = 0, endTime = Date.now() + this._maxRetryDelay * this._retries) {
+  async request(options, isExtendedTimeout) {
+    options.timeout = isExtendedTimeout ? this._extendedTimeout : this._timeout;
+    try {
+      return await this._makeRequest(options);
+    } catch (err) {
+      throw this._convertError(err);
+    }
+  }
+
+  /**
+   * Performs a request with a failover. Response errors are returned as ApiError or subclasses.
+   * @param {Object} options request options
+   * @returns {Object|String|any} request result
+   */
+  async requestWithFailover(options, retryCounter = 0, endTime = Date.now() + this._maxRetryDelay * this._retries) {
     options.timeout = this._timeout;
     let retryAfterSeconds = 0;
     options.callback = (e, res) => {
@@ -49,11 +66,11 @@ export default class HttpClient {
       body = await this._makeRequest(options);
     } catch (err) {
       retryCounter = await this._handleError(err, retryCounter, endTime);
-      return this.request(options, retryCounter, endTime);
+      return this.requestWithFailover(options, retryCounter, endTime);
     }
     if (retryAfterSeconds) {
       await this._handleRetry(endTime, retryAfterSeconds * 1000);
-      body = await this.request(options, retryCounter, endTime);
+      body = await this.requestWithFailover(options, retryCounter, endTime);
     }
     return body;
   }
@@ -128,8 +145,8 @@ export class HttpClientMock extends HttpClient {
    * @param {Number} timeout request timeout in seconds
    * @param {RetryOptions} retryOpts retry options
    */
-  constructor(requestFn, timeout, retryOpts) {
-    super(timeout, retryOpts);
+  constructor(requestFn, timeout, extendedTimeout, retryOpts) {
+    super(timeout, extendedTimeout, retryOpts);
     this._requestFn = requestFn;
   }
 

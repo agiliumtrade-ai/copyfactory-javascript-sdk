@@ -5,10 +5,11 @@ export default class HttpClient {
 
   /**
    * Constructs HttpClient class instance
-   * @param {Number} timeout request timeout in seconds
+   * @param {Number} [timeout] request timeout in seconds
+   * @param {Number} [extendedTimeout] request timeout in seconds
    * @param {RetryOptions} [retryOpts] retry options
    */
-  constructor(timeout?: number, retryOpts?: RetryOptions);
+  constructor(timeout?: number, extendedTimeout?: number, retryOpts?: RetryOptions);
 
   /**
    * Performs a request. Response errors are returned as ApiError or subclasses.
@@ -16,6 +17,13 @@ export default class HttpClient {
    * @returns {Object|String|any} request result
    */
   request(options: Object): Promise<Object> | Promise<string> | Promise<any>;
+
+  /**
+   * Performs a request. Response errors are returned as ApiError or subclasses.
+   * @param {Object} options request options
+   * @returns {Object|String|any} request result
+   */
+  requestWithFailover(options: Object): Promise<Object> | Promise<string> | Promise<any>;
 }
 
 /**

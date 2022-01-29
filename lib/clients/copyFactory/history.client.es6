@@ -1,7 +1,6 @@
 'use strict';
 
 import MetaApiClient from '../metaApi.client';
-import randomstring from 'randomstring';
 
 /**
  * metaapi.cloud CopyFactory history API (trade copying history API) client (see
@@ -11,13 +10,11 @@ export default class HistoryClient extends MetaApiClient {
 
   /**
    * Constructs CopyFactory history API client instance
-   * @param {HttpClient} httpClient HTTP client
-   * @param {String} token authorization token
-   * @param {String} domain domain to connect to, default is agiliumtrade.agiliumtrade.ai
+   * @param {DomainClient} domainClient domain client
    */
-  constructor(httpClient, token, domain = 'agiliumtrade.agiliumtrade.ai') {
-    super(httpClient, token, domain);
-    this._host = `https://copyfactory-application-history-master-v1.${domain}`;
+  constructor(domainClient) {
+    super(domainClient);
+    this._domainClient = domainClient;
   }
 
   /**
@@ -120,7 +117,7 @@ export default class HistoryClient extends MetaApiClient {
       qs.limit = limit;
     }
     const opts = {
-      url: `${this._host}/users/current/provided-transactions`,
+      url: '/users/current/provided-transactions',
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -128,7 +125,7 @@ export default class HistoryClient extends MetaApiClient {
       qs,
       json: true
     };
-    let transactions = await this._httpClient.request(opts);
+    let transactions = await this._domainClient.requestCopyFactory(opts, true);
     transactions.forEach(t => t.time = new Date(t.time));
     return transactions;
   }
@@ -165,7 +162,7 @@ export default class HistoryClient extends MetaApiClient {
       qs.limit = limit;
     }
     const opts = {
-      url: `${this._host}/users/current/subscription-transactions`,
+      url: '/users/current/subscription-transactions',
       method: 'GET',
       headers: {
         'auth-token': this._token
@@ -173,7 +170,7 @@ export default class HistoryClient extends MetaApiClient {
       qs,
       json: true
     };
-    let transactions = await this._httpClient.request(opts);
+    let transactions = await this._domainClient.requestCopyFactory(opts, true);
     transactions.forEach(t => t.time = new Date(t.time));
     return transactions;
   }
