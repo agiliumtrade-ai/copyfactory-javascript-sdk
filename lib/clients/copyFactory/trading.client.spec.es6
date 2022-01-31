@@ -196,4 +196,83 @@ describe('TradingClient', () => {
     }
   });
 
+  /**
+   * @test {TradingClient#getSignalClient}
+   */
+  describe('getSignalClient', () => {
+    let getAccountStub;
+
+    beforeEach(() => {
+      getAccountStub = sandbox.stub(domainClient, 'request').withArgs({
+        url: 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/accounts/accountId',
+        method: 'GET',
+        json: true,
+        headers: {
+          'auth-token': token
+        }});
+      getAccountStub.resolves({_id: 'accountId', region: 'vint-hill', accountReplicas: []});
+      sandbox.stub(domainClient, 'getSignalClientHost')
+        .callsFake((regions) => ({
+          host: 'https://copyfactory-api-v1',
+          regions,
+          domain: 'agiliumtrade.ai'
+        }));
+    });
+
+    /**
+     * @test {TradingClient#getSignalClient}
+     */
+    it('should get account', async () => {
+      const client = await  tradingClient.getSignalClient('accountId');
+      sinon.assert.match(client._accountId, 'accountId');
+      sinon.assert.match(client._host.regions, ['vint-hill']);
+    });
+
+    /**
+     * @test {TradingClient#getSignalClient}
+     */
+    it('should get account with replicas', async () => {
+      getAccountStub.resolves({
+        _id: 'accountId', 
+        region: 'vint-hill', 
+        accountReplicas: [
+          {
+            _id: 'accountId2', 
+            region: 'us-west', 
+          }
+        ]
+      });
+      const client = await tradingClient.getSignalClient('accountId');
+      sinon.assert.match(client._accountId, 'accountId');
+      sinon.assert.match(client._host.regions, ['vint-hill', 'us-west']);
+    });
+
+    /**
+     * @test {TradingClient#getSignalClient}
+     */
+    it('should get primary account if requested account is a replica', async () => {
+      getAccountStub.resolves({
+        _id: 'accountId', 
+        region: 'vint-hill', 
+        primaryAccountId: 'accountId2'
+      });
+      getAccountStub.withArgs({
+        url: 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/accounts/accountId2',
+        method: 'GET',
+        json: true,
+        headers: {
+          'auth-token': token
+        }}).resolves({_id: 'accountId2', region: 'us-west', accountReplicas: [
+        {
+          _id: 'accountId', 
+          region: 'vint-hill', 
+        }
+      ]});
+      const client = await  tradingClient.getSignalClient('accountId');
+      sinon.assert.match(client._accountId, 'accountId2');
+      sinon.assert.match(client._host.regions, ['us-west', 'vint-hill']);
+    });
+
+  });
+
 });

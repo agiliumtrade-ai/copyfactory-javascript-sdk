@@ -45,6 +45,7 @@
   "dependencies": {
     "babel-runtime": "~6.26.0",
     "moment": "~2.29.1",
+    "promise.any": "~2.0.3",
     "randomstring": "~1.1.5",
     "request": "~2.88.2",
     "request-promise-any": "~1.0.8"

@@ -43,15 +43,14 @@ export default class DomainClient {
    * Sends a signal client request
    * @param {Object} opts options request options 
    * @param {Object} host signal client host data
-   * @param {string[]} availableRegions list of available regions
    * @returns {Object|string|any} request result
    */
-  requestSignal(opts: Object, host: Object, availableRegions: string[] = this._regionCache): Promise<any>;
+  requestSignal(opts: Object, host: Object): Promise<any>;
 
   /**
    * Returns CopyFactory host for signal client requests
-   * @param {string} region subscriber region
+   * @param {string[]} regions subscriber regions
    * @returns {string} signal client CopyFactory host
    */
-  getSignalClientHost(region: string): string
+  getSignalClientHost(regions: string[]): string
 }

@@ -55,18 +55,32 @@ export default class TradingClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getSignalClient');
     }
-    const accountOpts = {
-      url: `https://mt-provisioning-api-v1.${this._domainClient.domain}/users/current/accounts/${accountId}`,
-      method: 'GET',
-      headers: {
-        'auth-token': this._token
-      },
-      json: true
+
+    const getAccount = async (id) => {
+      const accountOpts = {
+        url: `https://mt-provisioning-api-v1.${this._domainClient.domain}/users/current/accounts/${id}`,
+        method: 'GET',
+        headers: {
+          'auth-token': this._token
+        },
+        json: true
+      };
+      return await this._domainClient.request(accountOpts);
     };
 
-    const accountData = await this._domainClient.request(accountOpts);
-    const host = await this._domainClient.getSignalClientHost(accountData.region);
-    return new SignalClient(accountData._id, host, this._domainClient);
+    let accountData = await getAccount(accountId);
+    let signalClientAccountId = '';
+    if(accountData.primaryAccountId) {
+      signalClientAccountId = accountData.primaryAccountId;
+      accountData = await getAccount(signalClientAccountId);
+    } else {
+      signalClientAccountId = accountData._id;
+    }
+    let regions = [accountData.region].concat(accountData.accountReplicas && 
+      accountData.accountReplicas.map(replica => replica.region) || []);
+
+    const host = await this._domainClient.getSignalClientHost(regions);
+    return new SignalClient(signalClientAccountId, host, this._domainClient);
   }
 
   /**
