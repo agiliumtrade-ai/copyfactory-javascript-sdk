@@ -1,5 +1,7 @@
 'use strict';
 
+import any from 'promise.any';
+
 /**
  * Connection URL and request managing client
  */
@@ -76,42 +78,33 @@ export default class DomainClient {
    * Sends a signal client request
    * @param {Object} opts options request options 
    * @param {Object} host signal client host data
-   * @param {String[]} availableRegions list of available regions
    * @returns {Object|String|any} request result
    */
-  async requestSignal(opts, host, availableRegions = this._regionCache) {
+  async requestSignal(opts, host) {
     try {
-      return await this._httpClient.request(Object.assign({}, opts, {
-        url: `${host.host}.${host.region}.${host.domain}` + opts.url,
-        headers: {
-          'auth-token': this._token
-        },
+      return await any(host.regions.map(region => {
+        return this._httpClient.requestWithFailover(Object.assign({}, opts, {
+          url: `${host.host}.${region}.${host.domain}` + opts.url,
+          headers: {
+            'auth-token': this._token
+          },
+        }));
       }));
-    } catch (err) {
-      if(!['ConflictError', 'InternalError', 'ApiError', 'TimeoutError'].includes(err.name)) {
-        throw err;
-      } else {
-        availableRegions = availableRegions.filter(region => region !== host.region);
-        if(!availableRegions.length) {
-          throw err;
-        } else {
-          return this.requestSignal(opts, Object.assign({}, host, { region: availableRegions[0]}), availableRegions);
-        }
-      }
+    } catch (error) {
+      throw error.errors[0]; 
     }
-
   }
 
   /**
    * Returns CopyFactory host for signal client requests
-   * @param {String} region subscriber region
+   * @param {String[]} regions subscriber regions
    * @returns {String} signal client CopyFactory host
    */
-  async getSignalClientHost(region) {
+  async getSignalClientHost(regions) {
     await this._updateHost();
     return {
       host: 'https://copyfactory-api-v1',
-      region,
+      regions,
       domain: this._urlCache.domain
     };
   }

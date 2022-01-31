@@ -233,6 +233,8 @@ describe('DomainClient', () => {
 
   describe('requestSignal', () => {
 
+    let failoverRequestStub;
+
     const signalOpts = {
       url: '/users/current/subscribers/accountId/signals',
       method: 'GET',
@@ -248,14 +250,16 @@ describe('DomainClient', () => {
       side: 'buy',
     }];
 
-    const host = {
-      host: 'https://copyfactory-api-v1',
-      region: 'vint-hill',
-      domain: 'agiliumtrade.ai'
-    };
+    let host;
 
     beforeEach(async () => {
-      requestStub.withArgs({
+      host = {
+        host: 'https://copyfactory-api-v1',
+        regions: ['vint-hill'],
+        domain: 'agiliumtrade.ai'
+      };
+      failoverRequestStub = sandbox.stub(httpClient, 'requestWithFailover');
+      failoverRequestStub.withArgs({
         url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
         method: 'GET',
         json: true,
@@ -263,13 +267,21 @@ describe('DomainClient', () => {
           'auth-token': token
         },
       }).resolves(expectedSignals);
+      failoverRequestStub.withArgs({
+        url: 'https://copyfactory-api-v1.us-west.agiliumtrade.ai/users/current/subscribers/accountId/signals',
+        method: 'GET',
+        json: true,
+        headers: {
+          'auth-token': token
+        },
+      }).rejects(new InternalError('test'));
       await domainClient.getSignalClientHost('vint-hill');
     });
 
     it('should execute a request', async () => {
       const response = await domainClient.requestSignal(signalOpts, host);
       sinon.assert.match(response, expectedSignals);
-      sinon.assert.calledWith(requestStub, {
+      sinon.assert.calledWith(failoverRequestStub, {
         url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
         method: 'GET',
         json: true,
@@ -279,42 +291,19 @@ describe('DomainClient', () => {
       });
     });
 
-    it('should return an error on request', async () => {
-      requestStub.withArgs({
-        url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
-        method: 'GET',
-        json: true,
-        headers: {
-          'auth-token': token
-        },
-      }).throws(new ValidationError('test'));
-      try {
-        await domainClient.requestSignal(signalOpts, host);
-        throw new Error('ValidationError expected');
-      } catch (error) {
-        error.name.should.equal('ValidationError');
-      }
-    });
-
-    it('should try another region on timeout', async () => {
-      requestStub.withArgs({
-        url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
-        method: 'GET',
-        json: true,
-        headers: {
-          'auth-token': token
-        },
-      }).rejects(new InternalError('test'));
-      requestStub.withArgs({
-        url: 'https://copyfactory-api-v1.us-west.agiliumtrade.ai/users/current/subscribers/accountId/signals',
-        method: 'GET',
-        json: true,
-        headers: {
-          'auth-token': token
-        },
-      }).resolves(expectedSignals);
+    it('should execute a request with multiple regions', async () => {
+      host.regions = ['vint-hill', 'us-west'];
       const response = await domainClient.requestSignal(signalOpts, host);
-      sinon.assert.calledWith(requestStub, {
+      sinon.assert.match(response, expectedSignals);
+      sinon.assert.calledWith(failoverRequestStub, {
+        url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
+        method: 'GET',
+        json: true,
+        headers: {
+          'auth-token': token
+        },
+      });
+      sinon.assert.calledWith(failoverRequestStub, {
         url: 'https://copyfactory-api-v1.us-west.agiliumtrade.ai/users/current/subscribers/accountId/signals',
         method: 'GET',
         json: true,
@@ -322,20 +311,12 @@ describe('DomainClient', () => {
           'auth-token': token
         },
       });
-      sinon.assert.match(response, expectedSignals);
     });
-
+    
     it('should return an error if all regions failed', async () => {
-      requestStub.withArgs({
+      host.regions = ['vint-hill', 'us-west'];
+      failoverRequestStub.withArgs({
         url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
-        method: 'GET',
-        json: true,
-        headers: {
-          'auth-token': token
-        },
-      }).rejects(new InternalError('test'));
-      requestStub.withArgs({
-        url: 'https://copyfactory-api-v1.us-west.agiliumtrade.ai/users/current/subscribers/accountId/signals',
         method: 'GET',
         json: true,
         headers: {
@@ -349,7 +330,15 @@ describe('DomainClient', () => {
       } catch (error) {
         error.name.should.equal('InternalError');
       }
-      sinon.assert.calledWith(requestStub, {
+      sinon.assert.calledWith(failoverRequestStub, {
+        url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.ai/users/current/subscribers/accountId/signals',
+        method: 'GET',
+        json: true,
+        headers: {
+          'auth-token': token
+        },
+      });
+      sinon.assert.calledWith(failoverRequestStub, {
         url: 'https://copyfactory-api-v1.us-west.agiliumtrade.ai/users/current/subscribers/accountId/signals',
         method: 'GET',
         json: true,
@@ -364,10 +353,10 @@ describe('DomainClient', () => {
   describe('getSignalClientHost', () => {
 
     it('should return signal client host', async () => {
-      const response = await domainClient.getSignalClientHost('vint-hill');
+      const response = await domainClient.getSignalClientHost(['vint-hill']);
       sinon.assert.match(response, { 
         host: 'https://copyfactory-api-v1',
-        region: 'vint-hill',
+        regions: ['vint-hill'],
         domain: 'agiliumtrade.agiliumtrade.ai' 
       });
     });
