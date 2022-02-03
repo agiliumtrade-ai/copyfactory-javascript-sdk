@@ -43,14 +43,40 @@ export default class DomainClient {
    * Sends a signal client request
    * @param {Object} opts options request options 
    * @param {Object} host signal client host data
+   * @param {string} accountId account id
    * @returns {Object|string|any} request result
    */
-  requestSignal(opts: Object, host: Object): Promise<any>;
+  requestSignal(opts: Object, host: Object, accountId: string): Promise<any>;
 
   /**
    * Returns CopyFactory host for signal client requests
    * @param {string[]} regions subscriber regions
    * @returns {string} signal client CopyFactory host
    */
-  getSignalClientHost(regions: string[]): string
+  getSignalClientHost(regions: string[]): string;
+
+  /**
+   * Returns account data by id
+   * @param {string} accountId account id
+   * @returns {Object} account data
+   */
+  getAccountInfo(accountId: string): Promise<any>;
+
+}
+
+/**
+ * Account request info
+ */
+interface AccountInfo {
+
+  /**
+   * Primary account id
+   */
+  id: string;
+
+  /**
+   * Account available regions
+   */
+  regions: string[];
+
 }
