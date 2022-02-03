@@ -28,7 +28,7 @@ describe('SignalClient', () => {
       token: token,
       requestSignal: () => {}
     };
-    signalClient = new SignalClient('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', host, domainClient);
+    signalClient = new SignalClient('accountId', host, domainClient);
     requestStub = sandbox.stub(domainClient, 'requestSignal');
   });
  
@@ -62,7 +62,7 @@ describe('SignalClient', () => {
         'auth-token': token
       },
       json: true,
-      body: signal}, host);
+      body: signal}, host, 'accountId');
   });
  
   /**
@@ -80,7 +80,7 @@ describe('SignalClient', () => {
         'auth-token': token
       },
       json: true,
-      body: signal}, host);
+      body: signal}, host, 'accountId');
   });
  
   /**
@@ -95,16 +95,16 @@ describe('SignalClient', () => {
       volume: 1
     }];
     requestStub.resolves(expected);
-    let stopouts = await signalClient.getTradingSignals('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
+    let stopouts = await signalClient.getTradingSignals();
     stopouts.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestSignal, {
-      url: '/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/signals',
+      url: '/users/current/subscribers/accountId/signals',
       method: 'GET',
       headers: {
         'auth-token': token
       },
       json: true,
-    }, host);
+    }, host, 'accountId');
   });
  
 });

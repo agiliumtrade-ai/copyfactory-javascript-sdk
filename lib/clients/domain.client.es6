@@ -78,9 +78,11 @@ export default class DomainClient {
    * Sends a signal client request
    * @param {Object} opts options request options 
    * @param {Object} host signal client host data
+   * @param {String} accountId account id
    * @returns {Object|String|any} request result
    */
-  async requestSignal(opts, host) {
+  async requestSignal(opts, host, accountId) {
+    this._updateAccountRegions(host, accountId);
     try {
       return await any(host.regions.map(region => {
         return this._httpClient.requestWithFailover(Object.assign({}, opts, {
@@ -105,7 +107,50 @@ export default class DomainClient {
     return {
       host: 'https://copyfactory-api-v1',
       regions,
+      lastUpdated: Date.now(),
       domain: this._urlCache.domain
+    };
+  }
+
+  /**
+   * Account request info
+   * @typedef {Object} AccountInfo
+   * @property {String} id primary account id
+   * @property {String[]} regions account available regions
+   */
+
+  /**
+   * Returns account data by id
+   * @param {String} accountId account id
+   * @returns {AccountInfo} account data
+   */
+  async getAccountInfo(accountId) {
+    const getAccount = async (id) => {
+      const accountOpts = {
+        url: `https://mt-provisioning-api-v1.${this.domain}/users/current/accounts/${id}`,
+        method: 'GET',
+        headers: {
+          'auth-token': this.token
+        },
+        json: true
+      };
+      return await this._httpClient.requestWithFailover(accountOpts);
+    };
+
+    let accountData = await getAccount(accountId);
+    let primaryAccountId = '';
+    if(accountData.primaryAccountId) {
+      primaryAccountId = accountData.primaryAccountId;
+      accountData = await getAccount(primaryAccountId);
+    } else {
+      primaryAccountId = accountData._id;
+    }
+
+    let regions = [accountData.region].concat(accountData.accountReplicas && 
+      accountData.accountReplicas.map(replica => replica.region) || []);
+    return {
+      id: primaryAccountId,
+      regions
     };
   }
 
@@ -145,5 +190,13 @@ export default class DomainClient {
       json: true,
     });
   }
-    
+
+  async _updateAccountRegions(host, accountId) {
+    if(host.lastUpdated < Date.now() - 1000 * 60 * 10) {
+      const accountData = await this.getAccountInfo(accountId);
+      host.lastUpdated = Date.now();
+      host.regions = accountData.regions;
+    }
+  }
+
 }

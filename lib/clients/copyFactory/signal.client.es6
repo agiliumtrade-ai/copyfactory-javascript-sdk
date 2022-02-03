@@ -79,7 +79,7 @@ export default class SignalClient {
       },
       json: true
     };
-    return this._domainClient.requestSignal(opts, this._host);
+    return this._domainClient.requestSignal(opts, this._host, this._accountId);
   }
 
   /**
@@ -100,7 +100,7 @@ export default class SignalClient {
       body: signal,
       json: true
     };
-    return this._domainClient.requestSignal(opts, this._host);
+    return this._domainClient.requestSignal(opts, this._host, this._accountId);
   }
 
   /**
@@ -127,6 +127,6 @@ export default class SignalClient {
       body: signal,
       json: true
     };
-    return this._domainClient.requestSignal(opts, this._host);
+    return this._domainClient.requestSignal(opts, this._host, this._accountId);
   }
 }
