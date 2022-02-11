@@ -1,3 +1,4 @@
+import DomainClient from "../domain.client";
 import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
 import SignalClient from "./signal.client";

@@ -1,3 +1,6 @@
+5.0.1
+  - fix typescript types
+
 5.0.0
   - breaking change: signal methods move to a separate class
   - implemented region support
