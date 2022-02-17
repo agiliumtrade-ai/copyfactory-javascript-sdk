@@ -25,7 +25,7 @@ export default class HttpClient {
    * @param {Number} [extendedTimeout] request timeout in seconds
    * @param {RetryOptions} [retryOpts] retry options
    */
-  constructor(timeout = 10, extendedTimeout = 60, retryOpts = {}) {
+  constructor(timeout = 10, extendedTimeout = 70, retryOpts = {}) {
     this._timeout = timeout * 1000;
     this._extendedTimeout = extendedTimeout * 1000;
     this._retries = retryOpts.retries || 5;
@@ -87,7 +87,7 @@ export default class HttpClient {
     if(endTime > Date.now() + retryAfter) {
       await this._wait(retryAfter);
     } else {
-      throw new TimeoutError('Timed out waiting for the end of the process of calculating metrics');
+      throw new TimeoutError('Timed out waiting for the response');
     }
   }
 

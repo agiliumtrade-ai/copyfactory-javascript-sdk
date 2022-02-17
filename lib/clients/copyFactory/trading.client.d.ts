@@ -2,6 +2,7 @@ import DomainClient from "../domain.client";
 import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
 import SignalClient from "./signal.client";
+import StopoutListener from "./stopoutListener";
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -64,7 +65,23 @@ export default class TradingClient extends MetaApiClient {
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
   getUserLog(subscriberId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
-  
+
+  /**
+   * Adds a stopout listener and creates a job to make requests
+   * @param {StopoutListener} listener stopout listener
+   * @param {String} [accountId] account id
+   * @param {String} [strategyId] strategy id
+   * @param {Number} [sequenceNumber] sequence number
+   * @return {String} listener id
+   */
+  addStopoutListener(listener: StopoutListener, accountId?: string, strategyId?: string, sequenceNumber?: number): string;
+
+  /**
+   * Removes stopout listener and cancels the event stream
+   * @param {String} listenerId stopout listener id
+   */
+  removeStopoutListener(listenerId: string): void;
+
 }
 
 /**

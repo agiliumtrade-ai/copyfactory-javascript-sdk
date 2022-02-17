@@ -4,6 +4,7 @@ import HttpClient from '../httpClient';
 import sinon from 'sinon';
 import TradingClient from './trading.client';
 import DomainClient from '../domain.client';
+import StopoutListener from './stopoutListener';
 
 /**
  * @test {TradingClient}
@@ -220,6 +221,43 @@ describe('TradingClient', () => {
       const client = await  tradingClient.getSignalClient('accountId');
       sinon.assert.match(client._accountId, 'accountId');
       sinon.assert.match(client._host.regions, ['vint-hill']);
+    });
+
+  });
+
+  /**
+   * @test {TradingClient#addStopoutListener}
+   * @test {TradingClient#removeStopoutListener}
+   */
+  describe('stopoutListener', () => {
+
+    let listener;
+
+    beforeEach(() => {
+
+      class Listener extends StopoutListener {
+        async onStopout(strategyStopoutEvent) {}
+      }
+
+      listener = new Listener();
+    });
+
+    /**
+     * @test {TradingClient#addStopoutListener}
+     */
+    it('should add stopout listener', async () => {
+      const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'addStopoutListener');
+      tradingClient.addStopoutListener(listener, 'accountId', 'ABCD', 1);
+      sinon.assert.calledWith(callStub, listener, 'accountId', 'ABCD', 1);
+    });
+
+    /**
+     * @test {TradingClient#addStopoutListener}
+     */
+    it('should remove stopout listener', async () => {
+      const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'removeStopoutListener');
+      tradingClient.removeStopoutListener('id');
+      sinon.assert.calledWith(callStub);
     });
 
   });

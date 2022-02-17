@@ -1,3 +1,6 @@
+5.1.0
+  - added stopout listener
+
 5.0.1
   - fix typescript types
 

@@ -2,6 +2,7 @@
 
 import MetaApiClient from '../metaApi.client';
 import SignalClient from './signal.client';
+import StopoutListenerManager from './stopoutListenerManager';
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -16,6 +17,7 @@ export default class TradingClient extends MetaApiClient {
   constructor(domainClient) {
     super(domainClient);
     this._domainClient = domainClient;
+    this._stopoutListenerManager = new StopoutListenerManager(domainClient);
   }
 
   /**
@@ -168,6 +170,26 @@ export default class TradingClient extends MetaApiClient {
       result.map(r => r.time = new Date(r.time));
     }
     return result;
+  }
+
+  /**
+   * Adds a stopout listener and creates a job to make requests
+   * @param {StopoutListener} listener stopout listener
+   * @param {String} [accountId] account id
+   * @param {String} [strategyId] strategy id
+   * @param {Number} [sequenceNumber] sequence number
+   * @return {String} listener id
+   */
+  addStopoutListener(listener, accountId, strategyId, sequenceNumber) {
+    return this._stopoutListenerManager.addStopoutListener(listener, accountId, strategyId, sequenceNumber);
+  }
+
+  /**
+   * Removes stopout listener and cancels the event stream
+   * @param {String} listenerId stopout listener id
+   */
+  removeStopoutListener(listenerId) {
+    this._stopoutListenerManager.removeStopoutListener(listenerId);
   }
 
 }

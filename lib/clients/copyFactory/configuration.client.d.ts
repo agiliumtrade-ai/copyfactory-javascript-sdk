@@ -277,6 +277,12 @@ export declare type CopyFactoryStrategySubscription = {
   copyTakeProfit?: boolean,
 
   /**
+   * Trade sides which will be copied. Buy trades only, sell trades only or all trades.
+   * Default is to copy all trades
+   */
+  allowedSides?: string[],
+
+  /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be copied
    */
   minTradeVolume?: number,
@@ -569,6 +575,12 @@ export declare type CopyFactorySubscriberUpdate = {
   copyTakeProfit?: boolean,
 
   /**
+   * Trade sides which will be copied. Buy trades only, sell trades only or all trades.
+   * Default is to copy all trades
+   */
+  allowedSides?: string[],
+
+  /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
@@ -834,6 +846,12 @@ export declare type CopyFactoryStrategyUpdate = {
   copyTakeProfit?: boolean,
 
   /**
+   * Trade sides which will be copied. Buy trades only, sell trades only or all trades.
+   * Default is to copy all trades
+   */
+  allowedSides?: string[],
+
+  /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
@@ -1003,6 +1021,12 @@ export declare type CopyFactoryPortfolioStrategyMember = {
   copyTakeProfit?: boolean,
 
   /**
+   * Trade sides which will be copied. Buy trades only, sell trades only or all trades.
+   * Default is to copy all trades
+   */
+  allowedSides?: string[],
+
+  /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
    * copied
    */
@@ -1137,6 +1161,12 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * profit.
    */
   copyTakeProfit?: boolean,
+
+  /**
+   * Trade sides which will be copied. Buy trades only, sell trades only or all trades.
+   * Default is to copy all trades
+   */
+  allowedSides?: string[],
 
   /**
    * Minimum trade volume to copy. Trade signals with a smaller volume will not be
