@@ -240,7 +240,7 @@ describe('HttpClient', () => {
           should.not.exist('Should not exist this assertion');
         } catch (err) {
           err.name.should.eql('TimeoutError');
-          err.message.should.eql('Timed out waiting for the end of the process of calculating metrics');
+          err.message.should.eql('Timed out waiting for the response');
         }
         sinon.assert.calledOnce(stub);
       }).timeout(10000);
@@ -258,7 +258,7 @@ describe('HttpClient', () => {
           should.not.exist('Should not exist this assertion');
         } catch (err) {
           err.name.should.eql('TimeoutError');
-          err.message.should.eql('Timed out waiting for the end of the process of calculating metrics');
+          err.message.should.eql('Timed out waiting for the response');
         }
         sinon.assert.callCount(stub, 6);
       }).timeout(10000);

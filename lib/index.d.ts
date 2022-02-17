@@ -6,6 +6,7 @@ import TradingClient from "./clients/copyFactory/trading.client";
 import HttpClient from "./clients/httpClient";
 import MethodAccessError from "./clients/methodAccessError";
 import TimeoutError from "./clients/timeoutError";
+import StopoutListener from './clients/copyFactory/stopoutListener';
 
 export default CopyFactory;
 export * from './clients/copyFactory/configuration.client';
@@ -23,5 +24,6 @@ export {
   TradingClient,
   HttpClient,
   MethodAccessError, 
-  TimeoutError
+  TimeoutError,
+  StopoutListener
 };

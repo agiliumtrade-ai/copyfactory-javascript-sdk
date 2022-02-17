@@ -240,6 +240,31 @@ console.log(await tradingApi.getStopouts(accountId));
 await tradingApi.resetStopout(accountId, strategyId, 'daily-equity');
 ```
 
+## Managing stopout listeners
+You can subscribe to a stream of stopout events using the stopout listener.
+```javascript
+import {StopoutListener} from 'metaapi.cloud-sdk';
+
+let tradingApi = copyFactory.tradingApi;
+
+// create a custom class based on the StopoutListener
+class Listener extends StopoutListener {
+
+  // specify the function called on event arrival
+  async onStopout(strategyStopoutEvent) {
+    console.log('Strategy stopout event', strategyStopoutEvent);
+  }
+
+}
+
+// add listener
+const listener = new Listener();
+const listenerId = tradingApi.addStopoutListener(listener);
+
+// remove listener
+tradingApi.removeStopoutListener(listenerId);
+```
+
 ## Retrieving slave trading logs
 ```javascript
 let tradingApi = copyFactory.tradingApi;
