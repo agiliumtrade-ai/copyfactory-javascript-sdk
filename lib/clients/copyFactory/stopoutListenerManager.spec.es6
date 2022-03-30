@@ -20,7 +20,8 @@ describe('StopoutListenerManager', () => {
   let getStopoutStub, listener, callStub;
 
   let expected = [{
-    reason: 'max-drawdown',
+    subscriberId: 'accountId',
+    reason: 'monthly-balance',
     stoppedAt: new Date('2020-08-08T07:57:30.328Z'),
     strategy: {
       id: 'ABCD',
@@ -30,7 +31,8 @@ describe('StopoutListenerManager', () => {
     sequenceNumber: 2
   },
   {
-    reason: 'max-drawdown',
+    subscriberId: 'accountId',
+    reason: 'monthly-balance',
     stoppedAt: new Date('2020-08-08T07:57:31.328Z'),
     strategy: {
       id: 'ABCD',
@@ -41,7 +43,8 @@ describe('StopoutListenerManager', () => {
   }];
 
   let expected2 = [{
-    reason: 'max-drawdown',
+    subscriberId: 'accountId',
+    reason: 'monthly-balance',
     stoppedAt: new Date('2020-08-08T07:57:32.328Z'),
     strategy: {
       id: 'ABCD',
@@ -51,7 +54,8 @@ describe('StopoutListenerManager', () => {
     sequenceNumber: 4
   },
   {
-    reason: 'max-drawdown',
+    subscriberId: 'accountId',
+    reason: 'monthly-balance',
     stoppedAt: new Date('2020-08-08T07:57:33.328Z'),
     strategy: {
       id: 'ABCD',

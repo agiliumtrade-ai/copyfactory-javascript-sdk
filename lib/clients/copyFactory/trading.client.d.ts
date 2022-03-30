@@ -48,8 +48,8 @@ export default class TradingClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
-   * @param {String} reason stopout reason to reset. One of yearly-balance, monthly-balance, daily-balance,
-   * yearly-equity, monthly-equity, daily-equity, max-drawdown
+   * @param {String} reason stopout reason to reset. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance,
+   * yearly-equity, monthly-equity, daily-equity
    * @return {Promise} promise which resolves when the stopouts are reset
    */
   resetStopouts(subscriberId: string, strategyId: string, reason: string): Promise<any>;
@@ -229,6 +229,11 @@ export declare type CopyFactoryExternalSignalRemove = {
 export declare type CopyFactoryStrategyStopout = {
 
   /**
+   * Subscriber id
+   */
+  subscriberId: string,
+
+  /**
    * strategy which was stopped out
    */
   strategy: CopyFactoryStrategyIdAndName,
@@ -239,8 +244,7 @@ export declare type CopyFactoryStrategyStopout = {
   partial: boolean,
 
   /**
-   * stopout reason. One of yearly-balance, monthly-balance, daily-balance, yearly-equity,
-   * monthly-equity, daily-equity, max-drawdown
+   * stopout reason. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance, lifetime-equity, yearly-equity, monthly-equity, daily-equity
    */
   reason: string,
 
@@ -262,7 +266,12 @@ export declare type CopyFactoryStrategyStopout = {
   /**
    * time the strategy is stopped till
    */
-  stoppedTill: Date
+  stoppedTill: Date,
+
+  /**
+   * Stopout event sequence number
+   */
+  sequenceNumber: number
 }
 
 /**

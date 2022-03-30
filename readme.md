@@ -122,10 +122,6 @@ await configurationApi.updateStrategy(strategyId.id, {
   description: 'Some useful description about your strategy',
   accountId: masterMetaapiAccount.id,
   maxTradeRisk: 0.1,
-  stopOutRisk: {
-    value: 0.4,
-    startTime: new Date('2020-08-24T00:00:00.000Z')
-  },
   timeSettings: {
     lifetimeInHours: 192,
     openingIntervalInMinutes: 5

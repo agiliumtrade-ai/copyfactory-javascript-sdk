@@ -1,3 +1,6 @@
+5.1.1
+  - removed stop out risk from models
+
 5.1.0
   - added stopout listener
 

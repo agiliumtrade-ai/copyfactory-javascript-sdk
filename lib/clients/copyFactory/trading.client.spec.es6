@@ -75,15 +75,16 @@ describe('TradingClient', () => {
    */
   it('should retrieve stopouts', async () => {
     let expected = [{
-      reason: 'max-drawdown',
+      strategyId: 'accountId',
+      reason: 'monthly-balance',
       stoppedAt: new Date('2020-08-08T07:57:30.328Z'),
       strategy: {
         id: 'ABCD',
         name: 'Strategy'
       },
-      reasonDescription: 'total strategy equity drawdown exceeded limit'
-    }
-    ];
+      reasonDescription: 'total strategy equity drawdown exceeded limit',
+      sequenceNumber: 2
+    }];
     requestStub.resolves(expected);
     let stopouts = await tradingClient.getStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6');
     stopouts.should.equal(expected);

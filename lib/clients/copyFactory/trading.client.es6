@@ -66,14 +66,16 @@ export default class TradingClient extends MetaApiClient {
   /**
    * CopyFactory strategy stopout
    * @typedef {Object} CopyFactoryStrategyStopout
+   * @property {String} subscriberId subscriber id
    * @property {CopyFactoryStrategyIdAndName} strategy strategy which was stopped out
    * @property {Boolean} partial flag indicating that stopout is partial
-   * @property {String} reason stopout reason. One of yearly-balance, monthly-balance, daily-balance, yearly-equity,
-   * monthly-equity, daily-equity, max-drawdown
+   * @property {String} reason stopout reason. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance, 
+   * lifetime-equity, yearly-equity, monthly-equity, daily-equity
    * @property {String} reasonDescription human-readable description of the stopout reason
    * @property {Boolean} [closePositions] flag indicating if positions should be closed
    * @property {Date} stoppedAt time the strategy was stopped at
    * @property {Date} stoppedTill time the strategy is stopped till
+   * @property {Number} sequenceNumber stopout event sequence number
    */
 
   /**
@@ -102,8 +104,8 @@ export default class TradingClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
-   * @param {String} reason stopout reason to reset. One of yearly-balance, monthly-balance, daily-balance,
-   * yearly-equity, monthly-equity, daily-equity, max-drawdown
+   * @param {String} reason stopout reason to reset. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance,
+   * yearly-equity, monthly-equity, daily-equity
    * @return {Promise} promise which resolves when the stopouts are reset
    */
   resetStopouts(subscriberId, strategyId, reason) {
