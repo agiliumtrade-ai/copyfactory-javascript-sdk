@@ -71,8 +71,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will be terminated
-   * and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filter which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -113,15 +111,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * contractSize, balance, fixedVolume, fixedRisk
    * @property {number} [tradeVolume] Fixed trade volume for use with fixedVolume trade size scaling mode
    * @property {number} [riskFraction] Fixed risk fraction for use with fixedRisk trade size scaling mode
-   */
-
-  /**
-   * CopyFactory strategy stopout settings
-   * @typedef {Object} CopyFactoryStrategyStopOutSettings
-   * @property {Number} [absoluteValue] value of the stop out risk, measured in account currency
-   * @property {Number} [relativeValue] value of the stop out risk, expressed as a fraction of 1
-   * @property {Date|string|moment.Moment} [startTime] the time to start risk calculation from. All previous trades will be ignored. You can
-   * use it to reset the risk counter after a stopout event
    */
 
   /**
@@ -205,8 +194,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy
    * position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
    * @property {Array<CopyFactoryStrategyRiskLimit>} [riskLimits] account risk limits. You can configure trading to be
    * stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or
    * equity drawdown
@@ -366,8 +353,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -481,8 +466,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration
@@ -534,8 +517,6 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {String} [reduceCorrelations] setting indicating whether to enable automatic trade
    * correlation reduction. Possible settings are not specified (disable correlation risk restrictions),
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
-   * @property {CopyFactoryStrategyStopOutSettings} [stopOutRisk] stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
    * @property {CopyFactoryStrategySymbolFilter} [symbolFilter] symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    * @property {CopyFactoryStrategyNewsFilter} [newsFilter] news risk filter configuration

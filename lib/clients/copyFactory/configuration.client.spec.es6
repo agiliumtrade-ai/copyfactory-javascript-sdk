@@ -87,10 +87,6 @@ describe('ConfigurationClient', () => {
       name: 'Test strategy',
       accountId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      },
       riskLimits: [{
         type: 'monthly',
         applyTo: 'balance',
@@ -150,10 +146,6 @@ describe('ConfigurationClient', () => {
       name: 'Test strategy',
       connectionId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      },
       timeSettings: {
         lifetimeInHours: 192,
         openingIntervalInMinutes: 5
@@ -198,10 +190,6 @@ describe('ConfigurationClient', () => {
       name: 'Test strategy',
       accountId: 'e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
       maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      },
       riskLimits: [{
         type: 'monthly',
         applyTo: 'balance',
@@ -292,11 +280,7 @@ describe('ConfigurationClient', () => {
           strategyId: 'BCDE'
         }
       ],
-      maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      }
+      maxTradeRisk: 0.1
     }];
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategies(true, 100, 200);
@@ -348,11 +332,7 @@ describe('ConfigurationClient', () => {
           strategyId: 'BCDE'
         }
       ],
-      maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      }
+      maxTradeRisk: 0.1
     };
     requestStub.resolves(expected);
     let strategies = await copyFactoryClient.getPortfolioStrategy('ABCD');
@@ -396,11 +376,7 @@ describe('ConfigurationClient', () => {
           strategyId: 'BCDE'
         }
       ],
-      maxTradeRisk: 0.1,
-      stopOutRisk: {
-        relativeValue: 0.4,
-        startTime: '2020-08-24T00:00:00.000Z'
-      }
+      maxTradeRisk: 0.1
     };
     await copyFactoryClient.updatePortfolioStrategy('ABCD', strategy);
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {

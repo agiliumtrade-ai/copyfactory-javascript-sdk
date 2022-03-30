@@ -219,12 +219,6 @@ export declare type CopyFactoryStrategySubscription = {
   reduceCorrelations?: string,
 
   /**
-   * stop out setting. All trading will be terminated
-   * and positions closed once equity drawdown reaches this value
-   */
-  stopOutRisk?: CopyFactoryStrategyStopOutSettings,
-
-  /**
    * symbol filter which can be used to copy only specific
    * symbols or exclude some symbols from copying
    */
@@ -328,28 +322,6 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
 }
 
 /**
- * CopyFactory strategy stopout settings
- */
-export declare type CopyFactoryStrategyStopOutSettings = {
-
-  /**
-   * Value of the stop out risk, measured in account currency
-   */
-  absoluteValue?: number;
-
-  /**
-   * Value of the stop out risk, expressed as a fraction of 1
-   */
-  relativeValue?: number;
-
-  /**
-   * the time to start risk calculation from. All previous trades will be ignored. You can
-   * use it to reset the risk counter after a stopout event
-   */
-  startTime?: Date | string | moment.Moment
-}
-
-/**
  * CopyFactory symbol filter
  */
 export declare type CopyFactoryStrategySymbolFilter = {
@@ -441,7 +413,7 @@ export declare type CopyFactoryStrategyCalendarNewsFilter = {
 export declare type CopyFactoryStrategyRiskLimit = {
 
   /**
-   * restriction type. One of daily, monthly, or yearly
+   * restriction type. One of daily, monthly, yearly or lifetime
    */
   type: string,
 
@@ -464,13 +436,13 @@ export declare type CopyFactoryStrategyRiskLimit = {
    * whether to force close positions when the risk is reached. If value is false
    * then only the new trades will be halted, but existing ones will not be closed
    */
-  closePositions: boolean
+  closePositions: boolean;
 
   /**
    * time to start risk tracking from. All previous trades will be ignored. You
    * can use this value to reset the filter after stopout event
    */
-  startTime?: Date | string | moment.Moment
+  startTime?: Date | string | moment.Moment;
 }
 
 /**
@@ -542,12 +514,6 @@ export declare type CopyFactorySubscriberUpdate = {
    * per symbol). immediately means to close all positions immediately. One of 'by-position', 'by-symbol', 'immediately'
    */
   closeOnly?: string,
-
-  /**
-   * stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
-   */
-  stopOutRisk?: CopyFactoryStrategyStopOutSettings,
 
   /**
    * account risk limits. You can configure trading to be
@@ -786,12 +752,6 @@ export declare type CopyFactoryStrategyUpdate = {
   reduceCorrelations?: string,
 
   /**
-   * stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
-   */
-  stopOutRisk?: CopyFactoryStrategyStopOutSettings,
-
-  /**
    * symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    */
@@ -961,12 +921,6 @@ export declare type CopyFactoryPortfolioStrategyMember = {
   reduceCorrelations?: string,
 
   /**
-   * stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
-   */
-  stopOutRisk?: CopyFactoryStrategyStopOutSettings,
-
-  /**
    * symbol filters which can be used to copy only specific
    * symbols or exclude some symbols from copying
    */
@@ -1101,12 +1055,6 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * by-strategy (limit correlations for the strategy) or by-account (limit correlations for the account)
    */
   reduceCorrelations?: string,
-
-  /**
-   * stop out setting. All trading will
-   * be terminated and positions closed once equity drawdown reaches this value
-   */
-  stopOutRisk?: CopyFactoryStrategyStopOutSettings,
 
   /**
    * symbol filters which can be used to copy only specific
