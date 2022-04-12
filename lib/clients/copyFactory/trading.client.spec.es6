@@ -199,6 +199,55 @@ describe('TradingClient', () => {
   });
 
   /**
+   * @test {TradingClient#getStrategyLog}
+   */
+  it('should retrieve copy trading strategy log', async () => {
+    let expected = [
+      {
+        time: new Date('2020-08-08T07:57:30.328Z'),
+        level: 'INFO',
+        message: 'message'
+      }
+    ];
+    requestStub.resolves(expected);
+    let records = await tradingClient.getStrategyLog('ABCD',
+      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
+    records.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/strategies/ABCD/user-log',
+      method: 'GET',
+      qs: {
+        startTime: new Date('2020-08-01T00:00:00.000Z'),
+        endTime: new Date('2020-08-10T00:00:00.000Z'),
+        offset: 10,
+        limit: 100
+      },
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    }, true);
+  });
+  
+  /**
+   * @test {TradingClient#getStrategyLog}
+   */
+  it('should not retrieve copy trading strategy log from API with account token', async () => {
+    domainClient = new DomainClient(httpClient, 'token');
+    tradingClient = new TradingClient(domainClient);
+    try {
+      await tradingClient.getStrategyLog('ABCD');
+      throw new Error('MethodAccessError expected');
+    } catch (error) {
+      error.name.should.equal('MethodAccessError');
+      error.message.should.equal(
+        'You can not invoke getStrategyLog method, because you have connected with account access token. ' +
+          'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
    * @test {TradingClient#getSignalClient}
    */
   describe('getSignalClient', () => {
@@ -219,7 +268,7 @@ describe('TradingClient', () => {
      * @test {TradingClient#getSignalClient}
      */
     it('should get account', async () => {
-      const client = await  tradingClient.getSignalClient('accountId');
+      const client = await tradingClient.getSignalClient('accountId');
       sinon.assert.match(client._accountId, 'accountId');
       sinon.assert.match(client._host.regions, ['vint-hill']);
     });
@@ -258,7 +307,7 @@ describe('TradingClient', () => {
     it('should remove stopout listener', async () => {
       const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'removeStopoutListener');
       tradingClient.removeStopoutListener('id');
-      sinon.assert.calledWith(callStub);
+      sinon.assert.calledWith(callStub, 'id');
     });
 
   });
