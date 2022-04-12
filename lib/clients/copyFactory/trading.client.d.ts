@@ -67,6 +67,18 @@ export default class TradingClient extends MetaApiClient {
   getUserLog(subscriberId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
 
   /**
+   * Returns event log for CopyFactory strategy, sorted in reverse chronological order. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getStrategyLog/ 
+   * @param {string} strategyId strategy id to retrieve log for
+   * @param {Date} [startTime] time to start loading data from
+   * @param {Date} [endTime] time to stop loading data at
+   * @param {number} [offset] pagination offset. Default is 0
+   * @param {number} [limit] pagination limit. Default is 1000
+   * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
+   */
+  getStrategyLog(strategyId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
+
+  /**
    * Adds a stopout listener and creates a job to make requests
    * @param {StopoutListener} listener stopout listener
    * @param {String} [accountId] account id
