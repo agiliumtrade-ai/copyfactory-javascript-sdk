@@ -58,7 +58,7 @@ export default class DomainClient {
           throw err;
         } else {
           this._regionIndex++;
-          return this.requestCopyFactory(opts);
+          return await this.requestCopyFactory(opts, isExtendedTimeout);
         }
       }
     }
