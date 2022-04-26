@@ -110,7 +110,7 @@ export default class SignalClient {
    */
 
   /**
-   * Updates external signal for a strategy. See
+   * Removes (closes) external signal for a strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/removeExternalSignal/
    * @param {String} strategyId strategy id
    * @param {String} signalId external signal id

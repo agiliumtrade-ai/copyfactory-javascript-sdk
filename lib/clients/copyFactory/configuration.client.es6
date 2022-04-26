@@ -338,6 +338,23 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
+   * Telegram publishing settings
+   * @typedef {Object} StrategyTelegramPublishingSettings
+   * @property {String} token telegram bot API token
+   * @property {String} chatId telegram chatId to publish signals to. It can reference either a public
+   * channel (e.g. @myChannel), private channel (works by chat id only) or a user (works by chatId only).
+   * Note that in order to publish signals to a channel bot must be an admin of the channel
+   * @property {String} template telegram message template. A substring of ${description} will be replaced
+   * with a signal description
+   */
+
+  /**
+   * Strategy Telegram integration settings
+   * @typedef {Object} StrategyTelegramSettings
+   * @property {StrategyTelegramPublishingSettings} publishing telegram publishing settings
+   */
+
+  /**
    * CopyFactory strategy update
    * @typedef {Object} CopyFactoryStrategyUpdate
    * @property {String} name strategy human-readable name
@@ -384,6 +401,7 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {Array<String>} [symbolsTraded] symbols traded by this strategy. Specifying the symbols will improve trade
    * latency on first trades made by strategy. If you do not specify this setting the application will monitor the strategy
    * trades and detect the symbols automatically over time 
+   * @property {StrategyTelegramSettings} [telegram] telegram publishing settings
    * @property {CopyFactoryStrategyTimeSettings} [timeSettings] settings to manage copying timeframe and position
    * lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for
    * up to 90 days
