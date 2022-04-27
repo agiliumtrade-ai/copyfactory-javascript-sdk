@@ -666,6 +666,39 @@ export declare type CopyFactoryStrategyTimeSettings = {
 }
 
 /**
+ * Telegram publishing settings
+ */
+export declare type StrategyTelegramSettings = {
+  /**
+   * telegram publishing settings
+   */
+  publishing: StrategyTelegramPublishingSettings;
+}
+
+/**
+ * Strategy Telegram integration settings
+ */
+export declare type StrategyTelegramPublishingSettings = {
+
+  /**
+   * Token telegram bot API 
+   */
+  token: string;
+
+  /**
+   * telegram chatId to publish signals to. It can reference either a public
+   * channel (e.g. @myChannel), private channel (works by chat id only) or a user (works by chatId only).
+   * Note that in order to publish signals to a channel bot must be an admin of the channel
+   */
+  chatId: string;
+
+  /**
+   * telegram message template. A substring of ${description} will be replaced with a signal description
+   */
+  template: string;
+}
+
+/**
  * CopyFactory strategy equity curve filter
  */
 export declare type CopyFactoryStrategyEquityCurveFilter = {
@@ -851,7 +884,12 @@ export declare type CopyFactoryStrategyUpdate = {
    * lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for
    * up to 90 days
    */
-  timeSettings?: CopyFactoryStrategyTimeSettings
+  timeSettings?: CopyFactoryStrategyTimeSettings,
+
+  /**
+   * telegram publishing settings
+   */
+  telegram?: StrategyTelegramSettings;
 }
 
 /**

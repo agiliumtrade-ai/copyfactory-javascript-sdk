@@ -1,3 +1,6 @@
+5.3.1
+  - added telegram typescript typings
+
 5.3.0
   - added telegram integration
 
