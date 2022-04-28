@@ -111,6 +111,16 @@ export default class ConfigurationClient extends MetaApiClient {
    * contractSize, balance, fixedVolume, fixedRisk
    * @property {number} [tradeVolume] Fixed trade volume for use with fixedVolume trade size scaling mode
    * @property {number} [riskFraction] Fixed risk fraction for use with fixedRisk trade size scaling mode
+   * @property {boolean} [forceTinyTrades] if set to true, that trades smaller than minVolume - 0.5 * volumeStep will
+   * be placed with minVolume volume, in spite that they will result in increased trade risk, as long as risk
+   * increase is in line with maxRiskCoefficient configuration. Othersite such trades will be skipped to avoid
+   * taking excessive trade risk. Default is false.
+   * @property {number} [maxRiskCoefficient] sometimes when placing a small trade, the risk taken can exceed the
+   * subscription expectation due to volume rounding or forcefully placing tiny trades in accordance with
+   * forceTinyTrades setting. The maxRiskCoefficient setting will act as an extra line of protection to restrict
+   * trades if actual risk exceeds the value of expected subscription risk multiplied by maxRiskCoefficient. As a
+   * result trade volume will be decreased correspondingly or trade will be skipped if resulting volume is less
+   * than minVolume. Default value is 5, minimum value is 1.
    */
 
   /**
