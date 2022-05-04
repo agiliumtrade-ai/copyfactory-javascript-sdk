@@ -48,11 +48,10 @@ export default class TradingClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
-   * @param {String} reason stopout reason to reset. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance,
-   * yearly-equity, monthly-equity, daily-equity
+   * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
    * @return {Promise} promise which resolves when the stopouts are reset
    */
-  resetStopouts(subscriberId: string, strategyId: string, reason: string): Promise<any>;
+  resetStopouts(subscriberId: string, strategyId: string, reason: CopyFactoryStrategyStopoutReason): Promise<any>;
 
   /**
    * Returns copy trading user log for an account and time range. See
@@ -95,6 +94,23 @@ export default class TradingClient extends MetaApiClient {
   removeStopoutListener(listenerId: string): void;
 
 }
+
+/**
+ * CopyFactory strategy stopout reason
+ */
+export declare type CopyFactoryStrategyStopoutReason = 'day-balance-difference' | 'today-balance-difference' |
+    'week-balance-difference' | 'week-to-date-balance-difference' |
+    'month-balance-difference' | 'month-to-date-balance-difference' | 'quarter-balance-difference' |
+    'quarter-to-date-balance-difference' | 'year-balance-difference' |
+    'year-to-date-balance-difference' | 'lifetime-balance-difference' | 'day-balance-minus-equity' |
+    'today-balance-minus-equity' | 'week-balance-minus-equity' | 'week-to-date-balance-minus-equity' |
+    'month-balance-minus-equity' | 'month-to-date-balance-minus-equity' |
+    'quarter-balance-minus-equity' | 'quarter-to-date-balance-minus-equity' | 'year-balance-minus-equity' |
+    'year-to-date-balance-minus-equity' | 'lifetime-balance-minus-equity' |
+    'day-equity-difference' | 'today-equity-difference' | 'week-equity-difference' |
+    'week-to-date-equity-difference' | 'month-equity-difference' |
+    'month-to-date-equity-difference' | 'quarter-equity-difference' | 'quarter-to-date-equity-difference' |
+    'year-equity-difference' | 'year-to-date-equity-difference' | 'lifetime-equity-difference';
 
 /**
  * CopyFactory external signal update payload
@@ -256,9 +272,9 @@ export declare type CopyFactoryStrategyStopout = {
   partial: boolean,
 
   /**
-   * stopout reason. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance, lifetime-equity, yearly-equity, monthly-equity, daily-equity
+   * stopout reason
    */
-  reason: string,
+  reason: CopyFactoryStrategyStopoutReason,
 
   /**
    * human-readable description of the stopout reason

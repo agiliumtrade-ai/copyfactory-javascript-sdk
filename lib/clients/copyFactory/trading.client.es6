@@ -64,13 +64,29 @@ export default class TradingClient extends MetaApiClient {
   }
 
   /**
+   * CopyFactory strategy stopout reason
+   * @typedef {'day-balance-difference' | 'today-balance-difference' | 'week-balance-difference' |
+   * 'week-to-date-balance-difference' | 'month-balance-difference' | 'month-to-date-balance-difference' |
+   * 'quarter-balance-difference' | 'quarter-to-date-balance-difference' | 'year-balance-difference' |
+   * 'year-to-date-balance-difference' | 'lifetime-balance-difference' | 'day-balance-minus-equity' |
+   * 'today-balance-minus-equity' | 'week-balance-minus-equity' | 'week-to-date-balance-minus-equity' |
+   * 'month-balance-minus-equity' | 'month-to-date-balance-minus-equity' |
+   * 'quarter-balance-minus-equity' | 'quarter-to-date-balance-minus-equity' | 'year-balance-minus-equity' |
+   * 'year-to-date-balance-minus-equity' | 'lifetime-balance-minus-equity' |
+   * 'day-equity-difference' | 'today-equity-difference' | 'week-equity-difference' |
+   * 'week-to-date-equity-difference' | 'month-equity-difference' |
+   * 'month-to-date-equity-difference' | 'quarter-equity-difference' | 'quarter-to-date-equity-difference' |
+   * 'year-equity-difference' | 'year-to-date-equity-difference' |
+   * 'lifetime-equity-difference'} CopyFactoryStrategyStopoutReason
+   */
+
+  /**
    * CopyFactory strategy stopout
    * @typedef {Object} CopyFactoryStrategyStopout
    * @property {String} subscriberId subscriber id
    * @property {CopyFactoryStrategyIdAndName} strategy strategy which was stopped out
    * @property {Boolean} partial flag indicating that stopout is partial
-   * @property {String} reason stopout reason. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance, 
-   * lifetime-equity, yearly-equity, monthly-equity, daily-equity
+   * @property {CopyFactoryStrategyStopoutReason} reason stopout reason
    * @property {String} reasonDescription human-readable description of the stopout reason
    * @property {Boolean} [closePositions] flag indicating if positions should be closed
    * @property {Date} stoppedAt time the strategy was stopped at
@@ -104,7 +120,7 @@ export default class TradingClient extends MetaApiClient {
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
-   * @param {String} reason stopout reason to reset. One of lifetime-balance, yearly-balance, monthly-balance, daily-balance,
+   * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
    * yearly-equity, monthly-equity, daily-equity
    * @return {Promise} promise which resolves when the stopouts are reset
    */

@@ -426,19 +426,31 @@ export declare type CopyFactoryStrategyCalendarNewsFilter = {
 }
 
 /**
+ * CopyFactory strategy risk limit type
+ */
+export declare type CopyFactoryStrategyRiskLimitType = 'day' | 'today' | 'week' | 'week-to-date' | 'month' |
+    'month-to-date' | 'quarter' | 'quarter-to-date' | 'year' | 'year-to-date' | 'lifetime';
+
+/**
+ * CopyFactory strategy risk limit apply to enum
+ */
+export declare type CopyFactoryStrategyRiskLimitApplyTo = 'balance-difference' | 'balance-minus-equity' |
+  'equity-difference';
+
+/**
  * CopyFactory risk limit filter
  */
 export declare type CopyFactoryStrategyRiskLimit = {
 
   /**
-   * restriction type. One of daily, monthly, yearly or lifetime
+   * restriction type
    */
-  type: string,
+  type: CopyFactoryStrategyRiskLimitType,
 
   /**
-   * account metric to apply limit to. One of balance, equity
+   * account metric to apply limit to
    */
-  applyTo: string,
+  applyTo: CopyFactoryStrategyRiskLimitApplyTo,
 
   /**
    *  Max drawdown allowed, measured in account currency,

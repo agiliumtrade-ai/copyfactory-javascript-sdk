@@ -162,10 +162,21 @@ export default class ConfigurationClient extends MetaApiClient {
    */
 
   /**
+   * CopyFactory strategy risk limit type
+   * @typedef {'day' | 'today' | 'week' | 'week-to-date' | 'month' | 'month-to-date' | 'quarter' | 'quarter-to-date' |
+   * 'year' | 'year-to-date' | 'lifetime'} CopyFactoryStrategyRiskLimitType
+   */
+
+  /**
+   * CopyFactory strategy risk limit apply to enum
+   * @typedef {'balance-difference' | 'balance-minus-equity' | 'equity-difference'} CopyFactoryStrategyRiskLimitApplyTo
+   */
+
+  /**
    * CopyFactory risk limit filter
    * @typedef {Object} CopyFactoryStrategyRiskLimit
-   * @property {String} type restriction type. One of daily, monthly, or yearly
-   * @property {String} applyTo account metric to apply limit to. One of balance, equity
+   * @property {CopyFactoryStrategyRiskLimitType} type restriction type
+   * @property {CopyFactoryStrategyRiskLimitApplyTo} applyTo account metric to apply limit to
    * @property {Number} [maxAbsoluteRisk] max drawdown allowed, measured in account currency
    * @property {Number} [maxRelativeRisk] max drawdown allowed, measured in account currency
    * @property {Boolean} closePositions whether to force close positions when the risk is reached. If value is false
