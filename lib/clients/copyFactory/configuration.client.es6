@@ -163,7 +163,7 @@ export default class ConfigurationClient extends MetaApiClient {
 
   /**
    * CopyFactory strategy risk limit type
-   * @typedef {'day' | 'today' | 'week' | 'week-to-date' | 'month' | 'month-to-date' | 'quarter' | 'quarter-to-date' |
+   * @typedef {'day' | 'date' | 'week' | 'week-to-date' | 'month' | 'month-to-date' | 'quarter' | 'quarter-to-date' |
    * 'year' | 'year-to-date' | 'lifetime'} CopyFactoryStrategyRiskLimitType
    */
 

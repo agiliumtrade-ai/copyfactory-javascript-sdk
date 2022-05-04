@@ -65,15 +65,15 @@ export default class TradingClient extends MetaApiClient {
 
   /**
    * CopyFactory strategy stopout reason
-   * @typedef {'day-balance-difference' | 'today-balance-difference' | 'week-balance-difference' |
+   * @typedef {'day-balance-difference' | 'date-balance-difference' | 'week-balance-difference' |
    * 'week-to-date-balance-difference' | 'month-balance-difference' | 'month-to-date-balance-difference' |
    * 'quarter-balance-difference' | 'quarter-to-date-balance-difference' | 'year-balance-difference' |
    * 'year-to-date-balance-difference' | 'lifetime-balance-difference' | 'day-balance-minus-equity' |
-   * 'today-balance-minus-equity' | 'week-balance-minus-equity' | 'week-to-date-balance-minus-equity' |
+   * 'date-balance-minus-equity' | 'week-balance-minus-equity' | 'week-to-date-balance-minus-equity' |
    * 'month-balance-minus-equity' | 'month-to-date-balance-minus-equity' |
    * 'quarter-balance-minus-equity' | 'quarter-to-date-balance-minus-equity' | 'year-balance-minus-equity' |
    * 'year-to-date-balance-minus-equity' | 'lifetime-balance-minus-equity' |
-   * 'day-equity-difference' | 'today-equity-difference' | 'week-equity-difference' |
+   * 'day-equity-difference' | 'date-equity-difference' | 'week-equity-difference' |
    * 'week-to-date-equity-difference' | 'month-equity-difference' |
    * 'month-to-date-equity-difference' | 'quarter-equity-difference' | 'quarter-to-date-equity-difference' |
    * 'year-equity-difference' | 'year-to-date-equity-difference' |

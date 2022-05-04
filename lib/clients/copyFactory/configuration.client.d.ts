@@ -428,7 +428,7 @@ export declare type CopyFactoryStrategyCalendarNewsFilter = {
 /**
  * CopyFactory strategy risk limit type
  */
-export declare type CopyFactoryStrategyRiskLimitType = 'day' | 'today' | 'week' | 'week-to-date' | 'month' |
+export declare type CopyFactoryStrategyRiskLimitType = 'day' | 'date' | 'week' | 'week-to-date' | 'month' |
     'month-to-date' | 'quarter' | 'quarter-to-date' | 'year' | 'year-to-date' | 'lifetime';
 
 /**
