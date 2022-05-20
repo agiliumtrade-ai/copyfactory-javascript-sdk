@@ -723,7 +723,9 @@ export declare type StrategyTelegramPublishingSettings = {
   chatId: string;
 
   /**
-   * telegram message template. A substring of ${description} will be replaced with a signal description
+   * telegram message template. A substring of ${description} will be replaced with a signal description. Other
+   * variables you can use: ${operation}, ${orderId}, ${side}, ${type}, ${volume}, ${symbol}, ${openPrice},
+   * ${stopLoss}, ${takeProfit}.
    */
   template: string;
 }
