@@ -1,3 +1,6 @@
+5.6.0
+  - added expression option to strategy trade size scaling
+
 5.5.1
   - updated telegram integration documentation
 
