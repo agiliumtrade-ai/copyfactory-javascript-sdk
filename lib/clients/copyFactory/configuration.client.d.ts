@@ -301,15 +301,16 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
 
   /**
    * If set to balance, the trade size on strategy subscriber will be scaled according
-   * to balance to preserve risk. If value is none, then trade size will be preserved irregardless of the
-   * subscriber balance. If value is contractSize, then trade size will be scaled according to contract size.
-   * If fixedVolume is set, then trade will be copied with a fixed volume of tradeVolume setting. If fixedRisk
-   * is set, then each trade will be copied with a trade volume set to risk specific fraction of balance as
-   * configured by riskFraction setting. Note, that in fixedRisk mode trades without a SL are not copied.
-   * If expression is set, then trade volume will be calculated using a user-defined expression. Note, that
-   * expression trade size scaling mode is intended for advanced users and we DO NOT RECOMMEND using it unless
-   * you understand what are you doing, as mistakes in expression can result in loss. Default is balance.
-   * Allowed values: none, contractSize, balance, fixedVolume, fixedRisk, expression.
+   * to balance to preserve risk. If set to equity, the trade size on strategy subscriber will be scaled according
+   * to subscriber equity. If value is none, then trade size will be preserved irregardless of the subscriber
+   * balance. If value is contractSize, then trade size will be scaled according to contract size. If fixedVolume
+   * is set, then trade will be copied with a fixed volume of tradeVolume setting. If fixedRisk is set, then each
+   * trade will be copied with a trade volume set to risk specific fraction of balance as configured by
+   * riskFraction setting. Note, that in fixedRisk mode trades without a SL are not copied. If expression is
+   * set, then trade volume will be calculated using a user-defined expression. Note, that expression trade
+   * size scaling mode is intended for advanced users and we DO NOT RECOMMEND using it unless you understand
+   * what are you doing, as mistakes in expression can result in loss.
+   * Allowed values: none, contractSize, balance, equity, fixedVolume, fixedRisk, expression.
    */
   mode: string,
 
@@ -346,8 +347,9 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
    * (see https://mathjs.org/docs/expressions/syntax.html). Following variables are available in expression
    * scope: providerVolume - provider signal trade size; providerTradeAmount - provider signal trade value in
    * trade copier base curency; multiplier - subscription multiplier value; providerBalance - provider balance
-   * value; balance - subscriber balance value; quote - current asset price on subscriber side; tickValue -
-   * current asset tick value on subscriber side; tickSize - tick size on subscriber side; providerScaledVolume -
+   * value in trade copier base currency; balance - subscriber balance value in trade copier base currency;
+   * quote - current asset price on subscriber side; tickValue - current asset tick value on subscriber side
+   * expressed in trade copier base currency; tickSize - tick size on subscriber side; providerScaledVolume -
    * provider trade volume multiplied by provider contract size; contractSize - subscriber contract size;
    * providerStopLoss - provider signal stop loss price; providerTakeProfit - provider signal take profit price;
    * providerOpenPrice - provider signal pending order openining price; accountCurrencyExchangeRate - subscriber
