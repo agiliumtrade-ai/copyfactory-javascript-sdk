@@ -1,3 +1,6 @@
+5.7.0
+  - added equity trade size scaling mode
+
 5.6.0
   - added expression option to strategy trade size scaling
 
