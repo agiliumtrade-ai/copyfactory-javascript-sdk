@@ -1,3 +1,6 @@
+5.8.0
+  - updated trade size scaling expresson variables
+
 5.7.0
   - added equity trade size scaling mode
 
