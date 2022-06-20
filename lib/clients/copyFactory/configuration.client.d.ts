@@ -348,12 +348,12 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
    * scope: providerVolume - provider signal trade size; providerTradeAmount - provider signal trade value in
    * trade copier base curency; multiplier - subscription multiplier value; providerBalance - provider balance
    * value in trade copier base currency; balance - subscriber balance value in trade copier base currency;
-   * quote - current asset price on subscriber side; tickValue - current asset tick value on subscriber side
-   * expressed in trade copier base currency; tickSize - tick size on subscriber side; providerScaledVolume -
-   * provider trade volume multiplied by provider contract size; contractSize - subscriber contract size;
-   * providerStopLoss - provider signal stop loss price; providerTakeProfit - provider signal take profit price;
-   * providerOpenPrice - provider signal pending order openining price; accountCurrencyExchangeRate - subscriber
-   * exchange rate of account currency to trade copier base currency
+   * quoteOrOpenPrice - current asset price (for market orders) or open price (for pending orders) on subscriber
+   * side; tickValue - current asset tick value on subscriber side expressed in trade copier base currency;
+   * tickSize - tick size on subscriber side; providerScaledVolume - provider trade volume multiplied by provider
+   * contract size; contractSize - subscriber contract size; providerStopLoss - provider signal stop loss price;
+   * providerTakeProfit - provider signal take profit price; accountCurrencyExchangeRate - subscriber exchange
+   * rate of account currency to trade copier base currency
    */
   expression?: string
 }
