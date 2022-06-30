@@ -1,3 +1,7 @@
+5.9.0
+  - added streaming user logs and transactions
+  - added signalDelay option
+
 5.8.0
   - updated trade size scaling expresson variables
 

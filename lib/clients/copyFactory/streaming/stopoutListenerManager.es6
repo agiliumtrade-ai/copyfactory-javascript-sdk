@@ -1,6 +1,6 @@
 'use strict';
 
-import MetaApiClient from '../metaApi.client';
+import MetaApiClient from '../../metaApi.client';
 import randomstring from 'randomstring';
 
 /**

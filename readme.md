@@ -273,6 +273,108 @@ console.log(await tradingApi.getUserLog(accountId));
 console.log(await tradingApi.getUserLog(accountId, new Date(Date.now() - 24 * 60 * 60 * 1000), undefined, 20, 10));
 ```
 
+## Log streaming
+You can subscribe to a stream of strategy or subscriber log events using the user log listener.
+
+### Strategy logs
+```javascript
+import {UserLogListener} from 'metaapi.cloud-sdk';
+
+let tradingApi = copyFactory.tradingApi;
+
+// create a custom class based on the UserLogListener
+class Listener extends UserLogListener {
+
+  // specify the function called on event arrival
+  async onUserLog(logEvent) {
+    console.log('Strategy user log event', logEvent);
+  }
+
+}
+
+// add listener
+const listener = new Listener();
+const listenerId = tradingApi.addStrategyLogListener(listener, 'ABCD');
+
+// remove listener
+tradingApi.removeStrategyLogListener(listenerId);
+```
+
+### Subscriber logs
+```javascript
+import {UserLogListener} from 'metaapi.cloud-sdk';
+
+let tradingApi = copyFactory.tradingApi;
+
+// create a custom class based on the UserLogListener
+class Listener extends UserLogListener {
+
+  // specify the function called on event arrival
+  async onUserLog(logEvent) {
+    console.log('Subscriber user log event', logEvent);
+  }
+
+}
+
+// add listener
+const listener = new Listener();
+const listenerId = tradingApi.addSubscriberLogListener(listener, 'accountId');
+
+// remove listener
+tradingApi.removeSubscriberLogListener(listenerId);
+```
+
+## Transaction streaming
+You can subscribe to a stream of strategy or subscriber transaction events using the transaction listener.
+
+### Strategy transactions
+```javascript
+import {TransactionListener} from 'metaapi.cloud-sdk';
+
+let historyApi = copyFactory.historyApi;
+
+// create a custom class based on the TransactionListener
+class Listener extends TransactionListener {
+
+  // specify the function called on event arrival
+  async onTransaction(transactionEvent) {
+    console.log('Strategy transaction event', transactionEvent);
+  }
+
+}
+
+// add listener
+const listener = new Listener();
+const listenerId = historyApi.addStrategyTransactionListener(listener, 'ABCD');
+
+// remove listener
+historyApi.removeStrategyTransactionListener(listenerId);
+```
+
+### Subscriber transactions
+```javascript
+import {TransactionListener} from 'metaapi.cloud-sdk';
+
+let historyApi = copyFactory.historyApi;
+
+// create a custom class based on the TransactionListener
+class Listener extends TransactionListener {
+
+  // specify the function called on event arrival
+  async onTransaction(transactionEvent) {
+    console.log('Subscriber transaction event', transactionEvent);
+  }
+
+}
+
+// add listener
+const listener = new Listener();
+const listenerId = historyApi.addSubscriberTransactionListener(listener, 'accountId');
+
+// remove listener
+historyApi.removeSubscriberTransactionListener(listenerId);
+```
+
 ## Related projects:
 Take a look at our website for the full list of APIs and features supported [https://metaapi.cloud/#features](https://metaapi.cloud/#features)
 

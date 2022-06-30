@@ -1,6 +1,7 @@
 'use strict';
 
 import MetaApiClient from '../metaApi.client';
+import TransactionListenerManager from './streaming/transactionListenerManager';
 
 /**
  * metaapi.cloud CopyFactory history API (trade copying history API) client (see
@@ -15,6 +16,7 @@ export default class HistoryClient extends MetaApiClient {
   constructor(domainClient) {
     super(domainClient);
     this._domainClient = domainClient;
+    this._transactionListenerManager = new TransactionListenerManager(domainClient);
   }
 
   /**
@@ -173,6 +175,44 @@ export default class HistoryClient extends MetaApiClient {
     let transactions = await this._domainClient.requestCopyFactory(opts, true);
     transactions.forEach(t => t.time = new Date(t.time));
     return transactions;
+  }
+
+  /**
+   * Adds a strategy transaction listener and creates a job to make requests
+   * @param {TransactionListener} listener transaction listener
+   * @param {String} strategyId strategy id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+  addStrategyTransactionListener(listener, strategyId, startTime) {
+    this._transactionListenerManager.addStrategyTransactionListener(listener, strategyId, startTime);
+  }
+
+  /**
+   * Removes strategy log listener and cancels the event stream
+   * @param {String} listenerId strategy log listener id
+   */
+  removeStrategyTransactionListener(listenerId) {
+    this._transactionListenerManager.removeStrategyTransactionListener(listenerId);
+  }
+
+  /**
+   * Adds a subscriber transaction listener and creates a job to make requests
+   * @param {TransactionListener} listener transaction listener
+   * @param {String} subscriberId subscriber id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+  addSubscriberTransactionListener(listener, subscriberId, startTime) {
+    this._transactionListenerManager.addSubscriberTransactionListener(listener, subscriberId, startTime);
+  }
+
+  /**
+   * Removes subscriber log listener and cancels the event stream
+   * @param {String} listenerId subscriber log listener id
+   */
+  removeSubscriberTransactionListener(listenerId) {
+    this._transactionListenerManager.removeSubscriberTransactionListener(listenerId);
   }
 
 }

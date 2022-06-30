@@ -2,7 +2,8 @@
 
 import MetaApiClient from '../metaApi.client';
 import SignalClient from './signal.client';
-import StopoutListenerManager from './stopoutListenerManager';
+import StopoutListenerManager from './streaming/stopoutListenerManager';
+import UserLogListenerManager from './streaming/userLogListenerManager';
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -18,6 +19,7 @@ export default class TradingClient extends MetaApiClient {
     super(domainClient);
     this._domainClient = domainClient;
     this._stopoutListenerManager = new StopoutListenerManager(domainClient);
+    this._userLogListenerManager = new UserLogListenerManager(domainClient);
   }
 
   /**
@@ -243,6 +245,44 @@ export default class TradingClient extends MetaApiClient {
    */
   removeStopoutListener(listenerId) {
     this._stopoutListenerManager.removeStopoutListener(listenerId);
+  }
+
+  /**
+   * Adds a strategy log listener and creates a job to make requests
+   * @param {UserLogListener} listener user log listener
+   * @param {String} strategyId strategy id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+  addStrategyLogListener(listener, strategyId, startTime) {
+    this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime);
+  }
+
+  /**
+   * Removes strategy log listener and cancels the event stream
+   * @param {String} listenerId strategy log listener id
+   */
+  removeStrategyLogListener(listenerId) {
+    this._userLogListenerManager.removeStrategyLogListener(listenerId);
+  }
+
+  /**
+   * Adds a subscriber log listener and creates a job to make requests
+   * @param {UserLogListener} listener user log listener
+   * @param {String} subscriberId subscriber id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+  addSubscriberLogListener(listener, subscriberId, startTime) {
+    this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime);
+  }
+
+  /**
+   * Removes subscriber log listener and cancels the event stream
+   * @param {String} listenerId subscriber log listener id
+   */
+  removeSubscriberLogListener(listenerId) {
+    this._userLogListenerManager.removeSubscriberLogListener(listenerId);
   }
 
 }

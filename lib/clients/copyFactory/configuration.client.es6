@@ -54,6 +54,13 @@ export default class ConfigurationClient extends MetaApiClient {
   }
 
   /**
+   * Strategy signal delay
+   * @typedef {Object} StrategySignalDelay
+   * @property {Number} minInSeconds min extra trading signal delay value expressed in seconds
+   * @property {Number} maxInSeconds max extra trading signal delay value expressed in seconds
+   */
+
+  /**
    * CopyFactory strategy subscriptions
    * @typedef {Object} CopyFactoryStrategySubscription
    * @property {String} strategyId id of the strategy to subscribe to
@@ -95,6 +102,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {StrategySignalDelay} [signalDelay] extra trade copying delay introduced by trade copier before
+   * applying the trade signal. You can configure either a fixed or a random delay
    * @property {boolean} [removed] flag indicating that the subscription was scheduled for removal once all subscription
    * positions will be closed
    */
@@ -245,6 +254,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {StrategySignalDelay} [signalDelay] extra trade copying delay introduced by trade copier before
+   * applying the trade signal. You can configure either a fixed or a random delay
    * @property {Array<CopyFactoryStrategySubscription>} subscriptions strategy subscriptions
    */
 
@@ -431,6 +442,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {StrategySignalDelay} [signalDelay] extra trade copying delay introduced by trade copier before
+   * applying the trade signal. You can configure either a fixed or a random delay
    * @property {CopyFactoryStrategyMagicFilter} [magicFilter] magic (expert id) filter
    * @property {CopyFactoryStrategyEquityCurveFilter} [equityCurveFilter] filter which permits the trades only if account
    * equity is greater than balance moving average
@@ -545,6 +558,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {StrategySignalDelay} [signalDelay] extra trade copying delay introduced by trade copier before
+   * applying the trade signal. You can configure either a fixed or a random delay
    * @property {String} [closeOnRemovalMode] position close mode on strategy or subscription removal. Preserve means
    * that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means
    * that positions will continue to be managed by CopyFactory, but only close signals will be copied.
@@ -596,6 +611,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * copied
    * @property {number} [maxTradeVolume] Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
+   * @property {StrategySignalDelay} [signalDelay] extra trade copying delay introduced by trade copier before
+   * applying the trade signal. You can configure either a fixed or a random delay
    */
 
   /**

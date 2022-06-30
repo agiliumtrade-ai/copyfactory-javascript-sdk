@@ -4,7 +4,8 @@ import HttpClient from '../httpClient';
 import sinon from 'sinon';
 import TradingClient from './trading.client';
 import DomainClient from '../domain.client';
-import StopoutListener from './stopoutListener';
+import StopoutListener from './streaming/stopoutListener';
+import UserLogListener from './streaming/userLogListener';
 
 /**
  * @test {TradingClient}
@@ -302,11 +303,66 @@ describe('TradingClient', () => {
     });
 
     /**
-     * @test {TradingClient#addStopoutListener}
+     * @test {TradingClient#removeStopoutListener}
      */
     it('should remove stopout listener', async () => {
       const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'removeStopoutListener');
       tradingClient.removeStopoutListener('id');
+      sinon.assert.calledWith(callStub, 'id');
+    });
+
+  });
+
+  /**
+   * @test {TradingClient#addStrategyLogListener}
+   * @test {TradingClient#removeStopoutListener}
+   */
+  describe('userLogListener', () => {
+
+    let listener;
+
+    beforeEach(() => {
+
+      class Listener extends UserLogListener {
+        async onStopout(strategyStopoutEvent) {}
+      }
+
+      listener = new Listener();
+    });
+
+    /**
+     * @test {TradingClient#addStrategyLogListener}
+     */
+    it('should add strategy listener', async () => {
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addStrategyLogListener');
+      tradingClient.addStrategyLogListener(listener, 'ABCD');
+      sinon.assert.calledWith(callStub, listener, 'ABCD');
+    });
+
+    /**
+     * @test {TradingClient#removeStrategyLogListener}
+     */
+    it('should remove strategy listener', async () => {
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'removeStrategyLogListener');
+      tradingClient.removeStrategyLogListener('id');
+      sinon.assert.calledWith(callStub, 'id');
+    });
+
+    /**
+     * @test {TradingClient#addSubscriberLogListener}
+     */
+    it('should add subscriber listener', async () => {
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addSubscriberLogListener');
+      tradingClient.addSubscriberLogListener(listener, 'accountId');
+      sinon.assert.calledWith(callStub, listener, 'accountId');
+    });
+
+    /**
+     * @test {TradingClient#removeSubscriberLogListener}
+     */
+    it('should remove subscriber listener', async () => {
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'removeSubscriberLogListener');
+      tradingClient.removeSubscriberLogListener('id');
       sinon.assert.calledWith(callStub, 'id');
     });
 
