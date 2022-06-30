@@ -1,6 +1,6 @@
 5.9.0
-  - added streaming user logs and transactions
-  - added signalDelay option
+  - make it possible to stream user logs and transactions
+  - make it possible to delay trading signals by configured amount of time
 
 5.8.0
   - updated trade size scaling expresson variables
