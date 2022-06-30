@@ -7,7 +7,7 @@ export default class StopoutListener {
 
   /**
    * Calls a predefined function with the packets data
-   * @param {Object[]} strategyStopoutEvent strategy stopout event with an array of packets
+   * @param {CopyFactoryStrategyStopout[]} strategyStopoutEvent strategy stopout event with an array of packets
    */
   async onStopout(strategyStopoutEvent) {
     throw Error('Abstract method onStopout has no implementation');

@@ -41,8 +41,9 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/copyfactory-javascript-sdk.git"
   },
-  "version": "5.8.0",
+  "version": "5.9.0",
   "dependencies": {
+    "@log4js-node/log4js-api": "~1.0.2",
     "babel-runtime": "~6.26.0",
     "moment": "~2.29.1",
     "promise.any": "~2.0.3",
@@ -68,7 +69,7 @@
     "webpack-cli": "~3.3.12"
   },
   "scripts": {
-    "test": "mocha --exit --require babel-register lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
+    "test": "mocha --exit --require babel-register lib/**/*.spec.es6 lib/*.spec.es6",
     "lint": "eslint --ext es6 ./lib",
     "lint:fix": "eslint --ext es6 ./lib --fix",
     "build": "rm -rf dist; rm -rf es; npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp && copyfiles -u 1 \"lib/**/*.d.ts\" dist && copyfiles -u 1 \"lib/**/*.d.ts\" es",

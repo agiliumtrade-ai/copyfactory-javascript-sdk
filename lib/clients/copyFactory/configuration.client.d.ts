@@ -171,6 +171,22 @@ export declare type StrategyId = {
 }
 
 /**
+ * Strategy signal delay
+ */
+export declare type StrategySignalDelay = {
+
+  /**
+   * min extra trading signal delay value expressed in seconds
+   */
+  minInSeconds: number,
+
+  /**
+   * max extra trading signal delay value expressed in seconds
+   */
+  maxInSeconds: number
+}
+
+/**
  * CopyFactory strategy subscriptions
  */
 export declare type CopyFactoryStrategySubscription = {
@@ -286,6 +302,12 @@ export declare type CopyFactoryStrategySubscription = {
    * with maximum volume instead
    */
   maxTradeVolume?: number,
+
+  /**
+   * Extra trade copying delay introduced by trade copier before applying the trade signal.
+   * You can configure either a fixed or a random delay
+   */
+  signalDelay?: StrategySignalDelay,
 
   /**
    * flag indicating that the subscription was scheduled for removal once all subscription
@@ -608,6 +630,12 @@ export declare type CopyFactorySubscriberUpdate = {
   maxTradeVolume?: number,
 
   /**
+   * Extra trade copying delay introduced by trade copier before applying the trade signal.
+   * You can configure either a fixed or a random delay
+   */
+  signalDelay?: StrategySignalDelay,
+
+  /**
    * strategy subscriptions
    */
   subscriptions?: Array<CopyFactoryStrategySubscription>
@@ -908,6 +936,12 @@ export declare type CopyFactoryStrategyUpdate = {
   maxTradeVolume?: number,
 
   /**
+   * Extra trade copying delay introduced by trade copier before applying the trade signal.
+   * You can configure either a fixed or a random delay
+   */
+  signalDelay?: StrategySignalDelay,
+
+  /**
    * magic (expert id) filter
    */
   magicFilter?: CopyFactoryStrategyMagicFilter,
@@ -1079,7 +1113,13 @@ export declare type CopyFactoryPortfolioStrategyMember = {
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: number
+  maxTradeVolume?: number,
+
+  /**
+   * Extra trade copying delay introduced by trade copier before applying the trade signal.
+   * You can configure either a fixed or a random delay
+   */
+  signalDelay?: StrategySignalDelay,
 
   /**
    * position close mode on strategy or subscription removal. Preserve means
@@ -1215,7 +1255,13 @@ export declare type CopyFactoryPortfolioStrategyUpdate = {
    * Maximum trade volume to copy. Trade signals with a larger volume will be copied
    * with maximum volume instead
    */
-  maxTradeVolume?: number
+  maxTradeVolume?: number,
+
+  /**
+   * Extra trade copying delay introduced by trade copier before applying the trade signal.
+   * You can configure either a fixed or a random delay
+   */
+  signalDelay?: StrategySignalDelay
 }
 
 /**

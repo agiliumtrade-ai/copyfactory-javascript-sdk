@@ -1,8 +1,10 @@
 'use strict';
 
 import CopyFactory from './copyFactory';
-import StopoutListener from './clients/copyFactory/stopoutListener';
+import StopoutListener from './clients/copyFactory/streaming/stopoutListener';
+import UserLogListener from './clients/copyFactory/streaming/userLogListener';
+import TransactionListener from './clients/copyFactory/streaming/transactionListener';
 
 export default CopyFactory;
 
-export {CopyFactory, StopoutListener};
+export {CopyFactory, StopoutListener, UserLogListener, TransactionListener};

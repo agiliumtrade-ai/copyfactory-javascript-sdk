@@ -1,8 +1,8 @@
 'use strict';
 
-import HttpClient from '../httpClient';
+import HttpClient from '../../httpClient';
 import sinon from 'sinon';
-import DomainClient from '../domain.client';
+import DomainClient from '../../domain.client';
 import StopoutListener from './stopoutListener';
 import StopoutListenerManager from './stopoutListenerManager';
 
