@@ -739,7 +739,13 @@ export declare type CopyFactoryStrategyTimeSettings = {
    * minute for the position to get copied. If position were not copied during this time, the copying will not be
    * retried anymore.
    */
-  openingIntervalInMinutes?: number
+  openingIntervalInMinutes?: number,
+
+  /**
+   * If set to true, the openingIntervalInMinutes setting will be applied to pending orders as well. By default
+   * pending order signals do not expire
+   */
+  expirePendingOrders?: boolean
 }
 
 /**

@@ -1,3 +1,6 @@
+5.10.0
+  - make it possible to expire pending order signals
+
 5.9.0
   - make it possible to stream user logs and transactions
   - make it possible to delay trading signals by configured amount of time
