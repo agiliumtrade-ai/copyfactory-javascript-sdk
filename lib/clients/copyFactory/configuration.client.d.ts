@@ -349,7 +349,7 @@ export declare type CopyFactoryStrategyTradeSizeScaling = {
   /**
    * If set to true, that trades smaller than minVolume - 0.5 * volumeStep will
    * be placed with minVolume volume, in spite that they will result in increased trade risk, as long as risk
-   * increase is in line with maxRiskCoefficient configuration. Othersite such trades will be skipped to avoid
+   * increase is in line with maxRiskCoefficient configuration. Otherwise such trades will be skipped to avoid
    * taking excessive trade risk. Default is false.
    */
   forceTinyTrades?: boolean,

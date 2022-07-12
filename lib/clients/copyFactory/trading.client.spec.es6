@@ -297,8 +297,9 @@ describe('TradingClient', () => {
      * @test {TradingClient#addStopoutListener}
      */
     it('should add stopout listener', async () => {
-      const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'addStopoutListener');
-      tradingClient.addStopoutListener(listener, 'accountId', 'ABCD', 1);
+      const callStub = sinon.stub(tradingClient._stopoutListenerManager, 'addStopoutListener').returns('listenerId');
+      const listenerId = tradingClient.addStopoutListener(listener, 'accountId', 'ABCD', 1);
+      sinon.assert.match(listenerId, 'listenerId');
       sinon.assert.calledWith(callStub, listener, 'accountId', 'ABCD', 1);
     });
 
@@ -334,8 +335,10 @@ describe('TradingClient', () => {
      * @test {TradingClient#addStrategyLogListener}
      */
     it('should add strategy listener', async () => {
-      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addStrategyLogListener');
-      tradingClient.addStrategyLogListener(listener, 'ABCD');
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addStrategyLogListener')
+        .returns('listenerId');
+      const listenerId = tradingClient.addStrategyLogListener(listener, 'ABCD');
+      sinon.assert.match(listenerId, 'listenerId');
       sinon.assert.calledWith(callStub, listener, 'ABCD');
     });
 
@@ -352,8 +355,10 @@ describe('TradingClient', () => {
      * @test {TradingClient#addSubscriberLogListener}
      */
     it('should add subscriber listener', async () => {
-      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addSubscriberLogListener');
-      tradingClient.addSubscriberLogListener(listener, 'accountId');
+      const callStub = sinon.stub(tradingClient._userLogListenerManager, 'addSubscriberLogListener')
+        .returns('listenerId');
+      const listenerId = tradingClient.addSubscriberLogListener(listener, 'accountId');
+      sinon.assert.match(listenerId, 'listenerId');
       sinon.assert.calledWith(callStub, listener, 'accountId');
     });
 

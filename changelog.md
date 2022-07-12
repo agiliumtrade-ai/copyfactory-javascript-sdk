@@ -1,3 +1,6 @@
+5.10.1
+  - fixed add stream listener methods
+
 5.10.0
   - make it possible to expire pending order signals
 

@@ -255,7 +255,7 @@ export default class TradingClient extends MetaApiClient {
    * @return {String} listener id
    */
   addStrategyLogListener(listener, strategyId, startTime) {
-    this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime);
+    return this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime);
   }
 
   /**
@@ -274,7 +274,7 @@ export default class TradingClient extends MetaApiClient {
    * @return {String} listener id
    */
   addSubscriberLogListener(listener, subscriberId, startTime) {
-    this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime);
+    return this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime);
   }
 
   /**

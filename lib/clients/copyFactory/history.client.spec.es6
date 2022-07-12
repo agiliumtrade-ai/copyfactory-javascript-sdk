@@ -4,6 +4,7 @@ import HttpClient from '../httpClient';
 import sinon from 'sinon';
 import HistoryClient from './history.client';
 import DomainClient from '../domain.client';
+import TransactionListener from './streaming//transactionListener';
 
 /**
  * @test {HistoryClient}
@@ -179,6 +180,65 @@ describe('HistoryClient', () => {
         'access token. Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
       );
     }
+  });
+
+  /**
+   * @test {HistoryClient#addStrategyTransactionListener}
+   * @test {HistoryClient#removeStopoutListener}
+   */
+  describe('transactionListener', () => {
+
+    let listener;
+
+    beforeEach(() => {
+
+      class Listener extends TransactionListener {
+        async onStopout(strategyStopoutEvent) {}
+      }
+
+      listener = new Listener();
+    });
+
+    /**
+     * @test {HistoryClient#addStrategyTransactionListener}
+     */
+    it('should add strategy listener', async () => {
+      const callStub = sinon.stub(copyFactoryClient._transactionListenerManager, 'addStrategyTransactionListener')
+        .returns('listenerId');
+      const listenerId = copyFactoryClient.addStrategyTransactionListener(listener, 'ABCD');
+      sinon.assert.match(listenerId, 'listenerId');
+      sinon.assert.calledWith(callStub, listener, 'ABCD');
+    });
+
+    /**
+     * @test {HistoryClient#removeStrategyTransactionListener}
+     */
+    it('should remove strategy listener', async () => {
+      const callStub = sinon.stub(copyFactoryClient._transactionListenerManager, 'removeStrategyTransactionListener');
+      copyFactoryClient.removeStrategyTransactionListener('id');
+      sinon.assert.calledWith(callStub, 'id');
+    });
+
+    /**
+     * @test {HistoryClient#addSubscriberTransactionListener}
+     */
+    it('should add subscriber listener', async () => {
+      const callStub = sinon.stub(copyFactoryClient._transactionListenerManager, 'addSubscriberTransactionListener')
+        .returns('listenerId');
+      const listenerId = copyFactoryClient.addSubscriberTransactionListener(listener, 'accountId');
+      sinon.assert.match(listenerId, 'listenerId');
+      sinon.assert.calledWith(callStub, listener, 'accountId');
+    });
+
+    /**
+     * @test {HistoryClient#removeSubscriberTransactionListener}
+     */
+    it('should remove subscriber listener', async () => {
+      const callStub = sinon.stub(copyFactoryClient._transactionListenerManager, 'removeSubscriberTransactionListener');
+      copyFactoryClient.removeSubscriberTransactionListener('id');
+      sinon.assert.calledWith(callStub, 'id');
+    });
+
   });
 
 });
