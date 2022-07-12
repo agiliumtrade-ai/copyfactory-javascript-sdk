@@ -181,16 +181,16 @@ export default class HistoryClient extends MetaApiClient {
    * Adds a strategy transaction listener and creates a job to make requests
    * @param {TransactionListener} listener transaction listener
    * @param {String} strategyId strategy id
-   * @param {Date} [startTime] log search start time
+   * @param {Date} [startTime] transaction search start time
    * @return {String} listener id
    */
   addStrategyTransactionListener(listener, strategyId, startTime) {
-    this._transactionListenerManager.addStrategyTransactionListener(listener, strategyId, startTime);
+    return this._transactionListenerManager.addStrategyTransactionListener(listener, strategyId, startTime);
   }
 
   /**
-   * Removes strategy log listener and cancels the event stream
-   * @param {String} listenerId strategy log listener id
+   * Removes strategy transaction listener and cancels the event stream
+   * @param {String} listenerId strategy transaction listener id
    */
   removeStrategyTransactionListener(listenerId) {
     this._transactionListenerManager.removeStrategyTransactionListener(listenerId);
@@ -200,16 +200,16 @@ export default class HistoryClient extends MetaApiClient {
    * Adds a subscriber transaction listener and creates a job to make requests
    * @param {TransactionListener} listener transaction listener
    * @param {String} subscriberId subscriber id
-   * @param {Date} [startTime] log search start time
+   * @param {Date} [startTime] transaction search start time
    * @return {String} listener id
    */
   addSubscriberTransactionListener(listener, subscriberId, startTime) {
-    this._transactionListenerManager.addSubscriberTransactionListener(listener, subscriberId, startTime);
+    return this._transactionListenerManager.addSubscriberTransactionListener(listener, subscriberId, startTime);
   }
 
   /**
-   * Removes subscriber log listener and cancels the event stream
-   * @param {String} listenerId subscriber log listener id
+   * Removes subscriber transaction listener and cancels the event stream
+   * @param {String} listenerId subscriber transaction listener id
    */
   removeSubscriberTransactionListener(listenerId) {
     this._transactionListenerManager.removeSubscriberTransactionListener(listenerId);
