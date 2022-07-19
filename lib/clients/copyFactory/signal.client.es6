@@ -37,7 +37,7 @@ export default class SignalClient {
    * @property {Number} [magic] expert advisor id
    * @property {Number} [stopLoss] stop loss price
    * @property {Number} [takeProfit] take profit price
-   * @property {Number} [openPrice] pending order open price
+   * @property {Number} [openPrice] pending or market order open price
    */
 
   /**

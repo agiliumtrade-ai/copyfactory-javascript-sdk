@@ -96,7 +96,7 @@ export declare type CopyFactoryExternalSignalUpdate = {
   takeProfit?: number,
 
   /**
-   * pending order open price
+   * pending or market order open price
    */
   openPrice?: number
 }
