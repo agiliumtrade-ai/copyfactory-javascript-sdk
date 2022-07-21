@@ -1,3 +1,6 @@
+5.11.1
+  - renamed expirePendingOrders -> expirePendingOrderSignals
+
 5.11.0
   - made it possible to specify open price for market external signals
 

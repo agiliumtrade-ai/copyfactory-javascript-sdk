@@ -742,10 +742,10 @@ export declare type CopyFactoryStrategyTimeSettings = {
   openingIntervalInMinutes?: number,
 
   /**
-   * If set to true, the openingIntervalInMinutes setting will be applied to pending orders as well. By default
+   * If set to true, the openingIntervalInMinutes setting will be applied to pending order signals as well. By default
    * pending order signals do not expire
    */
-  expirePendingOrders?: boolean
+  expirePendingOrderSignals?: boolean
 }
 
 /**

@@ -309,8 +309,8 @@ export default class ConfigurationClient extends MetaApiClient {
    * @property {number} [openingIntervalInMinutes] time interval to copy new positions. Default is to let 1
    * minute for the position to get copied. If position were not copied during this time, the copying will not be
    * retried anymore.
-   * @property {boolean} [expirePendingOrders] If set to true, the openingIntervalInMinutes setting will be applied to
-   * pending orders as well. By default pending order signals do not expire
+   * @property {boolean} [expirePendingOrderSignals] If set to true, the openingIntervalInMinutes setting will be
+   * applied to pending order signals as well. By default pending order signals do not expire
    */
 
   /**
