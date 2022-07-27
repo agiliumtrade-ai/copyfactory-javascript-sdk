@@ -1,3 +1,6 @@
+5.11.2
+  - fixed captureStackTrace error on Safari
+
 5.11.1
   - renamed expirePendingOrders -> expirePendingOrderSignals
 
