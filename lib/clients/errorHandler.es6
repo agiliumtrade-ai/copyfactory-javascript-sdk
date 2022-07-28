@@ -23,7 +23,9 @@ export class ApiError extends Error {
      * @type {number}
      */
     this.status = status;
-    Error.captureStackTrace(this, clazz);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, clazz);
+    }
   }
 
   /**
