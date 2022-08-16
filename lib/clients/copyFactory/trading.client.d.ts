@@ -2,7 +2,7 @@ import DomainClient from "../domain.client";
 import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
 import SignalClient from "./signal.client";
-import StopoutListener from "./stopoutListener";
+import StopoutListener from './streaming/stopoutListener';
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
