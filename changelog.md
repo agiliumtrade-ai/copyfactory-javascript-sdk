@@ -1,3 +1,6 @@
+5.11.3
+  - added missing types
+
 5.11.2
   - fixed captureStackTrace error on Safari
 

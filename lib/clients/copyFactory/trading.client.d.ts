@@ -2,7 +2,7 @@ import DomainClient from "../domain.client";
 import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
 import SignalClient from "./signal.client";
-import StopoutListener from "./stopoutListener";
+import StopoutListener from "./streaming/stopoutListener";
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -92,6 +92,38 @@ export default class TradingClient extends MetaApiClient {
    * @param {String} listenerId stopout listener id
    */
   removeStopoutListener(listenerId: string): void;
+
+  /**
+   * Adds a strategy log listener and creates a job to make requests
+   * @param {UserLogListener} listener user log listener
+   * @param {String} strategyId strategy id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+   addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date): string;
+
+  /**
+   * Removes strategy log listener and cancels the event stream
+   * @param {String} listenerId strategy log listener id
+   */
+  removeStrategyLogListener(listenerId: string) {
+    this._userLogListenerManager.removeStrategyLogListener(listenerId);
+  }
+
+  /**
+   * Adds a subscriber log listener and creates a job to make requests
+   * @param {UserLogListener} listener user log listener
+   * @param {String} subscriberId subscriber id
+   * @param {Date} [startTime] log search start time
+   * @return {String} listener id
+   */
+  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date): string;
+
+  /**
+   * Removes subscriber log listener and cancels the event stream
+   * @param {String} listenerId subscriber log listener id
+   */
+  removeSubscriberLogListener(listenerId: string): void;
 
 }
 
