@@ -252,10 +252,11 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addStrategyLogListener(listener, strategyId, startTime) {
-    return this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime);
+  addStrategyLogListener(listener, strategyId, startTime, limit) {
+    return this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime, limit);
   }
 
   /**
@@ -271,10 +272,11 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addSubscriberLogListener(listener, subscriberId, startTime) {
-    return this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime);
+  addSubscriberLogListener(listener, subscriberId, startTime, limit) {
+    return this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime, limit);
   }
 
   /**

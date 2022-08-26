@@ -30,18 +30,20 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @returns {String} strategy log listener id
    */
-  addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date): string;
+  addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, limit?: number): string;
 
   /**
    * Adds a subscriber log listener
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @returns {String} subscriber log listener id
    */
-  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date): string;
+  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, limit?: number): string;
 
   /**
    * Removes strategy log listener by id

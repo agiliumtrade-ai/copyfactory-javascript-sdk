@@ -43,12 +43,13 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @returns {String} strategy log listener id
    */
-  addStrategyLogListener(listener, strategyId, startTime) {
+  addStrategyLogListener(listener, strategyId, startTime, limit) {
     const listenerId = randomstring.generate(10);
     this._strategyLogListeners[listenerId] = listener;
-    this._startStrategyLogStreamJob(listenerId, listener, strategyId, startTime);
+    this._startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, limit);
     return listenerId;
   }
 
@@ -57,12 +58,13 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @returns {String} subscriber log listener id
    */
-  addSubscriberLogListener(listener, subscriberId, startTime) {
+  addSubscriberLogListener(listener, subscriberId, startTime, limit) {
     const listenerId = randomstring.generate(10);
     this._subscriberLogListeners[listenerId] = listener;
-    this._startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime);
+    this._startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime, limit);
     return listenerId;
   }
 
@@ -82,7 +84,7 @@ export default class UserLogListenerManager extends MetaApiClient {
     delete this._subscriberLogListeners[listenerId];
   }
 
-  async _startStrategyLogStreamJob(listenerId, listener, strategyId, startTime) {
+  async _startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, limit) {
     let throttleTime = this._errorThrottleTime;
 
     while(this._strategyLogListeners[listenerId]) {
@@ -91,7 +93,7 @@ export default class UserLogListenerManager extends MetaApiClient {
         method: 'GET',
         qs: {
           startTime,
-          limit: 1000
+          limit
         },
         headers: {
           'auth-token': this._token
@@ -100,6 +102,8 @@ export default class UserLogListenerManager extends MetaApiClient {
       };
       try {
         const packets = await this._domainClient.requestCopyFactory(opts, true);
+        // stop job if user has unsubscribed in time of new packets has been received
+        if (!this._subscriberLogListeners[listenerId]) { return; }
         await listener.onUserLog(packets);
         throttleTime = this._errorThrottleTime;
         if(this._strategyLogListeners[listenerId] && packets.length) {
@@ -117,7 +121,7 @@ export default class UserLogListenerManager extends MetaApiClient {
     }
   }
 
-  async _startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime) {
+  async _startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime, limit) {
     let throttleTime = this._errorThrottleTime;
 
     while(this._subscriberLogListeners[listenerId]) {
@@ -126,7 +130,7 @@ export default class UserLogListenerManager extends MetaApiClient {
         method: 'GET',
         qs: {
           startTime,
-          limit: 1000
+          limit
         },
         headers: {
           'auth-token': this._token
@@ -135,6 +139,8 @@ export default class UserLogListenerManager extends MetaApiClient {
       };
       try {
         const packets = await this._domainClient.requestCopyFactory(opts, true);
+        // stop job if user has unsubscribed in time of new packets has been received
+        if (!this._subscriberLogListeners[listenerId]) { return; }
         await listener.onUserLog(packets);
         throttleTime = this._errorThrottleTime;
         if(this._subscriberLogListeners[listenerId] && packets.length) {
