@@ -1,3 +1,7 @@
+5.11.4
+  - added limit param to subscriber & strategy log streaming
+  - fix subscriber & strategy extra log streaming after unsubscription
+
 5.11.3
   - fix typings
 

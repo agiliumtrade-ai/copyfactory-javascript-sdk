@@ -98,9 +98,10 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-   addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date): string;
+   addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, limit?: number): string;
 
   /**
    * Removes strategy log listener and cancels the event stream
@@ -115,9 +116,10 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date): string;
+  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, limit?: number): string;
 
   /**
    * Removes subscriber log listener and cancels the event stream
