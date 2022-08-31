@@ -43,13 +43,15 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @returns {String} strategy log listener id
    */
-  addStrategyLogListener(listener, strategyId, startTime, limit) {
+  addStrategyLogListener(listener, strategyId, startTime, positionId, level, limit) {
     const listenerId = randomstring.generate(10);
     this._strategyLogListeners[listenerId] = listener;
-    this._startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, limit);
+    this._startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, positionId, level, limit);
     return listenerId;
   }
 
@@ -58,13 +60,25 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {string} [strategyId] strategy id filter
+   * @param {string} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @returns {String} subscriber log listener id
    */
-  addSubscriberLogListener(listener, subscriberId, startTime, limit) {
+  addSubscriberLogListener(listener, subscriberId, startTime, strategyId, positionId, level, limit) {
     const listenerId = randomstring.generate(10);
     this._subscriberLogListeners[listenerId] = listener;
-    this._startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime, limit);
+    this._startSubscriberLogStreamJob(
+      listenerId, 
+      listener, 
+      subscriberId, 
+      startTime, 
+      strategyId, 
+      positionId, 
+      level, 
+      limit
+    );
     return listenerId;
   }
 
@@ -84,7 +98,7 @@ export default class UserLogListenerManager extends MetaApiClient {
     delete this._subscriberLogListeners[listenerId];
   }
 
-  async _startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, limit) {
+  async _startStrategyLogStreamJob(listenerId, listener, strategyId, startTime, positionId, level, limit) {
     let throttleTime = this._errorThrottleTime;
 
     while(this._strategyLogListeners[listenerId]) {
@@ -93,6 +107,8 @@ export default class UserLogListenerManager extends MetaApiClient {
         method: 'GET',
         qs: {
           startTime,
+          positionId,
+          level,
           limit
         },
         headers: {
@@ -121,7 +137,16 @@ export default class UserLogListenerManager extends MetaApiClient {
     }
   }
 
-  async _startSubscriberLogStreamJob(listenerId, listener, subscriberId, startTime, limit) {
+  async _startSubscriberLogStreamJob(
+    listenerId, 
+    listener, 
+    subscriberId, 
+    startTime, 
+    strategyId, 
+    positionId, 
+    level, 
+    limit
+  ) {
     let throttleTime = this._errorThrottleTime;
 
     while(this._subscriberLogListeners[listenerId]) {
@@ -130,6 +155,9 @@ export default class UserLogListenerManager extends MetaApiClient {
         method: 'GET',
         qs: {
           startTime,
+          strategyId,
+          positionId,
+          level,
           limit
         },
         headers: {

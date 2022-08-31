@@ -30,20 +30,25 @@ export default class UserLogListenerManager extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @returns {String} strategy log listener id
    */
-  addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, limit?: number): string;
+  addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', limit?: number): string;
 
   /**
    * Adds a subscriber log listener
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {string} [strategyId] strategy id filter
+   * @param {string} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @returns {String} subscriber log listener id
    */
-  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, limit?: number): string;
+  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, strategyId?: string, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', limit?: number): string;
 
   /**
    * Removes strategy log listener by id

@@ -160,14 +160,17 @@ export default class TradingClient extends MetaApiClient {
   /**
    * Returns copy trading user log for an account and time range. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getUserLog/
-   * @param {string} subscriberId subscriber id
+   * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] time to start loading data from
    * @param {Date} [endTime] time to stop loading data at
-   * @param {number} [offset] pagination offset. Default is 0
-   * @param {number} [limit] pagination limit. Default is 1000
+   * @param {String} [strategyId] strategy id filter
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
+   * @param {Number} [offset] pagination offset. Default is 0
+   * @param {Number} [limit] pagination limit. Default is 1000
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
-  async getUserLog(subscriberId, startTime, endTime, offset = 0, limit = 1000) {
+  async getUserLog(subscriberId, startTime, endTime, strategyId, positionId, level, offset = 0, limit = 1000) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getUserLog');
     }
@@ -177,6 +180,9 @@ export default class TradingClient extends MetaApiClient {
       qs: {
         startTime,
         endTime,
+        strategyId, 
+        positionId, 
+        level,
         offset,
         limit
       },
@@ -195,14 +201,16 @@ export default class TradingClient extends MetaApiClient {
   /**
    * Returns event log for CopyFactory strategy, sorted in reverse chronological order. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getStrategyLog/ 
-   * @param {string} strategyId strategy id to retrieve log for
+   * @param {String} strategyId strategy id to retrieve log for
    * @param {Date} [startTime] time to start loading data from
    * @param {Date} [endTime] time to stop loading data at
-   * @param {number} [offset] pagination offset. Default is 0
-   * @param {number} [limit] pagination limit. Default is 1000
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
+   * @param {Number} [offset] pagination offset. Default is 0
+   * @param {Number} [limit] pagination limit. Default is 1000
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
-  async getStrategyLog(strategyId, startTime, endTime, offset = 0, limit = 1000) {
+  async getStrategyLog(strategyId, startTime, endTime, positionId, level, offset = 0, limit = 1000) {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getStrategyLog');
     }
@@ -212,6 +220,8 @@ export default class TradingClient extends MetaApiClient {
       qs: {
         startTime,
         endTime,
+        positionId,
+        level,
         offset,
         limit
       },
@@ -252,11 +262,20 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addStrategyLogListener(listener, strategyId, startTime, limit) {
-    return this._userLogListenerManager.addStrategyLogListener(listener, strategyId, startTime, limit);
+  addStrategyLogListener(listener, strategyId, startTime, positionId, level, limit) {
+    return this._userLogListenerManager.addStrategyLogListener(
+      listener, 
+      strategyId, 
+      startTime, 
+      positionId, 
+      level, 
+      limit
+    );
   }
 
   /**
@@ -272,11 +291,22 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {string} [strategyId] strategy id filter
+   * @param {string} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addSubscriberLogListener(listener, subscriberId, startTime, limit) {
-    return this._userLogListenerManager.addSubscriberLogListener(listener, subscriberId, startTime, limit);
+  addSubscriberLogListener(listener, subscriberId, startTime, strategyId, positionId, level, limit) {
+    return this._userLogListenerManager.addSubscriberLogListener(
+      listener, 
+      subscriberId, 
+      startTime, 
+      strategyId, 
+      positionId, 
+      level, 
+      limit
+    );
   }
 
   /**
