@@ -56,26 +56,31 @@ export default class TradingClient extends MetaApiClient {
   /**
    * Returns copy trading user log for an account and time range. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getUserLog/
-   * @param {string} subscriberId subscriber id
+   * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] time to start loading data from
    * @param {Date} [endTime] time to stop loading data at
-   * @param {number} [offset] pagination offset. Default is 0
-   * @param {number} [limit] pagination limit. Default is 1000
+   * @param {String} [strategyId] strategy id filter
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
+   * @param {Number} [offset] pagination offset. Default is 0
+   * @param {Number} [limit] pagination limit. Default is 1000
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
-  getUserLog(subscriberId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
+  getUserLog(subscriberId: string, startTime?: Date, endTime?: Date, strategyId?: string, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
 
   /**
    * Returns event log for CopyFactory strategy, sorted in reverse chronological order. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/getStrategyLog/ 
-   * @param {string} strategyId strategy id to retrieve log for
+   * @param {String} strategyId strategy id to retrieve log for
    * @param {Date} [startTime] time to start loading data from
    * @param {Date} [endTime] time to stop loading data at
-   * @param {number} [offset] pagination offset. Default is 0
-   * @param {number} [limit] pagination limit. Default is 1000
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
+   * @param {Number} [offset] pagination offset. Default is 0
+   * @param {Number} [limit] pagination limit. Default is 1000
    * @return {Promise<Array<CopyFactoryUserLogMessage>>} promise which resolves with log records found
    */
-  getStrategyLog(strategyId: string, startTime?: Date, endTime?: Date, offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
+  getStrategyLog(strategyId: string, startTime?: Date, endTime?: Date, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', offset?: number, limit?: number): Promise<Array<CopyFactoryUserLogMessage>>;
 
   /**
    * Adds a stopout listener and creates a job to make requests
@@ -98,10 +103,12 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} strategyId strategy id
    * @param {Date} [startTime] log search start time
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-   addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, limit?: number): string;
+   addStrategyLogListener(listener: UserLogListener, strategyId: string, startTime?: Date, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', limit?: number): string;
 
   /**
    * Removes strategy log listener and cancels the event stream
@@ -116,10 +123,13 @@ export default class TradingClient extends MetaApiClient {
    * @param {UserLogListener} listener user log listener
    * @param {String} subscriberId subscriber id
    * @param {Date} [startTime] log search start time
+   * @param {String} [strategyId] strategy id filter
+   * @param {String} [positionId] position id filter
+   * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} [level] minimum severity level
    * @param {Number} [limit] log pagination limit
    * @return {String} listener id
    */
-  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, limit?: number): string;
+  addSubscriberLogListener(listener: UserLogListener, subscriberId: string, startTime?: Date, strategyId?: string, positionId?: string, level?: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR', limit?: number): string;
 
   /**
    * Removes subscriber log listener and cancels the event stream

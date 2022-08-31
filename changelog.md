@@ -1,3 +1,7 @@
+6.0.0
+  - breaking change: added strategyId, positionId, level params to subscriber logs search & streaming
+  - breaking change: added positionId, level params to strategy logs search & streaming
+
 5.11.4
   - added limit param to subscriber & strategy log streaming
   - fix subscriber & strategy extra log streaming after unsubscription
