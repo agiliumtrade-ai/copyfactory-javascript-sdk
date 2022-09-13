@@ -119,7 +119,7 @@ export default class UserLogListenerManager extends MetaApiClient {
       try {
         const packets = await this._domainClient.requestCopyFactory(opts, true);
         // stop job if user has unsubscribed in time of new packets has been received
-        if (!this._subscriberLogListeners[listenerId]) { return; }
+        if (!this._strategyLogListeners[listenerId]) { return; }
         await listener.onUserLog(packets);
         throttleTime = this._errorThrottleTime;
         if(this._strategyLogListeners[listenerId] && packets.length) {
