@@ -1,3 +1,6 @@
+6.0.1
+  - fixed strategy log stream job
+
 6.0.0
   - breaking change: added strategyId, positionId, level params to subscriber logs search & streaming
   - breaking change: added positionId, level params to strategy logs search & streaming
