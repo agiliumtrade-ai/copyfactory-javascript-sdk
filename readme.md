@@ -21,7 +21,7 @@ We decided to share our product as it allows developers to start with a
 powerful solution in almost no time, saving on development and
 infrastructure maintenance costs.
 ## Frequently asked questions (FAQ)
-FAQ is located here: [http://metaapi.cloud/docs/copyfactory/faq](http://metaapi.cloud/docs/copyfactory/faq)
+FAQ is located here: [https://metaapi.cloud/docs/copyfactory/faq/](https://metaapi.cloud/docs/copyfactory/faq/)
 
 ## CopyFactory copytradging API features
 

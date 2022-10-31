@@ -1,3 +1,7 @@
+6.0.2
+  - fixed typings
+  - fixed FAQ URL
+
 6.0.1
   - fixed strategy log stream job
 
