@@ -3,6 +3,7 @@ import MetaApiClient from "../metaApi.client";
 import { CopyFactoryStrategyIdAndName } from "./history.client";
 import SignalClient from "./signal.client";
 import StopoutListener from "./streaming/stopoutListener";
+import UserLogListener from "./streaming/userLogListener";
 
 /**
  * metaapi.cloud CopyFactory trading API (trade copying trading API) client (see
@@ -114,9 +115,7 @@ export default class TradingClient extends MetaApiClient {
    * Removes strategy log listener and cancels the event stream
    * @param {String} listenerId strategy log listener id
    */
-  removeStrategyLogListener(listenerId: string) {
-    this._userLogListenerManager.removeStrategyLogListener(listenerId);
-  }
+  removeStrategyLogListener(listenerId: string): void;
 
   /**
    * Adds a subscriber log listener and creates a job to make requests
