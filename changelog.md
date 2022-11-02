@@ -1,3 +1,6 @@
+6.0.4
+  - fix typings in error events
+
 6.0.3
   - add logs on retrieve stream errors
 
