@@ -11,4 +11,10 @@ export default class UserLogListener {
    */
   onUserLog(logEvent: CopyFactoryUserLogMessage[]): Promise<void>;
 
+  /**
+   * Calls a predefined function with the received error
+   * @param {Error} error error received during retrieve attempt
+   */
+  async onError(error: Error): Promise<void>;
+
 }

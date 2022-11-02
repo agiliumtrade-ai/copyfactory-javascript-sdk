@@ -11,4 +11,10 @@ export default class StopoutListener {
    */
   onStopout(strategyStopoutEvent: CopyFactoryStrategyStopout[]): Promise<void>;
 
+  /**
+   * Calls a predefined function with the received error
+   * @param {Error} error error received during retrieve attempt
+   */
+  async onError(error: Error): Promise<void>;
+
 }

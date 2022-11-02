@@ -13,4 +13,10 @@ export default class UserLogListener {
     throw Error('Abstract method onUserLog has no implementation');
   }
 
+  /**
+   * Calls a predefined function with the received error
+   * @param {Error} error error received during retrieve attempt
+   */
+  async onError(error) {}
+
 }

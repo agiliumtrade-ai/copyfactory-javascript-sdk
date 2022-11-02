@@ -2,6 +2,7 @@
 
 import MetaApiClient from '../../metaApi.client';
 import randomstring from 'randomstring';
+import LoggerManager from '../../../logger';
 
 /**
  * Stopout event listener manager
@@ -17,6 +18,7 @@ export default class StopoutListenerManager extends MetaApiClient {
     this._domainClient = domainClient;
     this._stopoutListeners = {};
     this._errorThrottleTime = 1000;
+    this._logger = LoggerManager.getLogger('StopoutListenerManager');
   }
 
   /**
@@ -75,7 +77,10 @@ export default class StopoutListenerManager extends MetaApiClient {
         if(this._stopoutListeners[listenerId] && packets.length) {
           sequenceNumber = packets.slice(-1)[0].sequenceNumber;
         }
-      } catch (error) {
+      } catch (err) {
+        await listener.onError(err);
+        this._logger.error(`Failed to retrieve stopouts stream for strategy ${strategyId}, ` +
+            `listener ${listenerId}, retrying in ${Math.floor(throttleTime/1000)} seconds`, err);
         await new Promise(res => setTimeout(res, throttleTime));
         throttleTime = Math.min(throttleTime * 2, 30000);
       }

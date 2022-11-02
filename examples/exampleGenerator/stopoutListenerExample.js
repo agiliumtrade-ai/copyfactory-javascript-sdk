@@ -14,6 +14,10 @@ class Listener extends StopoutListener {
     console.log('Strategy stopout event', strategyStopoutEvent);
   }
 
+  async onError(error) {
+    console.log('Error event', error);
+  }
+
 }
 
 async function stopoutExample() {
