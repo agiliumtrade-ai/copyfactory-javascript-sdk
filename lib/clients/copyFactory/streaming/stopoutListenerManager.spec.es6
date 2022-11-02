@@ -17,7 +17,7 @@ describe('StopoutListenerManager', () => {
   let sandbox;
   let clock;
   let stopoutListenerManager;
-  let getStopoutStub, listener, callStub;
+  let getStopoutStub, listener, callStub, errorStub;
 
   let expected = [{
     subscriberId: 'accountId',
@@ -116,11 +116,16 @@ describe('StopoutListenerManager', () => {
       });
 
     callStub = sinon.stub();
+    errorStub = sinon.stub();
 
     class Listener extends StopoutListener {
 
       async onStopout(strategyStopoutEvent) {
         callStub(strategyStopoutEvent);
+      }
+
+      async onError(error) {
+        errorStub(error);
       }
 
     }
@@ -160,6 +165,8 @@ describe('StopoutListenerManager', () => {
    * @test {StopoutListenerManager#addStopoutListener}
    */
   it('should wait if error returned', async () => {
+    const error = new Error('test');
+    const error2 = new Error('test');
     getStopoutStub
       .callsFake(async (opts) => {
         await new Promise(res => setTimeout(res, 500));
@@ -182,15 +189,19 @@ describe('StopoutListenerManager', () => {
         await new Promise(res => setTimeout(res, 500));
         return expected;
       })
-      .onFirstCall().rejects(new Error('test'))
-      .onSecondCall().rejects(new Error('test'));
+      .onFirstCall().rejects(error)
+      .onSecondCall().rejects(error2);
     const id = stopoutListenerManager.addStopoutListener(listener, 'accountId', 'ABCD', 1);
     await clock.tickAsync(600);
     sinon.assert.callCount(getStopoutStub, 1);
     sinon.assert.notCalled(callStub);
+    sinon.assert.calledOnce(errorStub);
+    sinon.assert.calledWith(errorStub, error);
     await clock.tickAsync(600);
     sinon.assert.callCount(getStopoutStub, 2);
     sinon.assert.notCalled(callStub);
+    sinon.assert.calledTwice(errorStub);
+    sinon.assert.calledWith(errorStub, error2);
     await clock.tickAsync(2000);
     sinon.assert.callCount(getStopoutStub, 3);
     sinon.assert.notCalled(callStub);

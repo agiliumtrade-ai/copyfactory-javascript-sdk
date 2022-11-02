@@ -18,7 +18,7 @@ describe('TransactionListenerManager', () => {
   let sandbox;
   let clock;
   let transactionListenerManager;
-  let getTransactionsStub, listener, callStub;
+  let getTransactionsStub, listener, callStub, errorStub;
 
   let expected = [{
     id: '64664661:close',
@@ -52,12 +52,16 @@ describe('TransactionListenerManager', () => {
     transactionListenerManager = new TransactionListenerManager(domainClient);
     getTransactionsStub = sandbox.stub(domainClient, 'requestCopyFactory');
     callStub = sinon.stub();
+    errorStub = sinon.stub();
 
     class Listener extends TransactionListener {
 
       async onTransaction(transactionEvent) {
-        console.log('EVENT', transactionEvent);
         callStub(transactionEvent);
+      }
+
+      async onError(error) {
+        errorStub(error);
       }
 
     }
@@ -139,6 +143,8 @@ describe('TransactionListenerManager', () => {
      * @test {TransactionListenerManager#addStrategyTransactionListener}
      */
     it('should wait if error returned', async () => {
+      const error = new Error('test');
+      const error2 = new Error('test');
       getTransactionsStub
         .callsFake(async (opts) => {
           await new Promise(res => setTimeout(res, 500));
@@ -159,16 +165,20 @@ describe('TransactionListenerManager', () => {
           await new Promise(res => setTimeout(res, 500));
           return expected;
         })
-        .onFirstCall().rejects(new Error('test'))
-        .onSecondCall().rejects(new Error('test'));
+        .onFirstCall().rejects(error)
+        .onSecondCall().rejects(error2);
       const id = transactionListenerManager.addStrategyTransactionListener(listener, 'ABCD',
         new Date('2020-08-08T00:00:00.000Z'));
       await clock.tickAsync(600);
       sinon.assert.callCount(getTransactionsStub, 1);
       sinon.assert.notCalled(callStub);
+      sinon.assert.calledOnce(errorStub);
+      sinon.assert.calledWith(errorStub, error);
       await clock.tickAsync(600);
       sinon.assert.callCount(getTransactionsStub, 2);
       sinon.assert.notCalled(callStub);
+      sinon.assert.calledTwice(errorStub);
+      sinon.assert.calledWith(errorStub, error2);
       await clock.tickAsync(2000);
       sinon.assert.callCount(getTransactionsStub, 3);
       sinon.assert.notCalled(callStub);
@@ -181,6 +191,7 @@ describe('TransactionListenerManager', () => {
      * @test {TransactionListenerManager#addStrategyTransactionListener}
      */
     it('should remove listener on not found error', async () => {
+      const error = new NotFoundError('test');
       getTransactionsStub
         .withArgs({
           url: '/users/current/strategies/ABCD/transactions/stream',
@@ -195,7 +206,7 @@ describe('TransactionListenerManager', () => {
           json: true
         }).callsFake(async (opts) => {
           await new Promise(res => setTimeout(res, 1000));
-          throw new NotFoundError('test');
+          throw error;
         });
       transactionListenerManager.addStrategyTransactionListener(listener, 'ABCD',
         new Date('2020-08-08T00:00:00.000Z'));
@@ -209,6 +220,8 @@ describe('TransactionListenerManager', () => {
       sinon.assert.callCount(callStub, 1);
       await clock.tickAsync(1100);
       sinon.assert.callCount(callStub, 1);
+      sinon.assert.calledOnce(errorStub);
+      sinon.assert.calledWith(errorStub, error);
     });
     
   });
@@ -282,6 +295,8 @@ describe('TransactionListenerManager', () => {
      * @test {TransactionListenerManager#addSubscriberTransactionListener}
      */
     it('should wait if error returned', async () => {
+      const error = new Error('test');
+      const error2 = new Error('test');
       getTransactionsStub
         .callsFake(async (opts) => {
           await new Promise(res => setTimeout(res, 500));
@@ -302,16 +317,20 @@ describe('TransactionListenerManager', () => {
           await new Promise(res => setTimeout(res, 500));
           return expected;
         })
-        .onFirstCall().rejects(new Error('test'))
-        .onSecondCall().rejects(new Error('test'));
+        .onFirstCall().rejects(error)
+        .onSecondCall().rejects(error2);
       const id = transactionListenerManager.addSubscriberTransactionListener(listener, 'accountId',
         new Date('2020-08-08T00:00:00.000Z'));
       await clock.tickAsync(600);
       sinon.assert.callCount(getTransactionsStub, 1);
       sinon.assert.notCalled(callStub);
+      sinon.assert.calledOnce(errorStub);
+      sinon.assert.calledWith(errorStub, error);
       await clock.tickAsync(600);
       sinon.assert.callCount(getTransactionsStub, 2);
       sinon.assert.notCalled(callStub);
+      sinon.assert.calledTwice(errorStub);
+      sinon.assert.calledWith(errorStub, error2);
       await clock.tickAsync(2000);
       sinon.assert.callCount(getTransactionsStub, 3);
       sinon.assert.notCalled(callStub);
@@ -324,6 +343,7 @@ describe('TransactionListenerManager', () => {
      * @test {TransactionListenerManager#addSubscriberTransactionListener}
      */
     it('should remove listener on not found error', async () => {
+      const error = new NotFoundError('test');
       getTransactionsStub
         .withArgs({
           url: '/users/current/subscribers/accountId/transactions/stream',
@@ -338,7 +358,7 @@ describe('TransactionListenerManager', () => {
           json: true
         }).callsFake(async (opts) => {
           await new Promise(res => setTimeout(res, 1000));
-          throw new NotFoundError('test');
+          throw error;
         });
       transactionListenerManager.addSubscriberTransactionListener(listener, 'accountId',
         new Date('2020-08-08T00:00:00.000Z'));
@@ -352,6 +372,8 @@ describe('TransactionListenerManager', () => {
       sinon.assert.callCount(callStub, 1);
       await clock.tickAsync(1100);
       sinon.assert.callCount(callStub, 1);
+      sinon.assert.calledOnce(errorStub);
+      sinon.assert.calledWith(errorStub, error);
     });
     
   });

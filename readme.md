@@ -251,6 +251,11 @@ class Listener extends StopoutListener {
     console.log('Strategy stopout event', strategyStopoutEvent);
   }
 
+  // specify the function called on error event
+  async onError(error) {
+    console.log('Error event', error);
+  }
+
 }
 
 // add listener
@@ -290,6 +295,11 @@ class Listener extends UserLogListener {
     console.log('Strategy user log event', logEvent);
   }
 
+  // specify the function called on error event
+  async onError(error) {
+    console.log('Error event', error);
+  }
+
 }
 
 // add listener
@@ -312,6 +322,11 @@ class Listener extends UserLogListener {
   // specify the function called on event arrival
   async onUserLog(logEvent) {
     console.log('Subscriber user log event', logEvent);
+  }
+
+  // specify the function called on error event
+  async onError(error) {
+    console.log('Error event', error);
   }
 
 }
@@ -341,6 +356,11 @@ class Listener extends TransactionListener {
     console.log('Strategy transaction event', transactionEvent);
   }
 
+  // specify the function called on error event
+  async onError(error) {
+    console.log('Error event', error);
+  }
+
 }
 
 // add listener
@@ -363,6 +383,11 @@ class Listener extends TransactionListener {
   // specify the function called on event arrival
   async onTransaction(transactionEvent) {
     console.log('Subscriber transaction event', transactionEvent);
+  }
+
+  // specify the function called on error event
+  async onError(error) {
+    console.log('Error event', error);
   }
 
 }

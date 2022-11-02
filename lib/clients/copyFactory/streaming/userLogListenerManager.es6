@@ -126,10 +126,13 @@ export default class UserLogListenerManager extends MetaApiClient {
           startTime = new Date(new Date(packets[0].time).getTime() + 1);
         }
       } catch (err) {
+        await listener.onError(err);
         if (err.name === 'NotFoundError') {
           this._logger.error(`Strategy ${strategyId} not found, removing listener ${listenerId}`);
           delete this._strategyLogListeners[listenerId]; 
         } else {
+          this._logger.error(`Failed to retrieve user log stream for strategy ${strategyId}, ` +
+            `listener ${listenerId}, retrying in ${Math.floor(throttleTime/1000)} seconds`, err);
           await new Promise(res => setTimeout(res, throttleTime));
           throttleTime = Math.min(throttleTime * 2, 30000);
         }
@@ -175,10 +178,13 @@ export default class UserLogListenerManager extends MetaApiClient {
           startTime = new Date(new Date(packets[0].time).getTime() + 1);
         }
       } catch (err) {
+        await listener.onError(err);
         if (err.name === 'NotFoundError') {
           this._logger.error(`Subscriber ${subscriberId} not found, removing listener ${listenerId}`);
           delete this._subscriberLogListeners[listenerId]; 
-        } else { 
+        } else {
+          this._logger.error(`Failed to retrieve user log stream for subscriber ${subscriberId}, ` +
+            `listener ${listenerId}, retrying in ${Math.floor(throttleTime/1000)} seconds`, err);
           await new Promise(res => setTimeout(res, throttleTime));
           throttleTime = Math.min(throttleTime * 2, 30000);
         }

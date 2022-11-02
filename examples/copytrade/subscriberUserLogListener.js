@@ -1,15 +1,18 @@
 let CopyFactory = require('metaapi.cloud-sdk').CopyFactory;
-let StopoutListener = require('metaapi.cloud-sdk').StopoutListener;
+let UserLogListener = require('metaapi.cloud-sdk').UserLogListener;
 
 // your MetaApi API token
 let token = process.env.TOKEN || '<put in your token here>';
 
+// your subscriber id
+let subscriberId = process.env.SUBSCRIBER_ID || '<put in your subscriber id here>';
+
 const copyFactory = new CopyFactory(token);
 
-class Listener extends StopoutListener {
+class Listener extends UserLogListener {
 
-  async onStopout(strategyStopoutEvent) {
-    console.log('Strategy stopout event', strategyStopoutEvent);
+  async onUserLog(logEvent) {
+    console.log('Log event', logEvent);
   }
 
   async onError(error) {
@@ -18,12 +21,12 @@ class Listener extends StopoutListener {
 
 }
 
-async function stopoutExample() {
+async function userLogListenerExample() {
   try {
     const listener = new Listener();
 
     let tradingApi = copyFactory.tradingApi;
-    const listenerId = tradingApi.addStopoutListener(listener);
+    const listenerId = tradingApi.addSubscriberLogListener(listener, subscriberId);
 
     // eslint-disable-next-line no-constant-condition
     while(true) {
@@ -31,11 +34,11 @@ async function stopoutExample() {
     }
 
     // eslint-disable-next-line no-unreachable
-    tradingApi.removeStopoutListener(listenerId);
+    tradingApi.removeSubscriberLogListener(listenerId);
   } catch (err) {
     console.error(err);
   }
   process.exit();
 }
 
-stopoutExample();
+userLogListenerExample();

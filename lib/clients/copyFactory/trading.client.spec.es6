@@ -163,7 +163,7 @@ describe('TradingClient', () => {
     }];
     requestStub.resolves(expected);
     let records = await tradingClient.getUserLog('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
-      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
+      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 'strategyId', 'positionId');
     records.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
       url: '/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/user-log',
@@ -171,8 +171,11 @@ describe('TradingClient', () => {
       qs: {
         startTime: new Date('2020-08-01T00:00:00.000Z'),
         endTime: new Date('2020-08-10T00:00:00.000Z'),
-        offset: 10,
-        limit: 100
+        offset: 0,
+        level: undefined,
+        limit: 1000,
+        strategyId: 'strategyId',
+        positionId: 'positionId'
       },
       headers: {
         'auth-token': token
@@ -212,7 +215,7 @@ describe('TradingClient', () => {
     ];
     requestStub.resolves(expected);
     let records = await tradingClient.getStrategyLog('ABCD',
-      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 10, 100);
+      new Date('2020-08-01T00:00:00.000Z'), new Date('2020-08-10T00:00:00.000Z'), 'positionId', 'DEBUG');
     records.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
       url: '/users/current/strategies/ABCD/user-log',
@@ -220,8 +223,10 @@ describe('TradingClient', () => {
       qs: {
         startTime: new Date('2020-08-01T00:00:00.000Z'),
         endTime: new Date('2020-08-10T00:00:00.000Z'),
-        offset: 10,
-        limit: 100
+        offset: 0,
+        limit: 1000,
+        level: 'DEBUG',
+        positionId: 'positionId'
       },
       headers: {
         'auth-token': token

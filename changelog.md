@@ -1,3 +1,6 @@
+6.0.3
+  - add logs on retrieve stream errors
+
 6.0.2
   - fixed typings
   - fixed FAQ URL
