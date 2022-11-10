@@ -236,6 +236,44 @@ describe('DomainClient', () => {
         }
       });
 
+      /**
+       * @test {DomainClient#requestCopyFactory}
+       */
+      it('should roll over to the first region if all regions failed', async () => {
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.agiliumtrade.ai/users/' + 
+          'current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).throws(new InternalError('test'));
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.us-west.agiliumtrade.agiliumtrade.ai/users/current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).throws(new InternalError('test'));
+
+        try {
+          await domainClient.requestCopyFactory(opts);
+          throw new Error('InternalError expected');
+        } catch (error) {
+          error.name.should.equal('InternalError');
+        }
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.agiliumtrade.ai/users/' + 
+          'current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).resolves(expected);
+        const response = await domainClient.requestCopyFactory(opts);
+        sinon.assert.match(response, expected);
+      });
+
     });
 
   });
