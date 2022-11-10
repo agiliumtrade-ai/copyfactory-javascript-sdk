@@ -1,3 +1,6 @@
+6.0.5
+  - added rolling over to the first region if requests on all regions failed
+
 6.0.4
   - fix typings in error events
 
