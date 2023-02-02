@@ -206,6 +206,9 @@ await signalClient.updateExternalSignal(strategyId, signalId, {
   volume: 0.01
 });
 
+// get external signals
+console.log(await signalClient.getStrategyExternalSignals(strategyId));
+
 // remove signal
 await signalClient.removeExternalSignal(strategyId, signalId, {
   time: new Date()

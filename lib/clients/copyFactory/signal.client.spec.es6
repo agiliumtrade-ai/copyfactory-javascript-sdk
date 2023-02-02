@@ -106,6 +106,30 @@ describe('SignalClient', () => {
       json: true,
     }, host, 'accountId');
   });
+
+  /**
+   * @test {SignalClient#getStrategyExternalSignals}
+   */
+  it('should retrieve strategy external signals', async () => {
+    const expected = [{
+      id: '1',
+      symbol: 'EURUSD',
+      type: 'POSITION_TYPE_BUY',
+      time: '2020-08-24T00:00:00.000Z',
+      volume: 1
+    }];
+    requestStub.resolves(expected);
+    let signals = await signalClient.getStrategyExternalSignals('ABCD');
+    signals.should.equal(expected);
+    sinon.assert.calledOnceWithExactly(domainClient.requestSignal, {
+      url: '/users/current/strategies/ABCD/external-signals',
+      method: 'GET',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    }, host, 'accountId');
+  });
  
 });
  
