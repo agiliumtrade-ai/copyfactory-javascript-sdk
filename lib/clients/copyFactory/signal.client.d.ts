@@ -28,6 +28,15 @@ export default class SignalClient {
   getTradingSignals(): Promise<Array<CopyFactoryTradingSignal>>;
 
   /**
+   * Returns active external signals of a strategy. Requires access to
+   * copyfactory-api:rest:public:external-signals:getSignals method which is included into reader role.
+   * Requires access to strategy, account resources.
+   * @param {string} strategyId strategy id
+   * @returns {Promise<Array<CopyFactoryExternalSignal>>}
+   */
+  getStrategyExternalSignals(strategyId: string): Promise<Array<CopyFactoryExternalSignal>>
+
+  /**
    * Updates external signal for a strategy. See
    * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/updateExternalSignal/
    * @param {String} strategyId strategy id
@@ -99,6 +108,18 @@ export declare type CopyFactoryExternalSignalUpdate = {
    * pending or market order open price
    */
   openPrice?: number
+}
+
+/**
+ * CopyFactory external signal
+ */
+export declare type CopyFactoryExternalSignal = CopyFactoryExternalSignalUpdate & {
+
+  /**
+   * external signal id
+   */
+  id: string
+
 }
 
 /**

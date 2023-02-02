@@ -41,6 +41,12 @@ export default class SignalClient {
    */
 
   /**
+   * CopyFactory external signal
+   * @typedef {CopyFactoryExternalSignalUpdate} CopyFactoryExternalSignal
+   * @property {String} id external signal id
+   */
+
+  /**
    * CopyFactory trading signal
    * @typedef {Object} CopyFactoryTradingSignal
    * @property {CopyFactoryStrategyIdAndName} strategy strategy the signal arrived from
@@ -73,6 +79,25 @@ export default class SignalClient {
   getTradingSignals() {
     const opts = {
       url: `/users/current/subscribers/${this._accountId}/signals`,
+      method: 'GET',
+      headers: {
+        'auth-token': this._domainClient.token
+      },
+      json: true
+    };
+    return this._domainClient.requestSignal(opts, this._host, this._accountId);
+  }
+
+  /**
+   * Returns active external signals of a strategy. Requires access to
+   * copyfactory-api:rest:public:external-signals:getSignals method which is included into reader role.
+   * Requires access to strategy, account resources.
+   * @param {String} strategyId strategy id
+   * @returns {Promise<Array<CopyFactoryExternalSignal>>}
+   */
+  getStrategyExternalSignals(strategyId) {
+    const opts = {
+      url: `/users/current/strategies/${strategyId}/external-signals`,
       method: 'GET',
       headers: {
         'auth-token': this._domainClient.token

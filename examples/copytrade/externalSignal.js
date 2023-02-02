@@ -69,6 +69,9 @@ async function externalSignal() {
 
     await new Promise(res => setTimeout(res, 10000));
 
+    // output strategy external signals
+    console.log(await signalClient.getStrategyExternalSignals(strategyId));
+
     // output trading signals
     console.log(await signalClient.getTradingSignals());
 
