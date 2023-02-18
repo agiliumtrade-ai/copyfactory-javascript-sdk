@@ -4,7 +4,7 @@ CopyFactory is a powerful copy trading API which makes developing forex trade co
 
 CopyFactory API is a member of MetaApi project ([https://metaapi.cloud](https://metaapi.cloud)), a powerful cloud forex trading API which supports both MetaTrader 4 and MetaTrader 5 platforms.
 
-MetaApi is a paid service, however API access to one MetaTrader account is free of charge.
+MetaApi is a paid service, however we offer a free tier for testing and personal use.
 
 The [MetaApi pricing](https://metaapi.cloud/#pricing) was developed with the intent to make your charges less or equal to what you would have to pay
 for hosting your own infrastructure. This is possible because over time we managed to heavily optimize
