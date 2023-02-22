@@ -1,16 +1,16 @@
 {
   "author": {
-    "name": "Agilium Labs LLC",
-    "email": "agiliumtrade@agiliumtrade.ai"
+    "name": "MetaApi DMCC",
+    "email": "support@metaapi.cloud"
   },
   "contributors": [
     {
-      "name": "Roman Kisilenko",
-      "email": "roman.kisilenko@agiliumlabs.com"
+      "name": "MetaApi DMCC",
+      "email": "support@metaapi.cloud"
     }
   ],
   "bugs": {
-    "email": "agiliumtrade@agiliumtrade.ai",
+    "email": "support@metaapi.cloud",
     "url": "https://github.com/agiliumtrade-ai/copyfactory-javascript-sdk/issues"
   },
   "keywords": [

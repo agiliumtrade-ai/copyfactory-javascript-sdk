@@ -1,3 +1,6 @@
+6.1.1
+  - update package description
+
 6.1.0
   - added retrieve strategy external signals method
 
