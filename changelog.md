@@ -1,3 +1,7 @@
+6.1.2
+  - fixed region handling on error
+  - fixed TooManyRequestsError processing
+
 6.1.1
   - update package description
 
