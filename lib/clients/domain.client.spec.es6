@@ -274,6 +274,53 @@ describe('DomainClient', () => {
         sinon.assert.match(response, expected);
       });
 
+      /**
+       * @test {DomainClient#requestCopyFactory}
+       */
+      it('should not skip regions if two parallel requests fail', async () => {
+        getRegionsStub = requestStub.withArgs({
+          url: 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai/users/current/regions',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+          json: true,
+        }).resolves(['vint-hill', 'us-west', 'us-east']);
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.vint-hill.agiliumtrade.agiliumtrade.ai/users/' + 
+          'current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).callsFake(async () => {
+          await new Promise(res => setTimeout(res, 100));
+          throw new InternalError('test');
+        });
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.us-west.agiliumtrade.agiliumtrade.ai/users/' + 
+          'current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).resolves(expected);
+        requestStub.withArgs({
+          url: 'https://copyfactory-api-v1.us-east.agiliumtrade.agiliumtrade.ai/users/' + 
+          'current/configuration/strategies',
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+        }).resolves([]);
+        const results = await Promise.all([
+          domainClient.requestCopyFactory(opts),
+          domainClient.requestCopyFactory(opts)
+        ]);
+        sinon.assert.match(results[0], expected);
+        sinon.assert.match(results[1], expected);
+      });
+
     });
 
   });

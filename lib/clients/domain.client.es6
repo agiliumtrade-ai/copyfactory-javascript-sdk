@@ -46,6 +46,7 @@ export default class DomainClient {
    */
   async requestCopyFactory(opts, isExtendedTimeout = false) {
     await this._updateHost();
+    const regionIndex = this._regionIndex;
     try {
       return await this._httpClient.request(Object.assign({}, opts, {
         url: this._urlCache.url + opts.url
@@ -58,7 +59,9 @@ export default class DomainClient {
           this._regionIndex = 0;
           throw err;
         } else {
-          this._regionIndex++;
+          if(this._regionIndex === regionIndex) {
+            this._regionIndex++;
+          }
           return await this.requestCopyFactory(opts, isExtendedTimeout);
         }
       }
@@ -181,7 +184,6 @@ export default class DomainClient {
   }
 
   async _updateRegions() {
-    this._regionIndex = 0;
     this._regionCache = await this._httpClient.request({
       url: `https://mt-provisioning-api-v1.${this._domain}/users/current/regions`,
       method: 'GET',
@@ -190,6 +192,7 @@ export default class DomainClient {
       },
       json: true,
     });
+    this._regionIndex = 0;
   }
 
   async _updateAccountRegions(host, accountId) {

@@ -69,6 +69,76 @@ describe('HttpClient', () => {
 
   });
 
+  describe('Request', () => {
+    const opts = {url: 'http://metaapi.cloud'};
+    const getTooManyRequestsError = (sec) => {
+      const date = new Date();
+      date.setSeconds(date.getSeconds() + sec);
+      const recommendedRetryTime = date.toUTCString();
+      return new TooManyRequestsError('test', {recommendedRetryTime});
+    };
+    let sandbox, stub;
+
+    before(() => {
+      sandbox = sinon.createSandbox();
+    });
+
+    beforeEach(() => {
+      stub = sandbox.stub();
+      httpClient = new HttpClientMock(stub);
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    /**
+     * @test {HttpClient#request}
+     */
+    it('should return ApiError error', async () => {
+      stub.rejects(new ApiError(ApiError, 'test'));
+      httpClient = new HttpClientMock(stub, 10, 60, {retries: 2});
+      try {
+        const response = await httpClient.request(opts);
+        should.not.exist(response);
+      } catch (err) {
+        err.name.should.eql('ApiError');
+        err.message.should.eql('test');
+      }
+      sinon.assert.calledOnce(stub);
+    });
+
+    /**
+     * @test {HttpClient#request}
+     */
+    it('should retry request after waiting on fail with TooManyRequestsError error', async () => {
+      stub.onFirstCall().rejects(getTooManyRequestsError(2))
+        .onSecondCall().rejects(getTooManyRequestsError(3))
+        .onThirdCall().resolves('response');
+      const response = await httpClient.request(opts);
+      response.should.eql('response');
+      sinon.assert.calledThrice(stub);
+    }).timeout(10000);
+
+    /**
+     * @test {HttpClient#request}
+     */
+    it('should return error if recommended retry time is too long', async () => {
+      stub.onFirstCall().rejects(getTooManyRequestsError(2))
+        .onSecondCall().rejects(getTooManyRequestsError(300))
+        .onThirdCall().resolves('response');
+      try {
+        const response = await httpClient.request(opts);
+        should.not.exist(response);
+      } catch (err) {
+        err.name.should.eql('TooManyRequestsError');
+        err.message.should.eql('test');
+      }
+      sinon.assert.calledTwice(stub);
+    }).timeout(10000);
+
+  });
+
   /**
    * @test {HttpClient#requestWithFailover}
    */

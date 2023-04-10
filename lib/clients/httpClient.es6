@@ -39,12 +39,26 @@ export default class HttpClient {
    * @param {Boolean} isExtendedTimeout whether to run the request with an extended timeout
    * @returns {Object|String|any} request result
    */
-  async request(options, isExtendedTimeout) {
+  async request(options, isExtendedTimeout, endTime = Date.now() + this._maxRetryDelay * this._retries) {
     options.timeout = isExtendedTimeout ? this._extendedTimeout : this._timeout;
     try {
       return await this._makeRequest(options);
     } catch (err) {
-      throw this._convertError(err);
+      const error = this._convertError(err);
+      if(error.name === 'TooManyRequestsError') {
+        const retryTime = Date.parse(error.metadata.recommendedRetryTime);
+        const date = Date.now();
+        if (retryTime < endTime) {
+          if(retryTime > date) {
+            await this._wait(retryTime - date);
+          }
+          return await this.request(options, isExtendedTimeout, endTime);
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
     }
   }
 
