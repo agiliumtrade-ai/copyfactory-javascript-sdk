@@ -45,14 +45,23 @@ export default class TradingClient extends MetaApiClient {
   getStopouts(subscriberId: string): Promise<Array<CopyFactoryStrategyStopout>>;
 
   /**
-   * Resets strategy stopouts. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
+   * Resets subscription stopouts. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetSubscriptionStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
    * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
    * @return {Promise} promise which resolves when the stopouts are reset
    */
-  resetStopouts(subscriberId: string, strategyId: string, reason: CopyFactoryStrategyStopoutReason): Promise<any>;
+  resetSubscriptionStopouts(subscriberId: string, strategyId: string, reason: CopyFactoryStrategyStopoutReason): Promise<any>;
+
+  /**
+   * Resets subscriber stopouts. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetSubscriberStopOuts/
+   * @param {String} subscriberId subscriber id
+   * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
+   * @return {Promise} promise which resolves when the stopouts are reset
+   */
+  resetSubscriberStopouts(subscriberId: string, reason: CopyFactoryStrategyStopoutReason): Promise<any>;
 
   /**
    * Returns copy trading user log for an account and time range. See

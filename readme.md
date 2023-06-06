@@ -236,7 +236,7 @@ let strategyId = '...'; // CopyFactory strategy id
 console.log(await tradingApi.getStopouts(accountId));
 
 // reset a stopout so that subscription can continue
-await tradingApi.resetStopout(accountId, strategyId, 'daily-equity');
+await tradingApi.resetSubscriptionStopouts(accountId, strategyId, 'daily-equity');
 ```
 
 ## Managing stopout listeners

@@ -118,10 +118,10 @@ describe('TradingClient', () => {
   });
 
   /**
-   * @test {TradingClient#resetStopouts}
+   * @test {TradingClient#resetSubscriptionStopouts}
    */
   it('should reset stopouts', async () => {
-    await tradingClient.resetStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', 'daily-equity');
+    await tradingClient.resetSubscriptionStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'ABCD', 'daily-equity');
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
       url: '/users/current/subscribers/' +
         'e8867baa-5ec2-45ae-9930-4d5cea18d0d6/subscription-strategies/ABCD/stopouts/daily-equity/reset',
@@ -134,20 +134,55 @@ describe('TradingClient', () => {
   });
 
   /**
-   * @test {TradingClient#resetStopouts}
+   * @test {TradingClient#resetSubscriptionStopouts}
    */
   it('should not reset stopouts with account token', async () => {
     domainClient = new DomainClient(httpClient, 'token');
     tradingClient = new TradingClient(domainClient);
     try {
-      await tradingClient.resetStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+      await tradingClient.resetSubscriptionStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
         'ABCD', 'daily-equity');
       throw new Error('MethodAccessError expected');
     } catch (error) {
       error.name.should.equal('MethodAccessError');
       error.message.should.equal(
-        'You can not invoke resetStopouts method, because you have connected with account access token. ' +
+        'You can not invoke resetSubscriptionStopouts method, because you have connected with account access token. ' +
         'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
+      );
+    }
+  });
+
+  /**
+   * @test {TradingClient#resetSubscriberStopouts}
+   */
+  it('should reset subscriber stopouts', async () => {
+    await tradingClient.resetSubscriberStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6', 'daily-equity');
+    sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
+      url: '/users/current/subscribers/' + 
+        'e8867baa-5ec2-45ae-9930-4d5cea18d0d6/stopouts/daily-equity/reset',
+      method: 'POST',
+      headers: {
+        'auth-token': token
+      },
+      json: true,
+    });
+  });
+
+  /**
+   * @test {TradingClient#resetSubcriberStopouts}
+   */
+  it('should not reset subscriber stopouts with account token', async () => {
+    domainClient = new DomainClient(httpClient, 'token');
+    tradingClient = new TradingClient(domainClient);
+    try {
+      await tradingClient.resetSubscriberStopouts('e8867baa-5ec2-45ae-9930-4d5cea18d0d6',
+        'daily-equity');
+      throw new Error('MethodAccessError expected');
+    } catch (error) {
+      error.name.should.equal('MethodAccessError');
+      error.message.should.equal(
+        'You can not invoke resetSubscriberStopouts method, because you have connected with account access token. ' +
+          'Please use API access token from https://app.metaapi.cloud/token page to invoke this method.'
       );
     }
   });
