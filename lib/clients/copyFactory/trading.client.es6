@@ -118,21 +118,44 @@ export default class TradingClient extends MetaApiClient {
   }
 
   /**
-   * Resets strategy stopouts. See
-   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetStopOuts/
+   * Resets subscription stopouts. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetSubscriptionStopOuts/
    * @param {String} subscriberId subscriber id
    * @param {String} strategyId strategy id
    * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
    * yearly-equity, monthly-equity, daily-equity
    * @return {Promise} promise which resolves when the stopouts are reset
    */
-  resetStopouts(subscriberId, strategyId, reason) {
+  resetSubscriptionStopouts(subscriberId, strategyId, reason) {
     if (this._isNotJwtToken()) {
-      return this._handleNoAccessError('resetStopouts');
+      return this._handleNoAccessError('resetSubscriptionStopouts');
     }
     const opts = {
       url: `/users/current/subscribers/${subscriberId}/subscription-strategies/` +
         `${strategyId}/stopouts/${reason}/reset`,
+      method: 'POST',
+      headers: {
+        'auth-token': this._token
+      },
+      json: true
+    };
+    return this._domainClient.requestCopyFactory(opts);
+  }
+
+  /**
+   * Resets subscriber stopouts. See
+   * https://metaapi.cloud/docs/copyfactory/restApi/api/trading/resetSubscriberStopOuts/
+   * @param {String} subscriberId subscriber id
+   * @param {CopyFactoryStrategyStopoutReason} reason stopout reason to reset
+   * yearly-equity, monthly-equity, daily-equity
+   * @return {Promise} promise which resolves when the stopouts are reset
+   */
+  resetSubscriberStopouts(subscriberId, reason) {
+    if (this._isNotJwtToken()) {
+      return this._handleNoAccessError('resetSubscriberStopouts');
+    }
+    const opts = {
+      url: `/users/current/subscribers/${subscriberId}/stopouts/${reason}/reset`,
       method: 'POST',
       headers: {
         'auth-token': this._token

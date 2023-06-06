@@ -1,3 +1,7 @@
+7.0.0
+  - breaking change: updated `TradingClient` method `resetStopouts` to `resetSubscriptionStopouts`
+  - added method `TradingClient.resetSubscriberStopouts`
+
 6.1.2
   - fixed region handling on error
   - fixed TooManyRequestsError processing
