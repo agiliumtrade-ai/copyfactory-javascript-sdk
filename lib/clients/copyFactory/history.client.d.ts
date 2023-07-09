@@ -1,10 +1,6 @@
 import MetaApiClient from "../metaApi.client";
 import DomainClient from "../domain.client";
 import TransactionListener from "./streaming/transactionListener";
-<<<<<<< HEAD
-=======
-
->>>>>>> 4fc846e (fix typings)
 /**
  * metaapi.cloud CopyFactory history API (trade copying history API) client (see
  * https://metaapi.cloud/docs/copyfactory/)
@@ -46,39 +42,14 @@ export default class HistoryClient extends MetaApiClient {
   /**
    * Adds a strategy transaction listener and creates a job to make requests
    * @param {TransactionListener} listener transaction listener
-<<<<<<< HEAD
-   * @param {String} strategyId strategy id
-   * @param {Date} [startTime] transaction search start time
-   * @return {String} listener id
-=======
    * @param {string} strategyId strategy id
    * @param {Date} [startTime] transaction search start time
    * @return {string} listener id
->>>>>>> 4fc846e (fix typings)
    */
   addStrategyTransactionListener(listener: TransactionListener, strategyId: string, startTime?: Date): string;
 
   /**
    * Removes strategy transaction listener and cancels the event stream
-<<<<<<< HEAD
-   * @param {String} listenerId strategy transaction listener id
-   */
-  removeStrategyTransactionListener(listenerId: string) : void
-  
-  /**
-   * Adds a subscriber transaction listener and creates a job to make requests
-   * @param {TransactionListener} listener transaction listener
-   * @param {String} subscriberId subscriber id
-   * @param {Date} [startTime] transaction search start time
-   * @return {String} listener id
-   */
-  addSubscriberTransactionListener(listener: TransactionListener, subscriberId: string, startTime?: Date): string;
-  /**
-   * Removes subscriber transaction listener and cancels the event stream
-   * @param {String} listenerId subscriber transaction listener id
-   */
-  removeSubscriberTransactionListener(listenerI: string): void;
-=======
    * @param {string} listenerId strategy transaction listener id
    */
   removeStrategyTransactionListener(listenerId: string): void;
@@ -97,7 +68,6 @@ export default class HistoryClient extends MetaApiClient {
    * @param {string} listenerId subscriber transaction listener id
    */
   removeSubscriberTransactionListener(listenerId: string): string;
->>>>>>> 4fc846e (fix typings)
 }
 
 /**
