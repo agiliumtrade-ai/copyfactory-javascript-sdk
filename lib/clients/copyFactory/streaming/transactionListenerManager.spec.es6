@@ -85,7 +85,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: 1000
           },
@@ -100,7 +100,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: 1000
           },
@@ -153,7 +153,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: 1000
           },
@@ -196,7 +196,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: 1000
           },
@@ -237,7 +237,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: 1000
           },
@@ -252,7 +252,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: 1000
           },
@@ -305,7 +305,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: 1000
           },
@@ -348,7 +348,7 @@ describe('TransactionListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/transactions/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: 1000
           },

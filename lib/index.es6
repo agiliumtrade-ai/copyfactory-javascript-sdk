@@ -6,5 +6,4 @@ import UserLogListener from './clients/copyFactory/streaming/userLogListener';
 import TransactionListener from './clients/copyFactory/streaming/transactionListener';
 
 export default CopyFactory;
-
-export {CopyFactory, StopoutListener, UserLogListener, TransactionListener};
+export { StopoutListener, UserLogListener, TransactionListener };

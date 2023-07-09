@@ -83,7 +83,7 @@ describe('StopoutListenerManager', () => {
       .withArgs({
         url: '/users/current/stopouts/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 1,
           subscriberId: 'accountId',
           strategyId: 'ABCD',
@@ -100,7 +100,7 @@ describe('StopoutListenerManager', () => {
       .withArgs({
         url: '/users/current/stopouts/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 3,
           subscriberId: 'accountId',
           strategyId: 'ABCD',
@@ -175,7 +175,7 @@ describe('StopoutListenerManager', () => {
       .withArgs({
         url: '/users/current/stopouts/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 1,
           subscriberId: 'accountId',
           strategyId: 'ABCD',

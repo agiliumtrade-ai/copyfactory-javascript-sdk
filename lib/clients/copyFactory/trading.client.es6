@@ -42,7 +42,7 @@ export default class TradingClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs: {
+      params: {
         strategyId: strategyIds,
         positionId: positionIds
       },
@@ -200,7 +200,7 @@ export default class TradingClient extends MetaApiClient {
     const opts = {
       url: `/users/current/subscribers/${subscriberId}/user-log`,
       method: 'GET',
-      qs: {
+      params: {
         startTime,
         endTime,
         strategyId, 
@@ -240,7 +240,7 @@ export default class TradingClient extends MetaApiClient {
     const opts = {
       url: `/users/current/strategies/${strategyId}/user-log`,
       method: 'GET',
-      qs: {
+      params: {
         startTime,
         endTime,
         positionId,

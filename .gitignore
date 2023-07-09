@@ -6,9 +6,11 @@ node_modules
 npm-debug.log
 package-lock.json
 .npmrc
+.nvmrc
 .env
 .cache
 test.log
+build/
 dist/
 es/
 index.js

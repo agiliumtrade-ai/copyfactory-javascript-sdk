@@ -91,7 +91,7 @@ export default class TransactionListenerManager extends MetaApiClient {
       const opts = {
         url: `/users/current/strategies/${strategyId}/transactions/stream`,
         method: 'GET',
-        qs: {
+        params: {
           startTime,
           limit: 1000
         },
@@ -129,7 +129,7 @@ export default class TransactionListenerManager extends MetaApiClient {
       const opts = {
         url: `/users/current/subscribers/${subscriberId}/transactions/stream`,
         method: 'GET',
-        qs: {
+        params: {
           startTime,
           limit: 1000
         },

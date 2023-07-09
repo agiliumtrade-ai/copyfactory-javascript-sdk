@@ -46,7 +46,7 @@ describe('TradingClient', () => {
         'auth-token': token
       },
       json: true,
-      qs: {
+      params: {
         strategyId: ['ABCD'],
         positionId: ['0123456']
       }
@@ -203,7 +203,7 @@ describe('TradingClient', () => {
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
       url: '/users/current/subscribers/e8867baa-5ec2-45ae-9930-4d5cea18d0d6/user-log',
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-08-01T00:00:00.000Z'),
         endTime: new Date('2020-08-10T00:00:00.000Z'),
         offset: 0,
@@ -255,7 +255,7 @@ describe('TradingClient', () => {
     sinon.assert.calledOnceWithExactly(domainClient.requestCopyFactory, {
       url: '/users/current/strategies/ABCD/user-log',
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-08-01T00:00:00.000Z'),
         endTime: new Date('2020-08-10T00:00:00.000Z'),
         offset: 0,

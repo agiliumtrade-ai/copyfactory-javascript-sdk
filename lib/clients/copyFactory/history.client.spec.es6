@@ -77,7 +77,7 @@ describe('HistoryClient', () => {
       headers: {
         'auth-token': token
       },
-      qs: {
+      params: {
         from,
         till,
         strategyId: ['ABCD'],
@@ -153,7 +153,7 @@ describe('HistoryClient', () => {
         'auth-token': token
       },
       json: true,
-      qs: {
+      params: {
         from,
         till,
         strategyId: ['ABCD'],

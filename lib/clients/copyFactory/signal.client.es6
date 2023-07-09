@@ -122,7 +122,7 @@ export default class SignalClient {
       headers: {
         'auth-token': this._domainClient.token
       },
-      body: signal,
+      data: signal,
       json: true
     };
     return this._domainClient.requestSignal(opts, this._host, this._accountId);
@@ -149,7 +149,7 @@ export default class SignalClient {
       headers: {
         'auth-token': this._domainClient.token
       },
-      body: signal,
+      data: signal,
       json: true
     };
     return this._domainClient.requestSignal(opts, this._host, this._accountId);

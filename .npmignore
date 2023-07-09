@@ -7,5 +7,6 @@ npm-debug.log
 package-lock.json
 .git
 .env
+.nvmrc
 .metaapi
 test.log
