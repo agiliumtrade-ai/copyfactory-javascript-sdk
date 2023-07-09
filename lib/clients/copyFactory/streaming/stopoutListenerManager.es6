@@ -59,7 +59,7 @@ export default class StopoutListenerManager extends MetaApiClient {
       const opts = {
         url: '/users/current/stopouts/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: sequenceNumber,
           subscriberId: accountId,
           strategyId: strategyId,

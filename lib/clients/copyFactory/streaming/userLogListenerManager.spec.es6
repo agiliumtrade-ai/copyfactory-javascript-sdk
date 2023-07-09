@@ -85,7 +85,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: undefined,
             positionId: undefined,
@@ -102,7 +102,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: undefined,
             positionId: undefined,
@@ -155,7 +155,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             limit: undefined,
             positionId: undefined,
@@ -199,7 +199,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/strategies/ABCD/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             limit: undefined,
             positionId: undefined,
@@ -242,7 +242,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             strategyId: undefined,
             positionId: undefined,
@@ -260,7 +260,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             strategyId: undefined,
             positionId: undefined,
@@ -316,7 +316,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T00:00:00.000Z'),
             strategyId: undefined,
             positionId: undefined,
@@ -362,7 +362,7 @@ describe('UserLogListenerManager', () => {
         .withArgs({
           url: '/users/current/subscribers/accountId/user-log/stream',
           method: 'GET',
-          qs: {
+          params: {
             startTime: new Date('2020-08-08T08:57:30.329Z'),
             strategyId: undefined,
             positionId: undefined,

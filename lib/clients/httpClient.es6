@@ -1,6 +1,6 @@
 'use strict';
 
-import request from 'request-promise-any';
+import axios from '@axios';
 import {
   UnauthorizedError, ForbiddenError, ApiError, ValidationError, InternalError, 
   NotFoundError, TooManyRequestsError, ConflictError
@@ -42,7 +42,8 @@ export default class HttpClient {
   async request(options, isExtendedTimeout, endTime = Date.now() + this._maxRetryDelay * this._retries) {
     options.timeout = isExtendedTimeout ? this._extendedTimeout : this._timeout;
     try {
-      return await this._makeRequest(options);
+      const response = await this._makeRequest(options);
+      return (response && response.data) || undefined;
     } catch (err) {
       const error = this._convertError(err);
       if(error.name === 'TooManyRequestsError') {
@@ -71,13 +72,15 @@ export default class HttpClient {
     options.timeout = this._timeout;
     let retryAfterSeconds = 0;
     options.callback = (e, res) => {
-      if (res && res.statusCode === 202) {
+      if (res && res.status === 202) {
         retryAfterSeconds = res.headers['retry-after'];
       }
     };
     let body;
     try {
-      body = await this._makeRequest(options);
+      const response = await this._makeRequest(options);
+      options.callback(null, response);
+      body = (response && response.data) || undefined;
     } catch (err) {
       retryCounter = await this._handleError(err, retryCounter, endTime);
       return this.requestWithFailover(options, retryCounter, endTime);
@@ -90,7 +93,12 @@ export default class HttpClient {
   }
 
   _makeRequest(options) {
-    return request(options);
+    return axios({
+      transitional: {
+        clarifyTimeoutError: true,
+      },
+      ...options
+    });
   }
 
   async _wait(pause) {
@@ -124,28 +132,29 @@ export default class HttpClient {
 
   // eslint-disable-next-line complexity
   _convertError(err) {
-    err.error = err.error || {};
-    let status = err.statusCode || err.status;
+    const errorResponse = err.response || {};
+    const errorData = errorResponse.data || {};
+    const status = errorResponse.status || err.status;
+
     switch (status) {
     case 400:
-      return new ValidationError(err.error.message || err.message, err.error.details || err.details);
+      return new ValidationError(errorData.message || err.message, errorData.details);
     case 401:
-      return new UnauthorizedError(err.error.message || err.message);
+      return new UnauthorizedError(errorData.message || err.message);
     case 403:
-      return new ForbiddenError(err.error.message || err.message);
+      return new ForbiddenError(errorData.message || err.message);
     case 404:
-      return new NotFoundError(err.error.message || err.message);
+      return new NotFoundError(errorData.message || err.message);
     case 409:
-      return new ConflictError(err.error.message || err.message);
+      return new ConflictError(errorData.message || err.message);
     case 429:
-      return new TooManyRequestsError(err.error.message || err.message, err.error.metadata || err.metadata);
+      return new TooManyRequestsError(errorData.message || err.message, errorData.metadata || err.metadata);
     case 500:
-      return new InternalError(err.error.message || err.message);
+      return new InternalError(errorData.message || err.message);
     default:
-      return new ApiError(ApiError, err.error.message || err.message, status);
+      return new ApiError(ApiError, errorData.message || err.code || err.message, status);
     }
   }
-
 }
 
 /**

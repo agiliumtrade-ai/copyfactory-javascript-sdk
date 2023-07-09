@@ -102,21 +102,21 @@ export default class HistoryClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getProvidedTransactions');
     }
-    let qs = {
+    let params = {
       from,
       till
     };
     if (strategyIds) {
-      qs.strategyId = strategyIds;
+      params.strategyId = strategyIds;
     }
     if (subscriberIds) {
-      qs.subscriberId = subscriberIds;
+      params.subscriberId = subscriberIds;
     }
     if (offset !== undefined) {
-      qs.offset = offset;
+      params.offset = offset;
     }
     if (limit) {
-      qs.limit = limit;
+      params.limit = limit;
     }
     const opts = {
       url: '/users/current/provided-transactions',
@@ -124,7 +124,7 @@ export default class HistoryClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs,
+      params,
       json: true
     };
     let transactions = await this._domainClient.requestCopyFactory(opts, true);
@@ -147,21 +147,21 @@ export default class HistoryClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getSubscriptionTransactions');
     }
-    let qs = {
+    let params = {
       from,
       till
     };
     if (strategyIds) {
-      qs.strategyId = strategyIds;
+      params.strategyId = strategyIds;
     }
     if (subscriberIds) {
-      qs.subscriberId = subscriberIds;
+      params.subscriberId = subscriberIds;
     }
     if (offset !== undefined) {
-      qs.offset = offset;
+      params.offset = offset;
     }
     if (limit) {
-      qs.limit = limit;
+      params.limit = limit;
     }
     const opts = {
       url: '/users/current/subscription-transactions',
@@ -169,7 +169,7 @@ export default class HistoryClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs,
+      params,
       json: true
     };
     let transactions = await this._domainClient.requestCopyFactory(opts, true);

@@ -62,7 +62,7 @@ describe('SignalClient', () => {
         'auth-token': token
       },
       json: true,
-      body: signal}, host, 'accountId');
+      data: signal}, host, 'accountId');
   });
  
   /**
@@ -80,7 +80,7 @@ describe('SignalClient', () => {
         'auth-token': token
       },
       json: true,
-      body: signal}, host, 'accountId');
+      data: signal}, host, 'accountId');
   });
  
   /**

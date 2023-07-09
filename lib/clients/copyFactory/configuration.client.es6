@@ -333,15 +333,15 @@ export default class ConfigurationClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getStrategies');
     }
-    let qs = {};
+    let params = {};
     if(includeRemoved !== undefined) {
-      qs.includeRemoved = includeRemoved;
+      params.includeRemoved = includeRemoved;
     }
     if(limit !== undefined) {
-      qs.limit = limit;
+      params.limit = limit;
     }
     if(offset !== undefined) {
-      qs.offset = offset;
+      params.offset = offset;
     }
     const opts = {
       url: '/users/current/configuration/strategies',
@@ -349,7 +349,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs,
+      params,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts, true);
@@ -476,7 +476,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: strategy,
+      data: strategy,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -516,7 +516,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: closeInstructions,
+      data: closeInstructions,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -647,15 +647,15 @@ export default class ConfigurationClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getPortfolioStrategies');
     }
-    let qs = {};
+    let params = {};
     if(includeRemoved !== undefined) {
-      qs.includeRemoved = includeRemoved;
+      params.includeRemoved = includeRemoved;
     }
     if(limit !== undefined) {
-      qs.limit = limit;
+      params.limit = limit;
     }
     if(offset !== undefined) {
-      qs.offset = offset;
+      params.offset = offset;
     }
     const opts = {
       url: '/users/current/configuration/portfolio-strategies',
@@ -663,7 +663,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs,
+      params,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts, true);
@@ -707,7 +707,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: portfolio,
+      data: portfolio,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -730,7 +730,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: closeInstructions,
+      data: closeInstructions,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -754,7 +754,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: closeInstructions,
+      data: closeInstructions,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -772,15 +772,15 @@ export default class ConfigurationClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getSubscribers');
     }
-    let qs = {};
+    let params = {};
     if(includeRemoved !== undefined) {
-      qs.includeRemoved = includeRemoved;
+      params.includeRemoved = includeRemoved;
     }
     if(limit !== undefined) {
-      qs.limit = limit;
+      params.limit = limit;
     }
     if(offset !== undefined) {
-      qs.offset = offset;
+      params.offset = offset;
     }
     const opts = {
       url: '/users/current/configuration/subscribers',
@@ -788,7 +788,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs,
+      params,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts, true);
@@ -832,7 +832,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: subscriber,
+      data: subscriber,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -855,7 +855,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: closeInstructions,
+      data: closeInstructions,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);
@@ -879,7 +879,7 @@ export default class ConfigurationClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      body: closeInstructions,
+      data: closeInstructions,
       json: true
     };
     return this._domainClient.requestCopyFactory(opts);

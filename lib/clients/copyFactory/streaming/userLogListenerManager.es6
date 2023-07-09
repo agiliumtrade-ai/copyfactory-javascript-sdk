@@ -105,7 +105,7 @@ export default class UserLogListenerManager extends MetaApiClient {
       const opts = {
         url: `/users/current/strategies/${strategyId}/user-log/stream`,
         method: 'GET',
-        qs: {
+        params: {
           startTime,
           positionId,
           level,
@@ -156,7 +156,7 @@ export default class UserLogListenerManager extends MetaApiClient {
       const opts = {
         url: `/users/current/subscribers/${subscriberId}/user-log/stream`,
         method: 'GET',
-        qs: {
+        params: {
           startTime,
           strategyId,
           positionId,

@@ -108,7 +108,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      qs: { 
+      params: { 
         includeRemoved: true, 
         limit: 100,
         offset: 200 
@@ -210,7 +210,7 @@ describe('ConfigurationClient', () => {
         'auth-token': token
       },
       json: true,
-      body: strategy});
+      data: strategy});
   });
 
   /**
@@ -243,7 +243,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: payload,
+      data: payload,
       json: true,
     });
   });
@@ -291,7 +291,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      qs: { 
+      params: { 
         includeRemoved: true, 
         limit: 100,
         offset: 200 
@@ -386,7 +386,7 @@ describe('ConfigurationClient', () => {
         'auth-token': token
       },
       json: true,
-      body: strategy
+      data: strategy
     });
   });
 
@@ -420,7 +420,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: payload,
+      data: payload,
       json: true,
     });
   });
@@ -455,7 +455,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: payload,
+      data: payload,
       json: true,
     });
   });
@@ -502,7 +502,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      qs: { 
+      params: { 
         includeRemoved: true, 
         limit: 100,
         offset: 200 
@@ -600,7 +600,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: subscriber,
+      data: subscriber,
       json: true,
     });
   });
@@ -637,7 +637,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: payload,
+      data: payload,
       json: true,
     });
   });
@@ -674,7 +674,7 @@ describe('ConfigurationClient', () => {
       headers: {
         'auth-token': token
       },
-      body: payload,
+      data: payload,
       json: true,
     });
   });

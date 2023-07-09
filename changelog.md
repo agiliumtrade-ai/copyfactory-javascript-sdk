@@ -1,3 +1,6 @@
+7.1.0
+ - refactored build to support ESM, UMD, CJS
+
 7.0.0
   - breaking change: updated `TradingClient` method `resetStopouts` to `resetSubscriptionStopouts`
   - added method `TradingClient.resetSubscriberStopouts`
