@@ -1,3 +1,6 @@
+7.1.1
+ - fix merge conflict
+
 7.1.0
  - refactored build to support ESM, UMD, CJS
 
