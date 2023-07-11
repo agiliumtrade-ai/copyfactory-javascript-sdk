@@ -41,7 +41,7 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/copyfactory-javascript-sdk.git"
   },
-  "version": "7.1.1",
+  "version": "7.1.2",
   "dependencies": {
     "@log4js-node/log4js-api": "~1.0.2",
     "axios": "~1.3.6",
@@ -84,31 +84,35 @@
     "net": false,
     "os": false
   },
-  "module": "./dist/esm/index.js",
-  "unpkg": "./dist/umd/index.js",
-  "main": "./dist/cjs/index.js",
+  "module": "./dists/esm/index.js",
+  "unpkg": "./dists/umd/index.js",
+  "main": "./dists/cjs/index.js",
   "scripts": {
+    "test-win": "cross-env SWC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
     "test": "SWC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
     "lint:fix": "eslint --ext es6 ./lib --fix",
     "lint": "eslint --ext es6 ./lib",
     "build-win": "npm run clean-win | npm run build:optimized && npm run build:transpile && npm run build:types",
-    "build": "npm run clean; npm run build:optimized && npm run build:transpile && npm run build:types",
+    "build": "npm run clean; npm run build:optimized && npm run build:transpile && npm run build:types && npm run build:backward-compatiibility",
     "build:optimized": "npx webpack --config webpack.config.js",
     "build:transpile": "node ./swc/swc.transform.cjs.js && node ./swc/swc.transform.esm.js ",
-    "build:types": "copyfiles -u 1 \"lib/**/*.d.ts\" build/esm && copyfiles -u 1 \"lib/**/*.d.ts\" build/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dist/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dist/esm && copyfiles -u 1 \"lib/**/*.d.ts\" dist/umd",
-    "clean-win": "rmdir /Q /S dist | rmdir /Q /S build",
-    "clean": "rm -rf build; rm -rf dist;"
+    "build:types": "copyfiles -u 1 \"lib/**/*.d.ts\" build/esm && copyfiles -u 1 \"lib/**/*.d.ts\" build/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dists/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dists/esm && copyfiles -u 1 \"lib/**/*.d.ts\" dists/umd",
+    "build:backward-compatiibility": "copyfiles -u 2 \"build/cjs/**/*\" dist/",
+    "clean-win": "(if exist dist rmdir /Q /S dist) && (if exist build rmdir /Q /S build) && (if exist dists rmdir /Q /S dists)",
+    "clean": "rm -rf build; rm -rf dist; rm -rf dists;"
   },
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": "./dists/esm/index.js",
+      "require": "./dists/cjs/index.js"
     },
+    "./dist/*": "./dist/*.js",
+    "./dist/": "./dist/",
     "./cjs": "./build/cjs/index.js",
     "./esm": "./build/esm/index.js",
-    "./browser": "./dist/umd/index.js",
-    "./node": "./dist/cjs/index.js",
-    "./web": "./dist/esm/index.js"
+    "./browser": "./dists/umd/index.js",
+    "./node": "./dists/cjs/index.js",
+    "./web": "./dists/esm/index.js"
   },
   "typings": "./lib/index.d.ts",
   "types": "./lib/index.d.ts"

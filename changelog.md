@@ -1,3 +1,8 @@
+7.1.2
+ - refactored file structure for backward compatibility
+ - fixed support for Node.js v13.x.x
+ - fixed build for Node.js v11.x.x.
+
 7.1.1
  - fix merge conflict
 
