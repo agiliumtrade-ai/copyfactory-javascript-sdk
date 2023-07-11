@@ -14,6 +14,8 @@ function getAxiosAlias() {
   switch (v) {
   case 'v10':
     return 'axios/dist/node/axios.cjs';
+  case 'v11':
+    return 'axios/dist/node/axios.cjs';
   default:
     return 'axios';
   }

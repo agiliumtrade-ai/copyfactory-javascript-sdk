@@ -10,7 +10,9 @@ package-lock.json
 .env
 .cache
 test.log
+builds/
 build/
+dists/
 dist/
 es/
 index.js

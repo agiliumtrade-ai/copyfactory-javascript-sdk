@@ -4,18 +4,6 @@ const path = require('path');
 const { transformSync } = require('@swc/core');
 const swcCJS = require('./swcrc.cjs');
 
-function getAxiosAlias() {
-  const { version } = process;
-  const [v] = version.split('.');
-
-  switch (v) {
-  case 'v10':
-    return 'axios/dist/node/axios.cjs';
-  default:
-    return 'axios';
-  }
-}
-
 const aliases = {
   '@axios': getAxiosAlias()
 };
@@ -67,5 +55,19 @@ function walkAndTranspileFiles(dir) {
     } else if (filePath.endsWith('.es6') && !filePath.endsWith('.spec.es6')) {
       transpileFile(dir, file);
     }
+  }
+}
+
+function getAxiosAlias() {
+  const { version } = process;
+  const [v] = version.split('.');
+
+  switch (v) {
+  case 'v10':
+    return 'axios/dist/node/axios.cjs';
+  case 'v11':
+    return 'axios/dist/node/axios.cjs';
+  default:
+    return 'axios';
   }
 }
