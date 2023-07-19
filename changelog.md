@@ -1,3 +1,8 @@
+7.1.3
+ - added the request URL to the error log
+ - added a detailed error log in the examples
+ - fixed tests for the httpClient
+
 7.1.2
  - refactored file structure for backward compatibility
  - fixed support for Node.js v13.x.x

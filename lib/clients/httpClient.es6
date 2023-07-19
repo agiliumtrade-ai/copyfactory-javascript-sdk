@@ -135,24 +135,28 @@ export default class HttpClient {
     const errorResponse = err.response || {};
     const errorData = errorResponse.data || {};
     const status = errorResponse.status || err.status;
+    const url = err?.config?.url;
+
+    const errMsg = errorData.message || err.message;
+    const errMsgDefault = errorData.message || err.code || err.message;
 
     switch (status) {
     case 400:
-      return new ValidationError(errorData.message || err.message, errorData.details);
+      return new ValidationError(errMsg, errorData.details || err.details, url);
     case 401:
-      return new UnauthorizedError(errorData.message || err.message);
+      return new UnauthorizedError(errMsg, url);
     case 403:
-      return new ForbiddenError(errorData.message || err.message);
+      return new ForbiddenError(errMsg, url);
     case 404:
-      return new NotFoundError(errorData.message || err.message);
+      return new NotFoundError(errMsg, url);
     case 409:
-      return new ConflictError(errorData.message || err.message);
+      return new NotFoundError(errMsg, url);
     case 429:
-      return new TooManyRequestsError(errorData.message || err.message, errorData.metadata || err.metadata);
+      return new TooManyRequestsError(errMsg, errorData.metadata || err.metadata, url);
     case 500:
-      return new InternalError(errorData.message || err.message);
+      return new InternalError(errMsg, url);
     default:
-      return new ApiError(ApiError, errorData.message || err.code || err.message, status);
+      return new ApiError(ApiError, errMsgDefault, status, url);
     }
   }
 }
