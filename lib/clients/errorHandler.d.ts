@@ -7,19 +7,20 @@ export class ApiError extends Error {
    * ApiError constructor
    * @param {Function} clazz error name
    * @param {Object} message error message
-   * @param {Number} status HTTP status
+   * @param {number} status HTTP status
+   * @param {string} url API request URL
    */
-  constructor(clazz: Function, message: Object, status: number);
+  constructor(clazz: Function, message: Object, status: number, url?: string);
 
   /**
    * Sets error code, used for i18n
-   * @param {String} code error code for i18n
+   * @param {string} code error code for i18n
    */
   set code(code: string);
 
   /**
    * Returns error code used for i18n
-   * @return {String} error code
+   * @return {string} error code
    */
   get code(): string;
 
@@ -43,9 +44,10 @@ export class NotFoundError extends ApiError {
 
   /**
    * Represents NotFoundError.
-   * @param {String} message error message
+   * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message: string);
+  constructor(message: string, url?: string);
 }
 
 /**
@@ -55,9 +57,10 @@ export class ForbiddenError extends ApiError {
 
   /**
    * Constructs forbidden error.
-   * @param {String} message error message
+   * @param {string} message error message
+   * @param {string} url API request URL
    */
-   constructor(message: string);
+   constructor(message: string, url?: string);
 }
 
 /**
@@ -67,9 +70,10 @@ export class UnauthorizedError extends ApiError {
 
   /**
    * Constructs unauthorized error.
-   * @param {String} message error message
+   * @param {string} message error message
+   * @param {string} url API request URL
    */
-   constructor(message: string);
+   constructor(message: string, url?: string);
 }
 
 /**
@@ -79,10 +83,11 @@ export class ValidationError extends ApiError {
 
   /**
    * Constructs validation error.
-   * @param {String} message error message
+   * @param {string} message error message
    * @param {Object} details error data
+   * @param {string} url API request URL
    */
-  constructor(message: string, details: Object);
+  constructor(message: string, details: Object, url?: string);
 }
 
 /**
@@ -92,22 +97,24 @@ export class InternalError extends ApiError {
   
   /**
    * Constructs unexpected error.
-   * @param {String} message error message
+   * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message: string);
+  constructor(message: string, url?: string);
 }
 
 /**
  * Represents conflict error. Throwing this error results in 409 (Conflict) HTTP response code.
  */
- export class ConflictError extends ApiError {
+export class ConflictError extends ApiError {
 
   /**
    * Constructs conflict error.
-   * @param {String} message error message
+   * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message: string);
- }
+  constructor(message: string, url?: string);
+}
 
 /**
  * metadata for too many requests error
@@ -120,14 +127,19 @@ export type TooManyRequestsErrorMetadata = {
   periodInMinutes: number,
 
   /**
-   *available requests for periodInMinutes
+   * available requests for periodInMinutes
    */
   requestsPerPeriodAllowed: number,
 
   /**
    * recommended date to retry request
    */
-  recommendedRetryTime: Date
+  recommendedRetryTime: Date,
+
+  /**
+   * error type
+   */
+  type: string
 }
 
 /**
@@ -137,8 +149,9 @@ export class TooManyRequestsError extends ApiError {
 
   /**
    * Constructs too many requests error.
-   * @param {String} message error message
+   * @param {string} message error message
    * @param {TooManyRequestsErrorMetadata} metadata error metadata
+   * @param {string} url API request URL
    */
-  constructor(message: string, metadata: TooManyRequestsErrorMetadata);
+  constructor(message: string, metadata: TooManyRequestsErrorMetadata, url?: string);
 }
