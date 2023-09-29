@@ -1,3 +1,6 @@
+7.1.4
+  - fixed broken possibility to configure log4js when custom log4js version is used in an application
+
 7.1.3
  - added the request URL to the error log
  - added a detailed error log in the examples

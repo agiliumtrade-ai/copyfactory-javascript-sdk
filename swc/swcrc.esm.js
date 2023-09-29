@@ -3,11 +3,13 @@ module.exports = {
     'parser': {
       'syntax': 'ecmascript'
     },
-    'target': 'es2015'
+    'target': 'es2015',
+    'keepClassNames': true
   },
   'module': {
     'type': 'es6'
   },
   'isModule': true,
-  'sourceMaps': true
+  'inlineSourcesContent': true,
+  'sourceMaps': 'inline'
 };

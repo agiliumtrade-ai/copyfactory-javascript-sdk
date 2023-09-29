@@ -9,5 +9,6 @@ module.exports = {
     'type': 'umd'
   },
   'isModule': true,
+  'inlineSourcesContent': true,
   'sourceMaps': true
 };
