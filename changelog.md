@@ -1,4 +1,4 @@
-7.1.4
+7.1.5
   - fixed broken possibility to configure log4js when custom log4js version is used in an application
 
 7.1.3
