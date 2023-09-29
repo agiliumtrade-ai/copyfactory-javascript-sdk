@@ -8,12 +8,13 @@ module.exports = {
     'parser': {
       'syntax': 'ecmascript'
     },
-    'target': 'es5'
+    'keepClassNames': true
   },
   'module': {
     'type': 'commonjs'
   },
-  'sourceMaps': true,
+  'inlineSourcesContent': true,
+  'sourceMaps': 'inline',
   'isModule': true
 };
 
