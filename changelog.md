@@ -1,3 +1,6 @@
+7.1.6
+  - fix broken release
+
 7.1.5
   - fixed broken possibility to configure log4js when custom log4js version is used in an application
 
